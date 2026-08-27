@@ -22,12 +22,15 @@
         <form action="/tickets" method="POST" id="ticketForm" novalidate class="w-full">
             
             <!-- SECCIÓN 1: Datos del colaborador -->
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Datos del colaborador</h3>
+            <div class="mb-10">
+                <h3 class="text-xl font-extrabold text-slate-800 mb-5 border-b border-slate-100 pb-3 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    Datos del colaborador
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                     <div class="w-full box-border">
                         <label class="block text-slate-600 text-sm font-semibold mb-2">Colaborador <span class="text-rose-500">*</span></label>
-                        <select name="nombre_solicitante" id="nombre_solicitante" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border" onchange="updateCargo()">
+                        <select name="nombre_solicitante" id="nombre_solicitante" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100" onchange="updateCargo()">
                             <option value="">Seleccione su nombre...</option>
                         </select>
                         <p class="text-rose-500 text-xs mt-1 hidden" id="error_nombre_solicitante">Por favor selecciona tu nombre.</p>
@@ -41,19 +44,30 @@
             </div>
 
             <!-- SECCIÓN 2: Detalles del ticket -->
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Detalles del ticket</h3>
+            <div class="mb-10">
+                <h3 class="text-xl font-extrabold text-slate-800 mb-5 border-b border-slate-100 pb-3 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    Detalles del ticket
+                </h3>
                 
                 <div class="mb-5 w-full box-border">
                     <label class="block text-slate-600 text-sm font-semibold mb-2">Título / Asunto <span class="text-rose-500">*</span></label>
-                    <input type="text" name="titulo" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border" placeholder="Ej: Falla en impresora de contabilidad">
+                    <input type="text" name="titulo" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100" placeholder="Ej: Falla en impresora de contabilidad">
                     <p class="text-rose-500 text-xs mt-1 hidden" id="error_titulo">El título es obligatorio.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-5">
                     <div class="w-full box-border">
-                        <label class="block text-slate-600 text-sm font-semibold mb-2">Tipo de Afectación <span class="text-rose-500">*</span></label>
-                        <select name="tipo_afectacion" id="tipo_afectacion" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border" onchange="toggleEquipo()">
+                        <label class="flex items-center text-slate-600 text-sm font-semibold mb-2">
+                            Tipo de Afectación <span class="text-rose-500 ml-1">*</span>
+                            <div class="relative group cursor-help ml-2">
+                                <svg class="w-4 h-4 text-slate-400 hover:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10 text-center font-normal">
+                                    <strong>Aplicación:</strong> Fallos en software (Excel, ERP).<br><strong>Equipo:</strong> Daños físicos (Impresora, PC).
+                                </div>
+                            </div>
+                        </label>
+                        <select name="tipo_afectacion" id="tipo_afectacion" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100" onchange="toggleEquipo()">
                             <option value="">Seleccione...</option>
                             <option value="Aplicación">Aplicación</option>
                             <option value="Equipo">Equipo</option>
@@ -62,8 +76,16 @@
                     </div>
 
                     <div class="w-full box-border">
-                        <label class="block text-slate-600 text-sm font-semibold mb-2">Tipo de Solicitud <span class="text-rose-500">*</span></label>
-                        <select name="tipo_solicitud" id="tipo_solicitud" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border">
+                        <label class="flex items-center text-slate-600 text-sm font-semibold mb-2">
+                            Tipo de Solicitud <span class="text-rose-500 ml-1">*</span>
+                            <div class="relative group cursor-help ml-2">
+                                <svg class="w-4 h-4 text-slate-400 hover:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="absolute bottom-full right-0 md:left-1/2 md:-translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10 text-center font-normal">
+                                    <strong>Fallo:</strong> Algo dejó de funcionar.<br><strong>Instalación:</strong> Pides algo nuevo que no tenías.
+                                </div>
+                            </div>
+                        </label>
+                        <select name="tipo_solicitud" id="tipo_solicitud" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100">
                             <option value="">Seleccione...</option>
                             <option value="Fallo">Es un Fallo (No funciona)</option>
                             <option value="Instalación">Solicitud de Instalación</option>
@@ -74,7 +96,7 @@
                 
                 <div class="mb-5 hidden w-full box-border" id="div_equipo">
                     <label class="block text-slate-600 text-sm font-semibold mb-2">¿Qué tipo de equipo? <span class="text-rose-500">*</span></label>
-                    <select name="subtipo_equipo" id="subtipo_equipo" class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border">
+                    <select name="subtipo_equipo" id="subtipo_equipo" class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100">
                         <option value="">Seleccione...</option>
                         <option value="Computador">Computador</option>
                         <option value="Cámara">Cámara</option>
@@ -90,27 +112,30 @@
                     <div class="grid grid-cols-2 md:flex md:flex-wrap gap-2 sm:gap-3">
                         <label class="cursor-pointer w-full md:w-auto">
                             <input type="radio" name="urgencia" value="Bajo" class="peer sr-only">
-                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-emerald-100 peer-checked:text-emerald-700 peer-checked:border-emerald-400 transition-all hover:bg-slate-50">Bajo</div>
+                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-emerald-500 peer-checked:text-white peer-checked:border-emerald-500 transition-all hover:bg-slate-50 hover:border-slate-300">Bajo</div>
                         </label>
                         <label class="cursor-pointer w-full md:w-auto">
                             <input type="radio" name="urgencia" value="Medio" class="peer sr-only">
-                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-amber-100 peer-checked:text-amber-700 peer-checked:border-amber-400 transition-all hover:bg-slate-50">Medio</div>
+                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 transition-all hover:bg-slate-50 hover:border-slate-300">Medio</div>
                         </label>
                         <label class="cursor-pointer w-full md:w-auto">
                             <input type="radio" name="urgencia" value="Alto" class="peer sr-only">
-                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-orange-100 peer-checked:text-orange-700 peer-checked:border-orange-400 transition-all hover:bg-slate-50">Alto</div>
+                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-orange-500 transition-all hover:bg-slate-50 hover:border-slate-300">Alto</div>
                         </label>
                         <label class="cursor-pointer w-full md:w-auto">
                             <input type="radio" name="urgencia" value="Crítico" class="peer sr-only">
-                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-rose-100 peer-checked:text-rose-700 peer-checked:border-rose-400 transition-all hover:bg-slate-50">Crítico</div>
+                            <div class="text-center px-4 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 transition-all hover:bg-slate-50 hover:border-slate-300">Crítico</div>
                         </label>
                     </div>
                     <p class="text-rose-500 text-xs mt-2 hidden" id="error_urgencia">Por favor selecciona el nivel de urgencia.</p>
                 </div>
                 
                 <div class="mb-5 w-full box-border">
-                    <label class="block text-slate-600 text-sm font-semibold mb-2">Descripción detallada <span class="text-rose-500">*</span></label>
-                    <textarea name="descripcion" id="descripcion" rows="4" required placeholder="Describe el problema, cuándo ocurrió y qué esperabas que pasara..." class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border resize-y"></textarea>
+                    <label class="flex justify-between items-end text-slate-600 text-sm font-semibold mb-2">
+                        <span>Descripción detallada <span class="text-rose-500">*</span></span>
+                        <span id="charCount" class="text-xs text-slate-400 font-bold">0/500</span>
+                    </label>
+                    <textarea name="descripcion" id="descripcion" rows="4" maxlength="500" required placeholder="Describe el problema, cuándo ocurrió y qué esperabas que pasara..." class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border resize-y hover:bg-slate-100"></textarea>
                     <p class="text-rose-500 text-xs mt-1 hidden" id="error_descripcion">La descripción es obligatoria.</p>
                 </div>
 
@@ -129,7 +154,7 @@
                 </div>
             </div>
             
-            <button type="submit" id="submitBtn" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-emerald-200/50 w-full transition-all flex items-center justify-center gap-2">
+            <button type="submit" id="submitBtn" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-emerald-200/50 w-full transition-all flex items-center justify-center gap-2 mb-6 sm:mb-0">
                 <svg id="btnSpinner" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -264,6 +289,23 @@
                 }
             });
 
+            // Contador de caracteres para descripción
+            const descInput = document.getElementById('descripcion');
+            const charCount = document.getElementById('charCount');
+            if (descInput && charCount) {
+                descInput.addEventListener('input', function() {
+                    const count = this.value.length;
+                    charCount.textContent = `${count}/500`;
+                    if (count >= 500) {
+                        charCount.classList.add('text-rose-500');
+                        charCount.classList.remove('text-slate-400');
+                    } else {
+                        charCount.classList.remove('text-rose-500');
+                        charCount.classList.add('text-slate-400');
+                    }
+                });
+            }
+
             // Limpiar errores al interactuar
             form.addEventListener('input', (e) => {
                 if(e.target.hasAttribute('required')) {
@@ -284,7 +326,7 @@
         <h2 class="text-2xl font-extrabold mb-8 text-slate-800 tracking-tight">Tickets Recientes</h2>
         
         {% if tickets %}
-        <div class="space-y-4">
+        <div class="flex flex-col gap-3">
             {% for ticket in tickets %}
             <div class="border rounded-2xl p-5 sm:p-6 transition-all hover:shadow-md w-full box-border
                 {% if ticket.estado == 'Completado' %}bg-slate-50 border-slate-100 opacity-75
