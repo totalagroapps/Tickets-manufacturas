@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Gestionar Ticket #{{ ticket.id }} - OlamtexTickets{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <a href="/admin" class="text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        Volver al Panel
+    </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Detalles del Ticket -->
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-50 p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-800">{{ ticket.titulo }}</h2>
+                    <p class="text-slate-500 mt-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        <strong>{{ ticket.nombre_solicitante }}</strong> ({{ ticket.cargo_solicitante }})
+                    </p>
+                </div>
+                <div class="flex flex-col gap-2 shrink-0">
+                    <span class="px-4 py-1.5 text-xs uppercase tracking-wider rounded-lg font-bold text-center border
+                        {% if ticket.estado == 'Pendiente' %}bg-amber-100 text-amber-700 border-amber-200
+                        {% elif ticket.estado == 'En Progreso' %}bg-indigo-100 text-indigo-700 border-indigo-200
+                        {% else %}bg-emerald-100 text-emerald-700 border-emerald-200{% endif %}">
+                        {{ ticket.estado }}
+                    </span>
+                    <span class="px-4 py-1.5 text-xs uppercase tracking-wider rounded-lg font-bold text-center border
+                        {% if ticket.urgencia == 'Crítico' %}bg-rose-100 text-rose-700 border-rose-200
+                        {% elif ticket.urgencia == 'Alto' %}bg-orange-100 text-orange-700 border-orange-200
+                        {% elif ticket.urgencia == 'Medio' %}bg-amber-100 text-amber-700 border-amber-200
+                        {% else %}bg-emerald-100 text-emerald-700 border-emerald-200{% endif %}">
+                        {{ ticket.urgencia }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Fecha</p>
+                    <p class="text-sm font-semibold text-slate-700">{{ ticket.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Afectación</p>
+                    <p class="text-sm font-semibold text-slate-700">{{ ticket.tipo_afectacion }} {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Solicitud</p>
+                    <p class="text-sm font-semibold text-slate-700">{{ ticket.tipo_solicitud }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Responsable</p>
+                    <p class="text-sm font-semibold text-indigo-600">{{ ticket.responsable }}</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Descripción Detallada</h3>
+                <div class="bg-slate-50 p-5 rounded-2xl text-slate-700 leading-relaxed border border-slate-100">
+                    {{ ticket.descripcion }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de Gestiones -->
+        <div class="bg-white rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-50 p-6 sm:p-8">
+            <h3 class="text-xl font-extrabold text-slate-800 mb-6 flex items-center gap-2">
+                <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Gestiones y Notas
+            </h3>
+
+            {% if ticket.gestiones %}
+            <div class="space-y-6 mb-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+                {% for gestion in ticket.gestiones %}
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <!-- Icono Timeline -->
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-indigo-100 text-indigo-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </div>
+                    
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-slate-700 text-sm">{{ gestion.autor }}</span>
+                            <span class="text-xs text-slate-400 font-medium">{{ gestion.fecha.strftime('%d/%m/%Y %H:%M') }}</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-2">{{ gestion.nota }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-slate-400 text-center py-6 bg-slate-50 rounded-2xl border border-slate-100 dashed mb-8">No hay gestiones registradas aún.</p>
+            {% endif %}
+
+            <form action="/admin/ticket/{{ ticket.id }}/gestion" method="POST" class="bg-indigo-50/30 p-6 rounded-2xl border border-indigo-100">
+                <label class="block text-slate-700 font-bold mb-2">Añadir nueva gestión</label>
+                <textarea name="nota" rows="3" required placeholder="Registra lo que hiciste (ej: Se formateó el equipo, se contactó al proveedor...)" class="w-full py-3 px-4 text-slate-700 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border mb-4"></textarea>
+                <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-colors w-full sm:w-auto">Guardar Gestión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Panel Lateral: Actualizar Estado/Responsable -->
+    <div class="space-y-6">
+        <div class="bg-white rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-50 p-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Actualizar Ticket</h3>
+            <form action="/admin/ticket/{{ ticket.id }}/status" method="POST" class="flex flex-col gap-4">
+                
+                <div>
+                    <label class="block text-slate-600 text-sm font-semibold mb-2">Estado</label>
+                    <select name="estado" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-medium text-slate-700 transition-all">
+                        <option value="Pendiente" {% if ticket.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="En Progreso" {% if ticket.estado == 'En Progreso' %}selected{% endif %}>En Progreso</option>
+                        <option value="Completado" {% if ticket.estado == 'Completado' %}selected{% endif %}>Completado</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-slate-600 text-sm font-semibold mb-2">Responsable</label>
+                    <select name="responsable" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 font-medium text-slate-700 transition-all">
+                        <option value="Soporte" {% if ticket.responsable == 'Soporte' %}selected{% endif %}>Soporte (Sistemas)</option>
+                        <option value="Desarrollo" {% if ticket.responsable == 'Desarrollo' %}selected{% endif %}>Desarrollo</option>
+                        <option value="Administrativo" {% if ticket.responsable == 'Administrativo' %}selected{% endif %}>Administrativo</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="bg-indigo-400 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors mt-2">
+                    Actualizar
+                </button>
+            </form>
+        </div>
+        
+        <div class="bg-rose-50 rounded-3xl border border-rose-100 p-6">
+            <h3 class="text-lg font-bold text-rose-800 mb-2">Zona de Peligro</h3>
+            <p class="text-sm text-rose-600 mb-4">Eliminar este ticket borrará todo su historial permanentemente.</p>
+            <form action="/admin/ticket/{{ ticket.id }}/delete" method="POST" onsubmit="return confirm('¿Eliminar ticket definitivamente?');">
+                <button type="submit" class="w-full bg-white hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold py-3 px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    Eliminar Ticket
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

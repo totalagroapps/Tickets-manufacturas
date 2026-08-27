@@ -195,6 +195,7 @@ def admin_dashboard(request: Request, user: models.User = Depends(get_current_ad
 
 @app.post("/admin/ticket/{ticket_id}/status")
 def update_ticket_status(
+    request: Request,
     ticket_id: int,
     estado: str = Form(...),
     responsable: str = Form(...),
@@ -208,6 +209,59 @@ def update_ticket_status(
     if ticket:
         ticket.estado = estado
         ticket.responsable = responsable
+        db.commit()
+        
+    referer = request.headers.get("referer", "/admin")
+    return RedirectResponse(url=referer, status_code=status.HTTP_302_FOUND)
+
+@app.get("/admin/ticket/{ticket_id}", response_class=HTMLResponse)
+def admin_ticket_detail(request: Request, ticket_id: int, user: models.User = Depends(get_current_admin), db: Session = Depends(get_db)):
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    
+    ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket no encontrado")
+        
+    return templates.TemplateResponse(request=request, name="admin_ticket_detail.html", context={"request": request, "ticket": ticket, "user": user})
+
+@app.post("/admin/ticket/{ticket_id}/gestion")
+def add_ticket_gestion(
+    ticket_id: int,
+    nota: str = Form(...),
+    user: models.User = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    
+    ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
+    if ticket:
+        gestion = models.TicketGestion(
+            ticket_id=ticket.id,
+            autor=user.username,
+            nota=nota
+        )
+        db.add(gestion)
+        # Cambiamos estado automáticamente a En Progreso si estaba Pendiente
+        if ticket.estado == "Pendiente":
+            ticket.estado = "En Progreso"
+        db.commit()
+        
+    return RedirectResponse(url=f"/admin/ticket/{ticket_id}", status_code=status.HTTP_302_FOUND)
+
+@app.post("/admin/ticket/{ticket_id}/delete")
+def delete_ticket(
+    ticket_id: int,
+    user: models.User = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    
+    ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
+    if ticket:
+        db.delete(ticket)
         db.commit()
         
     return RedirectResponse(url="/admin", status_code=status.HTTP_302_FOUND)

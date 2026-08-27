@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Text, Enum, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
 import enum
@@ -43,5 +44,19 @@ class Ticket(Base):
     
     urgencia = Column(String, default=TicketUrgency.LOW)
     estado = Column(String, default=TicketStatus.PENDING)
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    fecha_actualizacion = Column(DateTime(timezone=True), onupdate=func.now())
+    
+    fecha_creacion = Column(DateTime, default=func.now())
+    fecha_actualizacion = Column(DateTime, default=func.now(), onupdate=func.now())
+
+    gestiones = relationship("TicketGestion", back_populates="ticket", cascade="all, delete-orphan")
+
+class TicketGestion(Base):
+    __tablename__ = "ticket_gestiones"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    ticket_id = Column(Integer, ForeignKey("tickets.id"))
+    autor = Column(String)
+    nota = Column(Text)
+    fecha = Column(DateTime, default=func.now())
+    
+    ticket = relationship("Ticket", back_populates="gestiones")
