@@ -1,0 +1,21 @@
+{
+    "name": "Olamtex Tickets",
+    "short_name": "Tickets",
+    "description": "Sistema de gestión de tickets de Manufacturas Olamtex SAS",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#818cf8",
+    "icons": [
+        {
+            "src": "https://ui-avatars.com/api/?name=Olamtex&background=818cf8&color=fff&size=192",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://ui-avatars.com/api/?name=Olamtex&background=818cf8&color=fff&size=512",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
