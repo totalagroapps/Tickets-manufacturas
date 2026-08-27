@@ -164,7 +164,6 @@ def create_ticket(
     tipo_afectacion: str = Form(...),
     subtipo_equipo: str = Form(None),
     tipo_solicitud: str = Form(...),
-    responsable: str = Form(...),
     user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -180,7 +179,7 @@ def create_ticket(
         tipo_afectacion=tipo_afectacion,
         subtipo_equipo=subtipo_equipo,
         tipo_solicitud=tipo_solicitud,
-        responsable=responsable
+        responsable="Soporte" # Por defecto entra a Soporte
     )
     db.add(new_ticket)
     db.commit()
@@ -198,6 +197,7 @@ def admin_dashboard(request: Request, user: models.User = Depends(get_current_ad
 def update_ticket_status(
     ticket_id: int,
     estado: str = Form(...),
+    responsable: str = Form(...),
     user: models.User = Depends(get_current_admin),
     db: Session = Depends(get_db)
 ):
@@ -207,6 +207,7 @@ def update_ticket_status(
     ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
     if ticket:
         ticket.estado = estado
+        ticket.responsable = responsable
         db.commit()
         
     return RedirectResponse(url="/admin", status_code=status.HTTP_302_FOUND)

@@ -43,13 +43,20 @@
                         </span>
                     </td>
                     <td class="w-1/6 text-left py-4 px-6">
-                        <form action="/admin/ticket/{{ ticket.id }}/status" method="POST" class="flex gap-2 items-center">
+                        <form action="/admin/ticket/{{ ticket.id }}/status" method="POST" class="flex flex-col gap-2">
                             <select name="estado" class="border border-slate-200 rounded-lg p-2 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 font-medium text-slate-700 shadow-sm transition-all">
                                 <option value="Pendiente" {% if ticket.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
                                 <option value="En Progreso" {% if ticket.estado == 'En Progreso' %}selected{% endif %}>En Progreso</option>
                                 <option value="Completado" {% if ticket.estado == 'Completado' %}selected{% endif %}>Completado</option>
                             </select>
-                            <button type="submit" class="bg-indigo-400 hover:bg-indigo-500 text-white px-3 py-2 rounded-lg text-sm font-bold shadow-sm shadow-indigo-200 transition-colors">OK</button>
+                            
+                            <select name="responsable" class="border border-slate-200 rounded-lg p-2 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 font-medium text-slate-700 shadow-sm transition-all">
+                                <option value="Soporte" {% if ticket.responsable == 'Soporte' %}selected{% endif %}>Soporte (Sistemas)</option>
+                                <option value="Desarrollo" {% if ticket.responsable == 'Desarrollo' %}selected{% endif %}>Desarrollo</option>
+                                <option value="Administrativo" {% if ticket.responsable == 'Administrativo' %}selected{% endif %}>Administrativo</option>
+                            </select>
+
+                            <button type="submit" class="bg-indigo-400 hover:bg-indigo-500 text-white px-3 py-2 rounded-lg text-sm font-bold shadow-sm shadow-indigo-200 transition-colors w-full">Guardar Cambios</button>
                         </form>
                     </td>
                 </tr>
