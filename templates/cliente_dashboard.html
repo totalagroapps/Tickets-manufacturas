@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Ticket - TicketsApp{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <!-- Formulario para nuevo ticket -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-bold mb-4">Reportar un nuevo problema</h2>
+        
+        <form action="/tickets" method="POST">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Colaborador (Nombre)</label>
+                <select name="nombre_solicitante" id="nombre_solicitante" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500" onchange="updateCargo()">
+                    <option value="">Seleccione su nombre...</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Cargo</label>
+                <input type="text" name="cargo_solicitante" id="cargo_solicitante" readonly class="border rounded w-full py-2 px-3 text-gray-500 bg-gray-100 cursor-not-allowed focus:outline-none">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Título / Asunto</label>
+                <input type="text" name="titulo" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Afectación</label>
+                <select name="tipo_afectacion" id="tipo_afectacion" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500" onchange="toggleEquipo()">
+                    <option value="">Seleccione...</option>
+                    <option value="Aplicación">Aplicación</option>
+                    <option value="Equipo">Equipo</option>
+                </select>
+            </div>
+            
+            <div class="mb-4 hidden" id="div_equipo">
+                <label class="block text-gray-700 text-sm font-bold mb-2">¿Qué tipo de equipo?</label>
+                <select name="subtipo_equipo" id="subtipo_equipo" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+                    <option value="">Seleccione...</option>
+                    <option value="Computador">Computador</option>
+                    <option value="Cámara">Cámara</option>
+                    <option value="Impresora">Impresora</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Solicitud</label>
+                <select name="tipo_solicitud" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+                    <option value="">Seleccione...</option>
+                    <option value="Fallo">Es un Fallo (No funciona)</option>
+                    <option value="Instalación">Solicitud de Instalación</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Urgencia</label>
+                <select name="urgencia" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+                    <option value="Bajo">Bajo</option>
+                    <option value="Medio">Medio</option>
+                    <option value="Alto">Alto</option>
+                    <option value="Crítico">Crítico</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Descripción detallada</label>
+                <textarea name="descripcion" rows="4" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500"></textarea>
+            </div>
+            
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">
+                Enviar Ticket
+            </button>
+        </form>
+
+        <script>
+            const empleados = {
+                "AGUIRRE JAIMES MARIA ALEJANDRA": "COORDINADORA INVESTIGACIÓN Y DESARROLLO DE PRODUCTO",
+                "ARISTIZABAL ECHEVERRY LUIS FELIPE": "GERENTE",
+                "ARROYAVE PEREZ DEILY DAYHANA": "ASESOR COMERCIAL",
+                "BERNAL VARGAS MARIA JOSÉ": "APRENDIZ SENA ETAPA PRODUCTIVA",
+                "CAMPILLO VELASQUEZ LUISA MARIA": "ANALISTA JUNIOR DISEÑO CREATIVO",
+                "CARDONA OSORIO LAURA": "LIDER C&DH",
+                "CORREA RESTREPO LEIDY JHOANA": "APRENDIZ SENA ETAPA PRODUCTIVA",
+                "CORRALES MARÍN JUAN ESTEBAN": "COORDINADOR FINANCIERO",
+                "FORERO VELÁZQUEZ JESSICA": "ASESOR COMERCIAL",
+                "GAVIRIA CASTAÑO SOPHIA": "ANALISTA JUNIOR DISEÑO CREATIVO",
+                "GARCIA CARDONA LUISA FERNANDA": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
+                "GIRALDO HERRERA CRISTIAN FELIPE": "LIDER DESARROLLO ORGANIZACIONAL",
+                "HERNANDEZ FRANCO DAIRO": "AUXILIAR DISEÑO TEJEDURIA",
+                "MERCADO RENDON YEIMMY ALEJANDRA": "SUPERVISORA DE PLANTA",
+                "OCAMPO CANDAMIL DIEGO ALEJANDRO": "AUXILIAR COMERCIAL",
+                "OSORIO MANSO YICETH CAMILA": "APRENDIZ SENA ETAPA PRODUCTIVA",
+                "PALACIO HERRERA CARLOS": "COORDINADOR DE PRODUCCIÓN",
+                "PARRA GALVIS ADRIANA": "COORDINADOR DE PRODUCCIÓN",
+                "PEREZ CIFUENTES MARIA ALEJANDRA": "AUXILIAR DE DISEÑO",
+                "QUINTERO TAPASCO ANGIE DANIELA": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
+                "QUINTERO LONDOÑO CRISTIAN DAVID": "SUPERVISOR DE PLANTA",
+                "SANCHEZ ORTEGA KAREN NAYITH": "ANALISTA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+                "SALAZAR ARISTIZABAL ALEX MAURICIO": "AUXILIAR CONTABLE",
+                "SALAMANCA VILLA ANGIE JULIETH": "COORDINADORA JUNIOR COMERCIAL",
+                "TEJADA PEREZ PAULINA": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
+                "TORO GARCIA JUAN JOSE": "COORDINADOR LOGISTICO",
+                "TORRES MONTAÑO NICOLL XIOMARA": "AUXILIAR DE TESORERIA",
+                "VARGAS CORREA DIANA MARCELA": "ANALISTA DE METODOS Y EFICIENCIA PRODUCTIVA",
+                "VELEZ FLOREZ VALENTINA": "COORDINADORA NUEVAS CUENTAS",
+                "VELEZ JIMENEZ JUAN CAMILO": "ANALISTA JUNIOR METODOS, TIEMPO, CALIDAD",
+                "ZAPATA AGUIRRE MARIA ALEJANDRA": "ANALISTA ADMINISTRATIVA"
+            };
+
+            // Poblar select
+            const selectNombre = document.getElementById('nombre_solicitante');
+            for (const nombre of Object.keys(empleados).sort()) {
+                const opt = document.createElement('option');
+                opt.value = nombre;
+                opt.textContent = nombre;
+                selectNombre.appendChild(opt);
+            }
+
+            function updateCargo() {
+                const nombre = document.getElementById('nombre_solicitante').value;
+                const cargo = empleados[nombre] || '';
+                document.getElementById('cargo_solicitante').value = cargo;
+            }
+
+            function toggleEquipo() {
+                const tipo = document.getElementById('tipo_afectacion').value;
+                const divEquipo = document.getElementById('div_equipo');
+                const selEquipo = document.getElementById('subtipo_equipo');
+                if (tipo === 'Equipo') {
+                    divEquipo.classList.remove('hidden');
+                    selEquipo.required = true;
+                } else {
+                    divEquipo.classList.add('hidden');
+                    selEquipo.required = false;
+                    selEquipo.value = "";
+                }
+            }
+        </script>
+    </div>
+
+    <!-- Lista de últimos tickets -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-bold mb-4">Tickets Recientes</h2>
+        
+        {% if tickets %}
+        <div class="space-y-4">
+            {% for ticket in tickets %}
+            <div class="border p-4 rounded {% if ticket.estado == 'Completado' %}bg-gray-50 border-gray-200{% else %}border-blue-200 bg-blue-50{% endif %}">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-gray-800">{{ ticket.titulo }}</h3>
+                        <p class="text-xs text-gray-500 mb-1">{{ ticket.fecha_creacion.strftime('%d/%m/%Y %I:%M %p') if ticket.fecha_creacion else '' }}</p>
+                        <p class="text-sm text-gray-600">Reportado por: <strong>{{ ticket.nombre_solicitante }}</strong> ({{ ticket.cargo_solicitante }})</p>
+                        <p class="text-sm text-gray-600">
+                            Tipo: {{ ticket.tipo_solicitud }} - {{ ticket.tipo_afectacion }} 
+                            {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <span class="px-2 py-1 text-xs rounded font-bold
+                            {% if ticket.estado == 'Pendiente' %}bg-yellow-200 text-yellow-800
+                            {% elif ticket.estado == 'En Progreso' %}bg-blue-200 text-blue-800
+                            {% else %}bg-green-200 text-green-800{% endif %}">
+                            {{ ticket.estado }}
+                        </span>
+                    </div>
+                </div>
+                <p class="text-sm mt-2 text-gray-700 truncate">{{ ticket.descripcion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500">No hay tickets reportados aún.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
