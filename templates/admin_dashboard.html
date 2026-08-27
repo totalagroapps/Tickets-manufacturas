@@ -28,7 +28,7 @@
                     <td class="w-1/3 text-left py-4 px-6">
                         <div class="font-bold text-lg text-indigo-500">{{ ticket.titulo }}</div>
                         <div class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">
-                            {{ ticket.tipo_solicitud }} <span class="mx-1 text-slate-300">|</span> {{ ticket.tipo_afectacion }} 
+                            Asignado a: <span class="text-indigo-600">{{ ticket.responsable }}</span> <span class="mx-1 text-slate-300">|</span> {{ ticket.tipo_solicitud }} <span class="mx-1 text-slate-300">|</span> {{ ticket.tipo_afectacion }} 
                             {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}
                         </div>
                         <div class="text-sm text-slate-600 mt-2">{{ ticket.descripcion }}</div>

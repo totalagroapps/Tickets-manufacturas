@@ -43,6 +43,8 @@
                     <option value="Computador">Computador</option>
                     <option value="Cámara">Cámara</option>
                     <option value="Impresora">Impresora</option>
+                    <option value="Lector de código de barras">Lector de código de barras</option>
+                    <option value="Radio">Radio</option>
                 </select>
             </div>
 
@@ -55,6 +57,16 @@
                 </select>
             </div>
             
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Responsable del Ticket</label>
+                <select name="responsable" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
+                    <option value="">Seleccione a quién va dirigido...</option>
+                    <option value="Soporte">Soporte (Sistemas/IT)</option>
+                    <option value="Desarrollo">Desarrollo (Software)</option>
+                    <option value="Administrativo">Administrativo</option>
+                </select>
+            </div>
+
             <div class="mb-5">
                 <label class="block text-slate-600 text-sm font-semibold mb-2">Urgencia</label>
                 <select name="urgencia" class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
@@ -169,7 +181,7 @@
                         </div>
                         
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                            {{ ticket.tipo_solicitud }} <span class="mx-1">|</span> {{ ticket.tipo_afectacion }} 
+                            Dirigido a: <span class="text-indigo-500">{{ ticket.responsable }}</span> <span class="mx-1">|</span> {{ ticket.tipo_solicitud }} <span class="mx-1">|</span> {{ ticket.tipo_afectacion }} 
                             {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}
                         </p>
                         

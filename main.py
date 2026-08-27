@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -44,6 +45,15 @@ def create_default_users():
 async def lifespan(app: FastAPI):
     # Startup
     models.Base.metadata.create_all(bind=engine)
+    
+    # Intento de agregar columnas nuevas si ya existía la tabla (útil para SQLite y Postgres sin alembic)
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE tickets ADD COLUMN responsable VARCHAR DEFAULT 'Soporte'"))
+            conn.commit()
+    except Exception:
+        pass # La columna ya existe
+        
     create_default_users()
     yield
     # Shutdown
@@ -154,6 +164,7 @@ def create_ticket(
     tipo_afectacion: str = Form(...),
     subtipo_equipo: str = Form(None),
     tipo_solicitud: str = Form(...),
+    responsable: str = Form(...),
     user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -168,7 +179,8 @@ def create_ticket(
         urgencia=urgencia,
         tipo_afectacion=tipo_afectacion,
         subtipo_equipo=subtipo_equipo,
-        tipo_solicitud=tipo_solicitud
+        tipo_solicitud=tipo_solicitud,
+        responsable=responsable
     )
     db.add(new_ticket)
     db.commit()

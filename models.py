@@ -39,6 +39,7 @@ class Ticket(Base):
     tipo_afectacion = Column(String) # Aplicación, Equipo
     subtipo_equipo = Column(String, nullable=True) # Computador, Cámara, Impresora (solo si es Equipo)
     tipo_solicitud = Column(String) # Fallo, Instalación
+    responsable = Column(String, default="Soporte") # Soporte, Desarrollo, Administrativo
     
     urgencia = Column(String, default=TicketUrgency.LOW)
     estado = Column(String, default=TicketStatus.PENDING)
