@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Tickets{% endblock %}</title>
     <meta name="theme-color" content="#818cf8">
+    <link rel="icon" type="image/png" href="/static/logo.png">
     <link rel="manifest" href="/static/manifest.json">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Olamtex&background=818cf8&color=fff&size=192">
+    <link rel="apple-touch-icon" href="/static/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans text-slate-800">
     <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-indigo-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 font-extrabold text-xl sm:text-2xl tracking-tight text-indigo-400">
-                    <a href="/">Olamtex<span class="text-slate-800">Tickets</span></a>
+            <div class="flex justify-between h-16 sm:h-20 items-center">
+                <div class="flex-shrink-0">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="/static/logo.png" alt="Olamtex" class="h-10 sm:h-12 object-contain">
+                        <span class="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-800 hidden md:block">Tickets</span>
+                    </a>
                 </div>
                 <div class="flex items-center gap-3">
                     {% if user %}
