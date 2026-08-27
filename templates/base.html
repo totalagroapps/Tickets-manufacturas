@@ -21,9 +21,14 @@
                     </a>
                 </div>
                 <div class="flex items-center gap-3">
+                    <button id="installAppBtn" class="hidden bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-colors shadow-sm flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        <span class="hidden sm:inline">Instalar App</span>
+                        <span class="sm:hidden">Instalar</span>
+                    </button>
                     {% if user %}
-                        <span class="hidden sm:inline text-sm font-medium text-slate-500">Hola, {{ user.username }}</span>
-                        <a href="/logout" class="bg-rose-300 hover:bg-rose-400 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors shadow-sm shadow-rose-200">Cerrar Sesión</a>
+                        <span class="hidden md:inline text-sm font-medium text-slate-500">Hola, {{ user.username }}</span>
+                        <a href="/logout" class="bg-rose-300 hover:bg-rose-400 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors shadow-sm shadow-rose-200">Salir</a>
                     {% endif %}
                 </div>
             </div>
@@ -42,6 +47,42 @@
                     .catch(err => console.log('SW error', err));
             });
         }
+
+        let deferredPrompt;
+        const installAppBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI to notify the user they can add to home screen
+            installAppBtn.classList.remove('hidden');
+        });
+
+        installAppBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                // We've used the prompt, and can't use it again, throw it away
+                deferredPrompt = null;
+                installAppBtn.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            // Hide the app-provided install promotion
+            installAppBtn.classList.add('hidden');
+            deferredPrompt = null;
+            console.log('PWA was installed');
+        });
     </script>
 </body>
 </html>
