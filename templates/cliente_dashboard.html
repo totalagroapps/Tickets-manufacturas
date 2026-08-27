@@ -3,42 +3,42 @@
 {% block title %}Crear Ticket - TicketsApp{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
     
     <!-- Formulario para nuevo ticket -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Reportar un nuevo problema</h2>
+    <div class="bg-white rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-50 p-8">
+        <h2 class="text-2xl font-extrabold mb-8 text-slate-800">Reportar un nuevo problema</h2>
         
         <form action="/tickets" method="POST">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Colaborador (Nombre)</label>
-                <select name="nombre_solicitante" id="nombre_solicitante" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500" onchange="updateCargo()">
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Colaborador (Nombre)</label>
+                <select name="nombre_solicitante" id="nombre_solicitante" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all" onchange="updateCargo()">
                     <option value="">Seleccione su nombre...</option>
                 </select>
             </div>
             
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Cargo</label>
-                <input type="text" name="cargo_solicitante" id="cargo_solicitante" readonly class="border rounded w-full py-2 px-3 text-gray-500 bg-gray-100 cursor-not-allowed focus:outline-none">
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Cargo</label>
+                <input type="text" name="cargo_solicitante" id="cargo_solicitante" readonly class="w-full py-3 px-4 text-slate-500 bg-slate-100 border border-slate-200 rounded-xl cursor-not-allowed focus:outline-none">
             </div>
             
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Título / Asunto</label>
-                <input type="text" name="titulo" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Título / Asunto</label>
+                <input type="text" name="titulo" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
             </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Afectación</label>
-                <select name="tipo_afectacion" id="tipo_afectacion" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500" onchange="toggleEquipo()">
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Tipo de Afectación</label>
+                <select name="tipo_afectacion" id="tipo_afectacion" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all" onchange="toggleEquipo()">
                     <option value="">Seleccione...</option>
                     <option value="Aplicación">Aplicación</option>
                     <option value="Equipo">Equipo</option>
                 </select>
             </div>
             
-            <div class="mb-4 hidden" id="div_equipo">
-                <label class="block text-gray-700 text-sm font-bold mb-2">¿Qué tipo de equipo?</label>
-                <select name="subtipo_equipo" id="subtipo_equipo" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+            <div class="mb-5 hidden" id="div_equipo">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">¿Qué tipo de equipo?</label>
+                <select name="subtipo_equipo" id="subtipo_equipo" class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
                     <option value="">Seleccione...</option>
                     <option value="Computador">Computador</option>
                     <option value="Cámara">Cámara</option>
@@ -46,18 +46,18 @@
                 </select>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Solicitud</label>
-                <select name="tipo_solicitud" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Tipo de Solicitud</label>
+                <select name="tipo_solicitud" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
                     <option value="">Seleccione...</option>
                     <option value="Fallo">Es un Fallo (No funciona)</option>
                     <option value="Instalación">Solicitud de Instalación</option>
                 </select>
             </div>
             
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Urgencia</label>
-                <select name="urgencia" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500">
+            <div class="mb-5">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Urgencia</label>
+                <select name="urgencia" class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
                     <option value="Bajo">Bajo</option>
                     <option value="Medio">Medio</option>
                     <option value="Alto">Alto</option>
@@ -65,12 +65,12 @@
                 </select>
             </div>
             
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Descripción detallada</label>
-                <textarea name="descripcion" rows="4" required class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500"></textarea>
+            <div class="mb-8">
+                <label class="block text-slate-600 text-sm font-semibold mb-2">Descripción detallada</label>
+                <textarea name="descripcion" rows="4" required class="w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all"></textarea>
             </div>
             
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">
+            <button type="submit" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-emerald-200 w-full transition-colors">
                 Enviar Ticket
             </button>
         </form>
@@ -110,7 +110,6 @@
                 "ZAPATA AGUIRRE MARIA ALEJANDRA": "ANALISTA ADMINISTRATIVA"
             };
 
-            // Poblar select
             const selectNombre = document.getElementById('nombre_solicitante');
             for (const nombre of Object.keys(empleados).sort()) {
                 const opt = document.createElement('option');
@@ -142,38 +141,48 @@
     </div>
 
     <!-- Lista de últimos tickets -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Tickets Recientes</h2>
+    <div class="bg-white rounded-3xl shadow-lg shadow-indigo-100/50 border border-indigo-50 p-8">
+        <h2 class="text-2xl font-extrabold mb-8 text-slate-800">Tickets Recientes</h2>
         
         {% if tickets %}
         <div class="space-y-4">
             {% for ticket in tickets %}
-            <div class="border p-4 rounded {% if ticket.estado == 'Completado' %}bg-gray-50 border-gray-200{% else %}border-blue-200 bg-blue-50{% endif %}">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="font-bold text-gray-800">{{ ticket.titulo }}</h3>
-                        <p class="text-xs text-gray-500 mb-1">{{ ticket.fecha_creacion.strftime('%d/%m/%Y %I:%M %p') if ticket.fecha_creacion else '' }}</p>
-                        <p class="text-sm text-gray-600">Reportado por: <strong>{{ ticket.nombre_solicitante }}</strong> ({{ ticket.cargo_solicitante }})</p>
-                        <p class="text-sm text-gray-600">
-                            Tipo: {{ ticket.tipo_solicitud }} - {{ ticket.tipo_afectacion }} 
+            <div class="border rounded-2xl p-6 transition-all hover:shadow-md 
+                {% if ticket.estado == 'Completado' %}bg-slate-50 border-slate-100 opacity-75
+                {% else %}bg-indigo-50/50 border-indigo-100 hover:border-indigo-200{% endif %}">
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-1">
+                            <h3 class="font-bold text-lg text-indigo-900">{{ ticket.titulo }}</h3>
+                            <span class="px-3 py-1 text-[10px] uppercase tracking-wider rounded-full font-bold
+                                {% if ticket.estado == 'Pendiente' %}bg-amber-100 text-amber-700
+                                {% elif ticket.estado == 'En Progreso' %}bg-indigo-100 text-indigo-700
+                                {% else %}bg-emerald-100 text-emerald-700{% endif %}">
+                                {{ ticket.estado }}
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-3 font-medium">{{ ticket.fecha_creacion.strftime('%d/%m/%Y %I:%M %p') if ticket.fecha_creacion else '' }}</p>
+                        
+                        <div class="bg-white/60 rounded-xl p-3 border border-white/40 mb-3">
+                            <p class="text-sm text-slate-700 mb-1">Reportado por: <span class="font-bold">{{ ticket.nombre_solicitante }}</span></p>
+                            <p class="text-xs text-slate-500">{{ ticket.cargo_solicitante }}</p>
+                        </div>
+                        
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                            {{ ticket.tipo_solicitud }} <span class="mx-1">|</span> {{ ticket.tipo_afectacion }} 
                             {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}
                         </p>
-                    </div>
-                    <div>
-                        <span class="px-2 py-1 text-xs rounded font-bold
-                            {% if ticket.estado == 'Pendiente' %}bg-yellow-200 text-yellow-800
-                            {% elif ticket.estado == 'En Progreso' %}bg-blue-200 text-blue-800
-                            {% else %}bg-green-200 text-green-800{% endif %}">
-                            {{ ticket.estado }}
-                        </span>
+                        
+                        <p class="text-sm mt-3 text-slate-700 bg-white/40 p-4 rounded-xl border border-white/50 leading-relaxed">{{ ticket.descripcion }}</p>
                     </div>
                 </div>
-                <p class="text-sm mt-2 text-gray-700 truncate">{{ ticket.descripcion }}</p>
             </div>
             {% endfor %}
         </div>
         {% else %}
-        <p class="text-gray-500">No hay tickets reportados aún.</p>
+        <div class="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100 dashed">
+            <p class="text-slate-400 font-medium">No hay tickets reportados aún.</p>
+        </div>
         {% endif %}
     </div>
 
