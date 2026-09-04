@@ -35,6 +35,7 @@ class Ticket(Base):
     descripcion = Column(Text)
     nombre_solicitante = Column(String)
     cargo_solicitante = Column(String, nullable=True)
+    celular_solicitante = Column(String, nullable=True)
     
     # Nuevos campos solicitados
     tipo_afectacion = Column(String) # Aplicación, Equipo

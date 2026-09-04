@@ -28,17 +28,25 @@
                     Datos del colaborador
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-                    <div class="w-full box-border">
+                    <div class="w-full box-border md:col-span-2">
                         <label class="block text-slate-600 text-sm font-semibold mb-2">Colaborador <span class="text-rose-500">*</span></label>
-                        <select name="nombre_solicitante" id="nombre_solicitante" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100" onchange="updateCargo()">
-                            <option value="">Seleccione su nombre...</option>
+                        <div class="relative mb-2">
+                            <input type="text" id="buscador_colaborador" placeholder="🔍 Escribe nombre o celular para filtrar la lista..." class="w-full py-2.5 px-3.5 text-xs sm:text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:bg-white transition-all box-border">
+                        </div>
+                        <select name="nombre_solicitante" id="nombre_solicitante" required class="custom-select w-full py-3 px-4 text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all box-border hover:bg-slate-100" onchange="updateColaborador()">
+                            <option value="">Seleccione su nombre o número...</option>
                         </select>
                         <p class="text-rose-500 text-xs mt-1 hidden" id="error_nombre_solicitante">Por favor selecciona tu nombre.</p>
                     </div>
                     
                     <div class="w-full box-border">
                         <label class="block text-slate-600 text-sm font-semibold mb-2">Cargo</label>
-                        <input type="text" name="cargo_solicitante" id="cargo_solicitante" readonly class="w-full py-3 px-4 text-slate-500 bg-slate-100 border border-slate-200 rounded-xl cursor-not-allowed focus:outline-none box-border">
+                        <input type="text" name="cargo_solicitante" id="cargo_solicitante" readonly class="w-full py-3 px-4 text-slate-500 bg-slate-100 border border-slate-200 rounded-xl cursor-not-allowed focus:outline-none box-border" placeholder="Cargo automático">
+                    </div>
+
+                    <div class="w-full box-border">
+                        <label class="block text-slate-600 text-sm font-semibold mb-2">Celular / WhatsApp</label>
+                        <input type="text" name="celular_solicitante" id="celular_solicitante" readonly class="w-full py-3 px-4 text-slate-700 bg-slate-100 border border-slate-200 rounded-xl cursor-not-allowed focus:outline-none box-border font-medium" placeholder="Celular automático">
                     </div>
                 </div>
             </div>
@@ -165,51 +173,81 @@
 
         <script>
             const empleados = {
-                "AGUIRRE JAIMES MARIA ALEJANDRA": "COORDINADORA INVESTIGACIÓN Y DESARROLLO DE PRODUCTO",
-                "ARISTIZABAL ECHEVERRY LUIS FELIPE": "GERENTE",
-                "ARROYAVE PEREZ DEILY DAYHANA": "ASESOR COMERCIAL",
-                "BERNAL VARGAS MARIA JOSÉ": "APRENDIZ SENA ETAPA PRODUCTIVA",
-                "CAMPILLO VELASQUEZ LUISA MARIA": "ANALISTA JUNIOR DISEÑO CREATIVO",
-                "CARDONA OSORIO LAURA": "LIDER C&DH",
-                "CORREA RESTREPO LEIDY JHOANA": "APRENDIZ SENA ETAPA PRODUCTIVA",
-                "CORRALES MARÍN JUAN ESTEBAN": "COORDINADOR FINANCIERO",
-                "FORERO VELÁZQUEZ JESSICA": "ASESOR COMERCIAL",
-                "GAVIRIA CASTAÑO SOPHIA": "ANALISTA JUNIOR DISEÑO CREATIVO",
-                "GARCIA CARDONA LUISA FERNANDA": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
-                "GIRALDO HERRERA CRISTIAN FELIPE": "LIDER DESARROLLO ORGANIZACIONAL",
-                "HERNANDEZ FRANCO DAIRO": "AUXILIAR DISEÑO TEJEDURIA",
-                "MERCADO RENDON YEIMMY ALEJANDRA": "SUPERVISORA DE PLANTA",
-                "OCAMPO CANDAMIL DIEGO ALEJANDRO": "AUXILIAR COMERCIAL",
-                "OSORIO MANSO YICETH CAMILA": "APRENDIZ SENA ETAPA PRODUCTIVA",
-                "PALACIO HERRERA CARLOS": "COORDINADOR DE PRODUCCIÓN",
-                "PARRA GALVIS ADRIANA": "COORDINADOR DE PRODUCCIÓN",
-                "PEREZ CIFUENTES MARIA ALEJANDRA": "AUXILIAR DE DISEÑO",
-                "QUINTERO TAPASCO ANGIE DANIELA": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
-                "QUINTERO LONDOÑO CRISTIAN DAVID": "SUPERVISOR DE PLANTA",
-                "SANCHEZ ORTEGA KAREN NAYITH": "ANALISTA DE SEGURIDAD Y SALUD EN EL TRABAJO",
-                "SALAZAR ARISTIZABAL ALEX MAURICIO": "AUXILIAR CONTABLE",
-                "SALAMANCA VILLA ANGIE JULIETH": "COORDINADORA JUNIOR COMERCIAL",
-                "TEJADA PEREZ PAULINA": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
-                "TORO GARCIA JUAN JOSE": "COORDINADOR LOGISTICO",
-                "TORRES MONTAÑO NICOLL XIOMARA": "AUXILIAR DE TESORERIA",
-                "VARGAS CORREA DIANA MARCELA": "ANALISTA DE METODOS Y EFICIENCIA PRODUCTIVA",
-                "VELEZ FLOREZ VALENTINA": "COORDINADORA NUEVAS CUENTAS",
-                "VELEZ JIMENEZ JUAN CAMILO": "ANALISTA JUNIOR METODOS, TIEMPO, CALIDAD",
-                "ZAPATA AGUIRRE MARIA ALEJANDRA": "ANALISTA ADMINISTRATIVA"
+                "AGUIRRE JAIMES MARIA ALEJANDRA": { cargo: "COORDINADORA INVESTIGACIÓN Y DESARROLLO DE PRODUCTO", celular: "3226372036" },
+                "ARISTIZABAL ECHEVERRY LUIS FELIPE": { cargo: "GERENTE", celular: "3174400191" },
+                "ARROYAVE PEREZ DEILY DAYHANA": { cargo: "ASESOR COMERCIAL", celular: "3226040898" },
+                "BERNAL VARGAS MARIA JOSÉ": { cargo: "APRENDIZ SENA ETAPA PRODUCTIVA", celular: "3116939284" },
+                "CAMPILLO VELASQUEZ LUISA MARIA": { cargo: "ANALISTA JUNIOR DISEÑO CREATIVO", celular: "3216507532" },
+                "CARDONA OSORIO LAURA": { cargo: "LIDER C&DH", celular: "3005068231" },
+                "CORREA RESTREPO LEIDY JHOANA": { cargo: "APRENDIZ SENA ETAPA PRODUCTIVA", celular: "3195229166" },
+                "CORRALES MARÍN JUAN ESTEBAN": { cargo: "COORDINADOR FINANCIERO", celular: "3104591966" },
+                "FORERO VELÁZQUEZ JESSICA": { cargo: "ASESOR COMERCIAL", celular: "3113821193" },
+                "GAVIRIA CASTAÑO SOPHIA": { cargo: "ANALISTA JUNIOR DISEÑO CREATIVO", celular: "3235257501" },
+                "GARCIA CARDONA LUISA FERNANDA": { cargo: "ANALISTA JUNIOR CALIDAD Y CONFECCION", celular: "3127743024" },
+                "GIRALDO HERRERA CRISTIAN FELIPE": { cargo: "LIDER DESARROLLO ORGANIZACIONAL", celular: "3215652399" },
+                "HERNANDEZ FRANCO DAIRO": { cargo: "AUXILIAR DISEÑO TEJEDURIA", celular: "3207279081" },
+                "MERCADO RENDON YEIMMY ALEJANDRA": { cargo: "SUPERVISORA DE PLANTA", celular: "3202164992" },
+                "OCAMPO CANDAMIL DIEGO ALEJANDRO": { cargo: "AUXILIAR COMERCIAL", celular: "3225401861" },
+                "OSORIO MANSO YICETH CAMILA": { cargo: "APRENDIZ SENA ETAPA PRODUCTIVA", celular: "3116857931" },
+                "PALACIO HERRERA CARLOS": { cargo: "COORDINADOR DE PRODUCCIÓN", celular: "3206041907" },
+                "PARRA GALVIS ADRIANA": { cargo: "COORDINADOR DE PRODUCCIÓN", celular: "3136334441" },
+                "PEREZ CIFUENTES MARIA ALEJANDRA": { cargo: "AUXILIAR DE DISEÑO", celular: "3043749051" },
+                "QUINTERO TAPASCO ANGIE DANIELA": { cargo: "ANALISTA JUNIOR CALIDAD Y CONFECCION", celular: "3234623428" },
+                "QUINTERO LONDOÑO CRISTIAN DAVID": { cargo: "SUPERVISOR DE PLANTA", celular: "3203367730" },
+                "SANCHEZ ORTEGA KAREN NAYITH": { cargo: "ANALISTA DE SEGURIDAD Y SALUD EN EL TRABAJO", celular: "3226124959" },
+                "SALAZAR ARISTIZABAL ALEX MAURICIO": { cargo: "AUXILIAR CONTABLE", celular: "3045916546" },
+                "SALAMANCA VILLA ANGIE JULIETH": { cargo: "COORDINADORA JUNIOR COMERCIAL", celular: "3116125157" },
+                "TEJADA PEREZ PAULINA": { cargo: "ANALISTA JUNIOR CALIDAD Y CONFECCION", celular: "3234908094" },
+                "TORO GARCIA JUAN JOSE": { cargo: "COORDINADOR LOGISTICO", celular: "3186972893" },
+                "TORRES MONTAÑO NICOLL XIOMARA": { cargo: "AUXILIAR DE TESORERIA", celular: "3112006100" },
+                "VARGAS CORREA DIANA MARCELA": { cargo: "ANALISTA DE METODOS Y EFICIENCIA PRODUCTIVA", celular: "3128944490" },
+                "VELEZ FLOREZ VALENTINA": { cargo: "COORDINADORA NUEVAS CUENTAS", celular: "3168316404" },
+                "VELEZ JIMENEZ JUAN CAMILO": { cargo: "ANALISTA JUNIOR METODOS, TIEMPO, CALIDAD", celular: "3053027288" },
+                "ZAPATA AGUIRRE MARIA ALEJANDRA": { cargo: "ANALISTA ADMINISTRATIVA", celular: "3245646745" }
             };
 
             const selectNombre = document.getElementById('nombre_solicitante');
-            for (const nombre of Object.keys(empleados).sort()) {
-                const opt = document.createElement('option');
-                opt.value = nombre;
-                opt.textContent = nombre;
-                selectNombre.appendChild(opt);
+            const buscador = document.getElementById('buscador_colaborador');
+
+            function renderOpciones(filtro = "") {
+                const valorActual = selectNombre.value;
+                selectNombre.innerHTML = '<option value="">Seleccione su nombre o número...</option>';
+                const filtroLimpio = filtro.toLowerCase().trim();
+                let matches = 0;
+                let unicoMatch = null;
+
+                for (const nombre of Object.keys(empleados).sort()) {
+                    const emp = empleados[nombre];
+                    if (!filtroLimpio || nombre.toLowerCase().includes(filtroLimpio) || emp.celular.includes(filtroLimpio)) {
+                        const opt = document.createElement('option');
+                        opt.value = nombre;
+                        opt.textContent = `${nombre} — ${emp.celular}`;
+                        if (nombre === valorActual) opt.selected = true;
+                        selectNombre.appendChild(opt);
+                        matches++;
+                        unicoMatch = nombre;
+                    }
+                }
+
+                if (filtroLimpio && matches === 1) {
+                    selectNombre.value = unicoMatch;
+                    updateColaborador();
+                }
             }
 
-            function updateCargo() {
+            renderOpciones();
+
+            if (buscador) {
+                buscador.addEventListener('input', function() {
+                    renderOpciones(this.value);
+                });
+            }
+
+            function updateColaborador() {
                 const nombre = document.getElementById('nombre_solicitante').value;
-                const cargo = empleados[nombre] || '';
-                document.getElementById('cargo_solicitante').value = cargo;
+                const data = empleados[nombre] || { cargo: '', celular: '' };
+                document.getElementById('cargo_solicitante').value = data.cargo;
+                document.getElementById('celular_solicitante').value = data.celular;
             }
 
             function toggleEquipo() {

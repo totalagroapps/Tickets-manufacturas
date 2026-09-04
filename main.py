@@ -53,6 +53,13 @@ async def lifespan(app: FastAPI):
             conn.commit()
     except Exception:
         pass # La columna ya existe
+
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE tickets ADD COLUMN celular_solicitante VARCHAR"))
+            conn.commit()
+    except Exception:
+        pass # La columna ya existe
         
     create_default_users()
     yield
@@ -144,6 +151,40 @@ def logout():
     response.delete_cookie("access_token")
     return response
 
+EMPLEADOS_DIRECTORIO = {
+    "AGUIRRE JAIMES MARIA ALEJANDRA": {"cargo": "COORDINADORA INVESTIGACIÓN Y DESARROLLO DE PRODUCTO", "celular": "3226372036"},
+    "ARISTIZABAL ECHEVERRY LUIS FELIPE": {"cargo": "GERENTE", "celular": "3174400191"},
+    "ARROYAVE PEREZ DEILY DAYHANA": {"cargo": "ASESOR COMERCIAL", "celular": "3226040898"},
+    "BERNAL VARGAS MARIA JOSÉ": {"cargo": "APRENDIZ SENA ETAPA PRODUCTIVA", "celular": "3116939284"},
+    "CAMPILLO VELASQUEZ LUISA MARIA": {"cargo": "ANALISTA JUNIOR DISEÑO CREATIVO", "celular": "3216507532"},
+    "CARDONA OSORIO LAURA": {"cargo": "LIDER C&DH", "celular": "3005068231"},
+    "CORREA RESTREPO LEIDY JHOANA": {"cargo": "APRENDIZ SENA ETAPA PRODUCTIVA", "celular": "3195229166"},
+    "CORRALES MARÍN JUAN ESTEBAN": {"cargo": "COORDINADOR FINANCIERO", "celular": "3104591966"},
+    "FORERO VELÁZQUEZ JESSICA": {"cargo": "ASESOR COMERCIAL", "celular": "3113821193"},
+    "GAVIRIA CASTAÑO SOPHIA": {"cargo": "ANALISTA JUNIOR DISEÑO CREATIVO", "celular": "3235257501"},
+    "GARCIA CARDONA LUISA FERNANDA": {"cargo": "ANALISTA JUNIOR CALIDAD Y CONFECCION", "celular": "3127743024"},
+    "GIRALDO HERRERA CRISTIAN FELIPE": {"cargo": "LIDER DESARROLLO ORGANIZACIONAL", "celular": "3215652399"},
+    "HERNANDEZ FRANCO DAIRO": {"cargo": "AUXILIAR DISEÑO TEJEDURIA", "celular": "3207279081"},
+    "MERCADO RENDON YEIMMY ALEJANDRA": {"cargo": "SUPERVISORA DE PLANTA", "celular": "3202164992"},
+    "OCAMPO CANDAMIL DIEGO ALEJANDRO": {"cargo": "AUXILIAR COMERCIAL", "celular": "3225401861"},
+    "OSORIO MANSO YICETH CAMILA": {"cargo": "APRENDIZ SENA ETAPA PRODUCTIVA", "celular": "3116857931"},
+    "PALACIO HERRERA CARLOS": {"cargo": "COORDINADOR DE PRODUCCIÓN", "celular": "3206041907"},
+    "PARRA GALVIS ADRIANA": {"cargo": "COORDINADOR DE PRODUCCIÓN", "celular": "3136334441"},
+    "PEREZ CIFUENTES MARIA ALEJANDRA": {"cargo": "AUXILIAR DE DISEÑO", "celular": "3043749051"},
+    "QUINTERO TAPASCO ANGIE DANIELA": {"cargo": "ANALISTA JUNIOR CALIDAD Y CONFECCION", "celular": "3234623428"},
+    "QUINTERO LONDOÑO CRISTIAN DAVID": {"cargo": "SUPERVISOR DE PLANTA", "celular": "3203367730"},
+    "SANCHEZ ORTEGA KAREN NAYITH": {"cargo": "ANALISTA DE SEGURIDAD Y SALUD EN EL TRABAJO", "celular": "3226124959"},
+    "SALAZAR ARISTIZABAL ALEX MAURICIO": {"cargo": "AUXILIAR CONTABLE", "celular": "3045916546"},
+    "SALAMANCA VILLA ANGIE JULIETH": {"cargo": "COORDINADORA JUNIOR COMERCIAL", "celular": "3116125157"},
+    "TEJADA PEREZ PAULINA": {"cargo": "ANALISTA JUNIOR CALIDAD Y CONFECCION", "celular": "3234908094"},
+    "TORO GARCIA JUAN JOSE": {"cargo": "COORDINADOR LOGISTICO", "celular": "3186972893"},
+    "TORRES MONTAÑO NICOLL XIOMARA": {"cargo": "AUXILIAR DE TESORERIA", "celular": "3112006100"},
+    "VARGAS CORREA DIANA MARCELA": {"cargo": "ANALISTA DE METODOS Y EFICIENCIA PRODUCTIVA", "celular": "3128944490"},
+    "VELEZ FLOREZ VALENTINA": {"cargo": "COORDINADORA NUEVAS CUENTAS", "celular": "3168316404"},
+    "VELEZ JIMENEZ JUAN CAMILO": {"cargo": "ANALISTA JUNIOR METODOS, TIEMPO, CALIDAD", "celular": "3053027288"},
+    "ZAPATA AGUIRRE MARIA ALEJANDRA": {"cargo": "ANALISTA ADMINISTRATIVA", "celular": "3245646745"}
+}
+
 @app.get("/tickets", response_class=HTMLResponse)
 def client_dashboard(request: Request, user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     if not user:
@@ -151,6 +192,10 @@ def client_dashboard(request: Request, user: models.User = Depends(get_current_u
     
     # Mostrar últimos tickets
     tickets = db.query(models.Ticket).order_by(models.Ticket.fecha_creacion.desc()).all()
+    for t in tickets:
+        if not t.celular_solicitante and t.nombre_solicitante in EMPLEADOS_DIRECTORIO:
+            t.celular_solicitante = EMPLEADOS_DIRECTORIO[t.nombre_solicitante]["celular"]
+
     return templates.TemplateResponse(request=request, name="cliente_dashboard.html", context={"request": request, "tickets": tickets, "user": user})
 
 @app.post("/tickets")
@@ -160,6 +205,7 @@ def create_ticket(
     descripcion: str = Form(...),
     nombre_solicitante: str = Form(...),
     cargo_solicitante: str = Form(None),
+    celular_solicitante: str = Form(None),
     urgencia: str = Form(...),
     tipo_afectacion: str = Form(...),
     subtipo_equipo: str = Form(None),
@@ -170,11 +216,16 @@ def create_ticket(
     if not user:
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     
+    # Si no llegó el celular, autocompletar desde el directorio
+    if not celular_solicitante and nombre_solicitante in EMPLEADOS_DIRECTORIO:
+        celular_solicitante = EMPLEADOS_DIRECTORIO[nombre_solicitante]["celular"]
+
     new_ticket = models.Ticket(
         titulo=titulo,
         descripcion=descripcion,
         nombre_solicitante=nombre_solicitante,
         cargo_solicitante=cargo_solicitante,
+        celular_solicitante=celular_solicitante,
         urgencia=urgencia,
         tipo_afectacion=tipo_afectacion,
         subtipo_equipo=subtipo_equipo,
@@ -191,6 +242,10 @@ def admin_dashboard(request: Request, user: models.User = Depends(get_current_ad
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     
     tickets = db.query(models.Ticket).order_by(models.Ticket.fecha_creacion.desc()).all()
+    for t in tickets:
+        if not t.celular_solicitante and t.nombre_solicitante in EMPLEADOS_DIRECTORIO:
+            t.celular_solicitante = EMPLEADOS_DIRECTORIO[t.nombre_solicitante]["celular"]
+
     return templates.TemplateResponse(request=request, name="admin_dashboard.html", context={"request": request, "tickets": tickets, "user": user})
 
 @app.post("/admin/ticket/{ticket_id}/status")
@@ -222,6 +277,9 @@ def admin_ticket_detail(request: Request, ticket_id: int, user: models.User = De
     ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket no encontrado")
+    
+    if not ticket.celular_solicitante and ticket.nombre_solicitante in EMPLEADOS_DIRECTORIO:
+        ticket.celular_solicitante = EMPLEADOS_DIRECTORIO[ticket.nombre_solicitante]["celular"]
         
     return templates.TemplateResponse(request=request, name="admin_ticket_detail.html", context={"request": request, "ticket": ticket, "user": user})
 
