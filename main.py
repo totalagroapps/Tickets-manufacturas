@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Request, Form, status, HTTPException
+from fastapi import FastAPI, Depends, Request, Form, status, HTTPException, UploadFile, File, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,7 +7,10 @@ from sqlalchemy import text
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from typing import Optional
+from typing import Optional, List
+import io
+import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
 import models
 from database import engine, get_db, SessionLocal
@@ -210,6 +213,7 @@ def create_ticket(
     tipo_afectacion: str = Form(...),
     subtipo_equipo: str = Form(None),
     tipo_solicitud: str = Form(...),
+    archivos: List[UploadFile] = File(None),
     user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -234,6 +238,24 @@ def create_ticket(
     )
     db.add(new_ticket)
     db.commit()
+    db.refresh(new_ticket)
+
+    # Guardar archivos adjuntos si existen (máximo 3)
+    if archivos:
+        for f in archivos[:3]:
+            if f.filename and f.filename.strip():
+                contenido = f.file.read()
+                if len(contenido) > 0:
+                    adjunto = models.TicketAdjunto(
+                        ticket_id=new_ticket.id,
+                        nombre_archivo=f.filename,
+                        tipo_contenido=f.content_type or "application/octet-stream",
+                        archivo_bytes=contenido,
+                        tamano=len(contenido)
+                    )
+                    db.add(adjunto)
+        db.commit()
+
     return RedirectResponse(url="/tickets", status_code=status.HTTP_302_FOUND)
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -323,3 +345,101 @@ def delete_ticket(
         db.commit()
         
     return RedirectResponse(url="/admin", status_code=status.HTTP_302_FOUND)
+
+@app.get("/attachments/{adjunto_id}")
+def get_attachment(adjunto_id: int, db: Session = Depends(get_db)):
+    adjunto = db.query(models.TicketAdjunto).filter(models.TicketAdjunto.id == adjunto_id).first()
+    if not adjunto:
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    return Response(
+        content=adjunto.archivo_bytes,
+        media_type=adjunto.tipo_contenido or "application/octet-stream",
+        headers={"Content-Disposition": f'inline; filename="{adjunto.nombre_archivo}"'}
+    )
+
+@app.get("/admin/export-excel")
+def export_tickets_excel(user: models.User = Depends(get_current_admin), db: Session = Depends(get_db)):
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    
+    tickets = db.query(models.Ticket).order_by(models.Ticket.fecha_creacion.desc()).all()
+    
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Reporte Tickets Olamtex"
+    
+    # Estilos profesionales
+    header_fill = PatternFill(start_color="312E81", end_color="312E81", fill_type="solid") # Indigo 900
+    header_font = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF")
+    header_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    
+    row_font = Font(name="Segoe UI", size=10)
+    thin_border = Border(
+        left=Side(style='thin', color='E2E8F0'),
+        right=Side(style='thin', color='E2E8F0'),
+        top=Side(style='thin', color='E2E8F0'),
+        bottom=Side(style='thin', color='E2E8F0')
+    )
+    
+    headers = [
+        "ID Ticket", "Fecha Creación", "Solicitante", "Cargo", "Celular / WhatsApp",
+        "Título del Problema", "Afectación", "Subtipo Equipo", "Tipo Solicitud",
+        "Responsable Asignado", "Nivel Urgencia", "Estado Actual", "Descripción del Problema", 
+        "Historial de Gestiones y Notas", "Archivos Adjuntos"
+    ]
+    
+    ws.append(headers)
+    for cell in ws[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = header_alignment
+        cell.border = thin_border
+    ws.row_dimensions[1].height = 28
+    
+    for t in tickets:
+        cel = t.celular_solicitante or (EMPLEADOS_DIRECTORIO.get(t.nombre_solicitante, {}).get("celular", ""))
+        gestiones_str = " | ".join([f"[{g.fecha.strftime('%d/%m/%Y %H:%M')} - {g.autor}]: {g.nota}" for g in t.gestiones]) if t.gestiones else "Sin gestiones registradas"
+        num_adjuntos = f"{len(t.adjuntos)} archivo(s)" if t.adjuntos else "Sin archivos"
+        
+        row_data = [
+            t.id,
+            t.fecha_creacion.strftime('%d/%m/%Y %I:%M %p') if t.fecha_creacion else "",
+            t.nombre_solicitante,
+            t.cargo_solicitante or "",
+            cel,
+            t.titulo,
+            t.tipo_afectacion,
+            t.subtipo_equipo or "N/A",
+            t.tipo_solicitud,
+            t.responsable,
+            t.urgencia,
+            t.estado,
+            t.descripcion,
+            gestiones_str,
+            num_adjuntos
+        ]
+        ws.append(row_data)
+        current_row = ws.max_row
+        for cell in ws[current_row]:
+            cell.font = row_font
+            cell.border = thin_border
+            cell.alignment = Alignment(vertical="center")
+        ws.row_dimensions[current_row].height = 22
+
+    # Autoajustar ancho de columnas
+    for col in ws.columns:
+        max_len = max(len(str(cell.value or '')) for cell in col)
+        col_letter = col[0].column_letter
+        ws.column_dimensions[col_letter].width = max(min(max_len + 4, 60), 14)
+
+    stream = io.BytesIO()
+    wb.save(stream)
+    stream.seek(0)
+    
+    filename = f"Reporte_Tickets_Olamtex_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
+    return Response(
+        content=stream.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
+

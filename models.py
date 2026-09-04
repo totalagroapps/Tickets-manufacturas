@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Text, Enum, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
@@ -50,6 +50,7 @@ class Ticket(Base):
     fecha_actualizacion = Column(DateTime, default=func.now(), onupdate=func.now())
 
     gestiones = relationship("TicketGestion", back_populates="ticket", cascade="all, delete-orphan")
+    adjuntos = relationship("TicketAdjunto", back_populates="ticket", cascade="all, delete-orphan")
 
 class TicketGestion(Base):
     __tablename__ = "ticket_gestiones"
@@ -61,3 +62,16 @@ class TicketGestion(Base):
     fecha = Column(DateTime, default=func.now())
     
     ticket = relationship("Ticket", back_populates="gestiones")
+
+class TicketAdjunto(Base):
+    __tablename__ = "ticket_adjuntos"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    ticket_id = Column(Integer, ForeignKey("tickets.id"))
+    nombre_archivo = Column(String)
+    tipo_contenido = Column(String)
+    archivo_bytes = Column(LargeBinary)
+    tamano = Column(Integer, default=0)
+    fecha_subida = Column(DateTime, default=func.now())
+    
+    ticket = relationship("Ticket", back_populates="adjuntos")

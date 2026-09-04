@@ -3,8 +3,17 @@
 {% block title %}Panel de Administración - TicketsApp{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded-3xl shadow-lg shadow-indigo-100/50 border border-indigo-50 p-8">
-    <h2 class="text-3xl font-extrabold mb-8 text-slate-800 tracking-tight">Gestión de Tickets</h2>
+<div class="bg-white rounded-3xl shadow-lg shadow-indigo-100/50 border border-indigo-50 p-6 sm:p-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Gestión de Tickets</h2>
+            <p class="text-sm text-slate-400 mt-1">Total registrados: <span class="font-bold text-slate-700">{{ tickets|length }}</span></p>
+        </div>
+        <a href="/admin/export-excel" class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl shadow-md shadow-emerald-200 transition-all text-sm w-full sm:w-auto">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            <span>Descargar Reporte Excel</span>
+        </a>
+    </div>
     
     <div class="overflow-x-auto rounded-xl border border-slate-100">
         <table class="min-w-full bg-white">
@@ -14,7 +23,7 @@
                     <th class="w-1/6 text-left py-4 px-6 uppercase font-bold text-xs tracking-wider">Solicitante</th>
                     <th class="w-1/3 text-left py-4 px-6 uppercase font-bold text-xs tracking-wider">Detalles del Ticket</th>
                     <th class="w-1/12 text-left py-4 px-6 uppercase font-bold text-xs tracking-wider">Urgencia</th>
-                    <th class="w-1/6 text-left py-4 px-6 uppercase font-bold text-xs tracking-wider">Estado</th>
+                    <th class="w-1/6 text-left py-4 px-6 uppercase font-bold text-xs tracking-wider">Acciones</th>
                 </tr>
             </thead>
             <tbody class="text-slate-700 divide-y divide-slate-100">
@@ -35,9 +44,16 @@
                     </td>
                     <td class="w-1/3 text-left py-4 px-6">
                         <a href="/admin/ticket/{{ ticket.id }}" class="font-bold text-lg text-indigo-500 hover:text-indigo-700 hover:underline">{{ ticket.titulo }}</a>
-                        <div class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">
-                            Asignado a: <span class="text-indigo-600">{{ ticket.responsable }}</span> <span class="mx-1 text-slate-300">|</span> {{ ticket.tipo_solicitud }} <span class="mx-1 text-slate-300">|</span> {{ ticket.tipo_afectacion }} 
-                            {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}
+                        <div class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider flex flex-wrap items-center gap-1.5">
+                            <span>Asignado a: <span class="text-indigo-600">{{ ticket.responsable }}</span></span>
+                            <span class="text-slate-300">|</span>
+                            <span>{{ ticket.tipo_solicitud }}</span>
+                            <span class="text-slate-300">|</span>
+                            <span>{{ ticket.tipo_afectacion }} {% if ticket.subtipo_equipo %}({{ ticket.subtipo_equipo }}){% endif %}</span>
+                            {% if ticket.adjuntos %}
+                            <span class="text-slate-300">|</span>
+                            <span class="text-indigo-600 font-bold inline-flex items-center gap-0.5">📎 {{ ticket.adjuntos|length }}</span>
+                            {% endif %}
                         </div>
                         <div class="text-sm text-slate-600 mt-2 line-clamp-2">{{ ticket.descripcion }}</div>
                     </td>
