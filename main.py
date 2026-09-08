@@ -268,7 +268,22 @@ def admin_dashboard(request: Request, user: models.User = Depends(get_current_ad
         if not t.celular_solicitante and t.nombre_solicitante in EMPLEADOS_DIRECTORIO:
             t.celular_solicitante = EMPLEADOS_DIRECTORIO[t.nombre_solicitante]["celular"]
 
-    return templates.TemplateResponse(request=request, name="admin_dashboard.html", context={"request": request, "tickets": tickets, "user": user})
+    tickets_nuevos = [t for t in tickets if t.estado == "Pendiente"]
+    tickets_proceso = [t for t in tickets if t.estado == "En Progreso"]
+    tickets_cerrados = [t for t in tickets if t.estado == "Completado"]
+
+    return templates.TemplateResponse(
+        request=request, 
+        name="admin_dashboard.html", 
+        context={
+            "request": request, 
+            "tickets": tickets, 
+            "tickets_nuevos": tickets_nuevos,
+            "tickets_proceso": tickets_proceso,
+            "tickets_cerrados": tickets_cerrados,
+            "user": user
+        }
+    )
 
 @app.post("/admin/ticket/{ticket_id}/status")
 def update_ticket_status(
