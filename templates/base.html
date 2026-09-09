@@ -9,18 +9,39 @@
     <link rel="manifest" href="/static/manifest.json">
     <link rel="apple-touch-icon" href="/static/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-slate-50 min-h-screen font-sans text-slate-800">
     <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-indigo-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 sm:h-20 items-center">
-                <div class="flex-shrink-0">
+                <div class="flex-shrink-0 flex items-center gap-4 sm:gap-6">
                     <a href="/" class="flex items-center gap-2">
                         <img src="/static/logo.png" alt="Olamtex" class="h-10 sm:h-12 object-contain">
                         <span class="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-800 hidden md:block">Tickets</span>
                     </a>
+                    {% if user and (user.role == 'ADMIN' or user.role == 'admin') %}
+                    <div class="hidden sm:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+                        <a href="/admin" class="px-3 py-1.5 rounded-lg transition-colors {% if request.url.path == '/admin' or '/admin/ticket' in request.url.path %}bg-white text-indigo-600 shadow-xs{% else %}text-slate-600 hover:text-slate-900{% endif %}">
+                            Gestión de Tickets
+                        </a>
+                        <a href="/admin/equipos" class="px-3 py-1.5 rounded-lg transition-colors {% if request.url.path == '/admin/equipos' %}bg-white text-indigo-600 shadow-xs{% else %}text-slate-600 hover:text-slate-900{% endif %}">
+                            Administración de Equipos
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    {% if user and (user.role == 'ADMIN' or user.role == 'admin') %}
+                    <div class="flex sm:hidden items-center gap-1 mr-1">
+                        <a href="/admin" class="px-2 py-1 rounded-lg text-xs font-bold {% if request.url.path == '/admin' or '/admin/ticket' in request.url.path %}bg-indigo-50 text-indigo-600{% else %}text-slate-500{% endif %}">
+                            Tickets
+                        </a>
+                        <a href="/admin/equipos" class="px-2 py-1 rounded-lg text-xs font-bold {% if request.url.path == '/admin/equipos' %}bg-indigo-50 text-indigo-600{% else %}text-slate-500{% endif %}">
+                            Equipos
+                        </a>
+                    </div>
+                    {% endif %}
                     <button id="installAppBtn" class="hidden bg-transparent hover:bg-indigo-50 text-indigo-500 border border-indigo-200 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         <span class="hidden sm:inline">Instalar App</span>

@@ -285,6 +285,16 @@ def admin_dashboard(request: Request, user: models.User = Depends(get_current_ad
         }
     )
 
+@app.get("/admin/equipos", response_class=HTMLResponse)
+def admin_equipos(request: Request, user: models.User = Depends(get_current_admin)):
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    return templates.TemplateResponse(
+        request=request,
+        name="admin_equipos.html",
+        context={"request": request, "user": user}
+    )
+
 @app.post("/admin/ticket/{ticket_id}/status")
 def update_ticket_status(
     request: Request,
