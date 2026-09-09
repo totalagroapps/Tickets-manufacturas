@@ -43,6 +43,7 @@
   </div>
 
 <div class="space-y-6">
+
     <!-- BARRA SUPERIOR / HEADER DE EQUIPOS -->
     <div class="bg-white rounded-3xl shadow-lg shadow-indigo-100/50 border border-indigo-50 p-6 sm:p-8">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -85,9 +86,8 @@
         </div>
     </div>
 
-    
 
-    <!-- TARJETAS DE RESUMEN / MÉTRICAS -->
+<!-- TARJETAS DE RESUMEN / MÉTRICAS -->
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div>
@@ -204,8 +204,6 @@
         </table>
       </div>
     </section>
-
-  
 </div>
 
 <!-- MODAL PARA AGREGAR NUEVO DISPOSITIVO -->
@@ -269,639 +267,6 @@
       </form>
     </div>
   </div>
-
-  <!-- SCRIPT CON LA LÓGICA COMPLETA DE DESPLEGABLES, DATOS Y EXCEL -->
-  <script>
-    // BASE DE DATOS INICIAL CON CAMPOS TÉCNICOS DETALLADOS
-    const DATOS_INICIALES = [
-      { 
-        id: "pc-server", 
-        nombre: "PC Servidor Principal", 
-        piso: "Piso 1", 
-        tipo: "Servidor", 
-        ip: "192.168.0.250", 
-        mac: "B4:2E:99:A1:10:02", 
-        hostname: "SRV-AVANSIS-PROD",
-        usuario: "Servidor Empresa (Acceso Todos)", 
-        cargo: "Servidor de Producción y Diseño",
-        so: "Windows 10 Pro 64-bit",
-        hardware: "Intel Core i7, 16GB RAM, 1TB SSD",
-        marca: "PC Ensamblado Desktop", 
-        conectado: "Switch Escritorio Piso 1 (Puerto 1)", 
-        puerto_switch: "Pto 1 (1 Gbps)",
-        enlace_tipo: "Cable UTP Cat 5e",
-        software: "Avansis Server, SQL Server, Carpetas Compartidas SMB",
-        alerta: "Crítico", 
-        notas: "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1." 
-      },
-      { 
-        id: "gw-ruijie", 
-        nombre: "Gateway Multi-WAN", 
-        piso: "Piso 2", 
-        tipo: "Router / Gateway", 
-        ip: "192.168.0.1", 
-        mac: "CC:81:DA:44:12:01", 
-        hostname: "GW-RUIJIE-MDF",
-        usuario: "Infraestructura TI", 
-        cargo: "Borde de Red / Seguridad",
-        so: "ReyeeOS / Ruijie Cloud",
-        hardware: "Router Balanceador Multi-WAN",
-        marca: "Ruijie Reyee RG-EG", 
-        conectado: "Modem Claro (WAN1) y Modem Ruijie (WAN2) / Switch HP (LAN)", 
-        puerto_switch: "LAN1 -> Switch HP Puerto 1",
-        enlace_tipo: "Cable UTP Cat 6",
-        software: "Ruijie Cloud, Multi-WAN Load Balancing, DHCP Server",
-        alerta: "Normal", 
-        notas: "Gateway principal y servidor DHCP general (192.168.0.1)." 
-      },
-      { 
-        id: "sw-hp", 
-        nombre: "Switch Core Principal", 
-        piso: "Piso 2", 
-        tipo: "Switch", 
-        ip: "192.168.0.2", 
-        mac: "70:10:5C:88:00:1A", 
-        hostname: "SW-HP-CORE-P2",
-        usuario: "Infraestructura TI", 
-        cargo: "Conmutación MDF",
-        so: "HP ProCurve OS",
-        hardware: "24 Puertos Gigabit 10/100/1000",
-        marca: "HP 24 Puertos", 
-        conectado: "Ruijie Reyee (Pto 1), DVR (Pto 2), Troncal Piso 3 (Pto 23), Troncal Piso 1 (Pto 24)", 
-        puerto_switch: "Troncal 24 Puertos",
-        enlace_tipo: "Cableado Vertical",
-        software: "VLAN 802.1Q disponible, Spanning Tree",
-        alerta: "Normal", 
-        notas: "Switch administrable central. Con capacidad de segmentar en VLANs." 
-      },
-      { 
-        id: "ups-p2", 
-        nombre: "UPS de Rack Piso 2", 
-        piso: "Piso 2", 
-        tipo: "Energía / UPS", 
-        ip: "N/A (No gestionable)", 
-        mac: "N/A", 
-        hostname: "UPS-RACK-P2",
-        usuario: "Gabinete Comunicaciones", 
-        cargo: "Protección Eléctrica",
-        so: "Hardware Eléctrico",
-        hardware: "UPS 1500VA / 2000VA para Rack",
-        marca: "Comercial / Genérica", 
-        conectado: "Alimenta Ruijie Reyee, Switch HP y DVR CCTV", 
-        puerto_switch: "N/A",
-        enlace_tipo: "Tomas eléctricas C13 / NEMA",
-        software: "N/A",
-        alerta: "Crítico", 
-        notas: "BATERÍAS INOPERATIVAS. Funciona como simple regleta. Ante corte de luz, la red y cámaras caen al instante." 
-      },
-      { 
-        id: "dvr-cctv", 
-        nombre: "DVR Cámaras de Seguridad", 
-        piso: "Piso 2", 
-        tipo: "Seguridad / CCTV", 
-        ip: "192.168.0.200", 
-        mac: "4C:11:BF:33:44:99", 
-        hostname: "DVR-CCTV-P2",
-        usuario: "Seguridad / Administración", 
-        cargo: "Circuito Cerrado de TV",
-        so: "Firmware DVR Embebido",
-        hardware: "DVR 16 Canales con Disco 2TB",
-        marca: "Dahua / Hikvision", 
-        conectado: "Switch Core HP (Puerto 2)", 
-        puerto_switch: "Pto 2",
-        enlace_tipo: "Cable UTP",
-        software: "App Móvil de visualización remota",
-        alerta: "Atención", 
-        notas: "Ubicado en la misma red de usuarios y finanzas sin aislamiento." 
-      },
-      { 
-        id: "sw-tenda", 
-        nombre: "Switch Rack Piso 3", 
-        piso: "Piso 3", 
-        tipo: "Switch", 
-        ip: "No administrable", 
-        mac: "No aplica", 
-        hostname: "SW-TENDA-P3",
-        usuario: "Área Administrativa", 
-        cargo: "Distribución Piso 3",
-        so: "Sin gestión",
-        hardware: "Switch Tenda 12/16 Puertos 10/100",
-        marca: "Tenda", 
-        conectado: "Switch HP Piso 2 (Enlace vertical)", 
-        puerto_switch: "Pto 1 uplink",
-        enlace_tipo: "Cable UTP",
-        software: "No soporta VLANs",
-        alerta: "Atención", 
-        notas: "Switch doméstico/SOHO en el piso de finanzas y gerencia." 
-      },
-      { 
-        id: "ap-gerencia", 
-        nombre: "Router/AP Wi-Fi Gerencia", 
-        piso: "Piso 3", 
-        tipo: "Wi-Fi / AP", 
-        ip: "192.168.0.15", 
-        mac: "50:D4:F7:11:22:33", 
-        hostname: "AP-GERENCIA-P3",
-        usuario: "Gerencia General", 
-        cargo: "Acceso Inalámbrico Ejecutivo",
-        so: "Firmware TP-Link",
-        hardware: "Router Wi-Fi AC1200",
-        marca: "TP-Link", 
-        conectado: "Switch Tenda Piso 3", 
-        puerto_switch: "LAN/WAN",
-        enlace_tipo: "Cable UTP",
-        software: "SSID: Gerencia_Privado",
-        alerta: "Atención", 
-        notas: "Verificar si tiene DHCP desactivado para prevenir colisión de IPs." 
-      },
-      { 
-        id: "ap-juntas", 
-        nombre: "Router/AP Sala de Juntas", 
-        piso: "Piso 3", 
-        tipo: "Wi-Fi / AP", 
-        ip: "192.168.0.16", 
-        mac: "50:D4:F7:44:55:66", 
-        hostname: "AP-JUNTAS-P3",
-        usuario: "Reuniones y Visitantes", 
-        cargo: "Wi-Fi Sala de Juntas",
-        so: "Firmware TP-Link",
-        hardware: "Router Wi-Fi N300/AC",
-        marca: "TP-Link", 
-        conectado: "Switch Tenda Piso 3", 
-        puerto_switch: "LAN",
-        enlace_tipo: "Cable UTP",
-        software: "SSID: Sala_Juntas",
-        alerta: "Normal", 
-        notas: "Usado para presentaciones y visitas." 
-      },
-      { 
-        id: "printer-admin", 
-        nombre: "Impresora Facturación", 
-        piso: "Piso 3", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.210", 
-        mac: "00:1E:C9:AA:BB:CC", 
-        hostname: "PRINTER-FACTURACION",
-        usuario: "Contabilidad y Facturación", 
-        cargo: "Impresión de facturas legales",
-        so: "Firmware Láser",
-        hardware: "Multifuncional Láser Monocromática",
-        marca: "HP LaserJet / Kyocera", 
-        conectado: "Switch Tenda Piso 3", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Driver PCL6 / WSD",
-        alerta: "Normal", 
-        notas: "Asignar IP fija estática en el Ruijie." 
-      },
-      { 
-        id: "plotter", 
-        nombre: "Plotter de Corte y Trazos", 
-        piso: "Piso 1", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.215", 
-        mac: "78:2B:CB:11:88:99", 
-        hostname: "PLOTTER-PRODUCCION",
-        usuario: "Operarios de Corte", 
-        cargo: "Trazos de moldería textil",
-        so: "Firmware Plotter",
-        hardware: "Plotter Gran Formato 1.80m",
-        marca: "Graphtec / HP / Roland", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Software de tizado / trazo textil",
-        alerta: "Normal", 
-        notas: "Impresión continua de patrones de confección." 
-      },
-      { 
-        id: "printer-stickers", 
-        nombre: "Impresora de Stickers", 
-        piso: "Piso 1", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.216", 
-        mac: "00:07:4D:22:33:44", 
-        hostname: "PRINTER-STICKERS",
-        usuario: "Empaque y Despacho", 
-        cargo: "Etiquetado de bolsas y cajas",
-        so: "Firmware Térmico",
-        hardware: "Impresora Térmica Directa 4x6",
-        marca: "Zebra / Xprinter", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Zebra Designer / BarTender",
-        alerta: "Normal", 
-        notas: "Impresión de códigos de barra para pedidos." 
-      },
-      { 
-        id: "printer-lavado", 
-        nombre: "Impresora Etiquetas de Lavado", 
-        piso: "Piso 1", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.217", 
-        mac: "00:07:4D:55:66:77", 
-        hostname: "PRINTER-LAVADO-TEXTIL",
-        usuario: "Producción Textil", 
-        cargo: "Etiquetas técnicas de poliamida/satín",
-        so: "Firmware Transferencia Térmica",
-        hardware: "Impresora de Ribbon Resina para Satín",
-        marca: "TSC / Zebra", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Software de composición de etiquetas",
-        alerta: "Normal", 
-        notas: "Etiquetas con instrucciones de lavado y porcentaje de fibras." 
-      },
-      { 
-        id: "printers-wifi", 
-        nombre: "2x Impresoras Wi-Fi Oficina", 
-        piso: "Piso 2", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.220 / DHCP", 
-        mac: "Varios", 
-        hostname: "PRINTERS-WIFI-P2",
-        usuario: "Diseño y Operaciones", 
-        cargo: "Impresión de fichas técnicas",
-        so: "Firmware Wi-Fi",
-        hardware: "Multifuncionales Color",
-        marca: "Epson / HP Ink Tank", 
-        conectado: "Wi-Fi Ruijie (2.4 GHz)", 
-        puerto_switch: "Wi-Fi",
-        enlace_tipo: "Inalámbrico",
-        software: "Drivers Wi-Fi",
-        alerta: "Atención", 
-        notas: "Se recomienda cablearlas por UTP para evitar desconfiguración de IP." 
-      },
-      { 
-        id: "ap-p1", 
-        nombre: "Access Point Planta Piso 1", 
-        piso: "Piso 1", 
-        tipo: "Wi-Fi / AP", 
-        ip: "192.168.0.18", 
-        mac: "24:A4:3C:99:88:77", 
-        hostname: "AP-PLANTA-P1",
-        usuario: "Planta y Operarios", 
-        cargo: "Cobertura Wi-Fi Planta",
-        so: "Firmware AP",
-        hardware: "Access Point de Techo/Pared",
-        marca: "Por confirmar", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet",
-        enlace_tipo: "Cable UTP",
-        software: "SSID: Planta_Operaciones",
-        alerta: "Normal", 
-        notas: "Wi-Fi para operarios y terminales móviles." 
-      },
-      { 
-        id: "pc-contab-01", 
-        nombre: "PC Contabilidad 01", 
-        piso: "Piso 3", 
-        tipo: "Puesto de Trabajo", 
-        ip: "192.168.0.101 (DHCP)", 
-        mac: "30:9C:23:45:67:89", 
-        hostname: "PC-CONTAB-01",
-        usuario: "María Gómez", 
-        cargo: "Contadora Principal",
-        so: "Windows 11 Pro",
-        hardware: "Core i5, 8GB RAM, 256GB SSD",
-        marca: "Lenovo ThinkCentre", 
-        conectado: "Switch Escritorio Piso 3", 
-        puerto_switch: "Pto 3",
-        enlace_tipo: "Cable UTP",
-        software: "Cliente Avansis, Office 365, Software Bancos",
-        alerta: "Atención", 
-        notas: "Accede a datos bancarios y nómina desde la red plana general." 
-      },
-      { 
-        id: "pc-diseno-01", 
-        nombre: "PC Diseño y Moldería 01", 
-        piso: "Piso 2", 
-        tipo: "Puesto de Trabajo", 
-        ip: "192.168.0.120 (DHCP)", 
-        mac: "A0:36:BC:55:44:33", 
-        hostname: "PC-DISENO-01",
-        usuario: "Carlos Rodríguez", 
-        cargo: "Diseñador Textil",
-        so: "Windows 11 Pro",
-        hardware: "Core i7, 32GB RAM, 1TB NVMe, Tarjeta Gráfica RTX",
-        marca: "Dell OptiPlex / Workstation", 
-        conectado: "Switch Escritorio Piso 2", 
-        puerto_switch: "Pto 2",
-        enlace_tipo: "Cable UTP",
-        software: "Adobe Illustrator, Photoshop, Audaces/Optitex, Avansis",
-        alerta: "Normal", 
-        notas: "Maneja archivos pesados en el PC Servidor de Piso 1." 
-      }
-    ];
-
-    let dispositivos = [];
-    let redNetwork = null;
-    let filaAbiertaId = null;
-
-    // Inicialización al cargar la página
-    document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
-      cargarDispositivos();
-      inicializarGrafo();
-      actualizarMetricas();
-      renderizarTabla();
-    });
-
-    function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices");
-      if (guardados) {
-        try {
-          dispositivos = JSON.parse(guardados);
-        } catch (e) {
-          dispositivos = [...DATOS_INICIALES];
-        }
-      } else {
-        dispositivos = [...DATOS_INICIALES];
-        guardarEnLocalStorage();
-      }
-    }
-
-    function guardarEnLocalStorage() {
-      localStorage.setItem("netmap_pro_devices", JSON.stringify(dispositivos));
-    }
-
-    function mostrarToast(mensaje) {
-      const toast = document.getElementById("toast-notif");
-      document.getElementById("toast-texto").innerText = mensaje;
-      toast.classList.remove("translate-y-20", "opacity-0");
-      setTimeout(() => {
-        toast.classList.add("translate-y-20", "opacity-0");
-      }, 2500);
-    }
-
-    function actualizarMetricas() {
-      document.getElementById("stat-total").innerText = dispositivos.length;
-      document.getElementById("stat-p1").innerText = dispositivos.filter(d => d.piso === "Piso 1").length;
-      document.getElementById("stat-p2").innerText = dispositivos.filter(d => d.piso === "Piso 2").length;
-      document.getElementById("stat-p3").innerText = dispositivos.filter(d => d.piso === "Piso 3").length;
-    }
-
-    // INICIALIZACIÓN DEL MAPA VIS.JS
-    function inicializarGrafo() {
-      const container = document.getElementById("network-canvas");
-
-      const nodesArray = dispositivos.map(d => {
-        let color = "#3b82f6";
-        let shape = "box";
-
-        if (d.tipo === "Router / Gateway") color = "#ef4444";
-        else if (d.tipo === "Switch") color = "#10b981";
-        else if (d.tipo === "Servidor") color = "#f97316";
-        else if (d.alerta === "Crítico") color = "#dc2626";
-        else if (d.tipo === "Periférico / Impresora") color = "#06b6d4";
-        else if (d.tipo === "Wi-Fi / AP") color = "#8b5cf6";
-        else if (d.tipo === "Seguridad / CCTV") color = "#ec4899";
-
-        return {
-          id: d.id,
-          label: `${d.nombre}\n[${d.piso}] - ${d.ip}`,
-          shape: shape,
-          margin: 9,
-          color: {
-            background: color,
-            border: "#0f172a",
-            highlight: { background: "#2563eb", border: "#0284c7" }
-          },
-          font: { color: "#ffffff", size: 11, face: "sans-serif", multi: true }
-        };
-      });
-
-      const edgesArray = [
-        { from: "gw-ruijie", to: "sw-hp", label: "Troncal LAN" },
-        { from: "ups-p2", to: "gw-ruijie", dashes: true },
-        { from: "ups-p2", to: "sw-hp", dashes: true },
-        { from: "ups-p2", to: "dvr-cctv", dashes: true },
-        { from: "sw-hp", to: "dvr-cctv" },
-        { from: "sw-hp", to: "sw-tenda", label: "Troncal P3" },
-        { from: "sw-hp", to: "pc-server", label: "Troncal P1" },
-        { from: "sw-tenda", to: "ap-gerencia" },
-        { from: "sw-tenda", to: "ap-juntas" },
-        { from: "sw-tenda", to: "printer-admin" },
-        { from: "sw-tenda", to: "pc-contab-01" },
-        { from: "sw-hp", to: "plotter" },
-        { from: "sw-hp", to: "printer-stickers" },
-        { from: "sw-hp", to: "printer-lavado" },
-        { from: "sw-hp", to: "ap-p1" },
-        { from: "sw-hp", to: "pc-diseno-01" },
-        { from: "gw-ruijie", to: "printers-wifi", dashes: true, label: "Wi-Fi" }
-      ];
-
-      const data = {
-        nodes: new vis.DataSet(nodesArray),
-        edges: new vis.DataSet(edgesArray)
-      };
-
-      const options = {
-        physics: {
-          stabilization: false,
-          barnesHut: { springLength: 120, springConstant: 0.04, damping: 0.09 }
-        },
-        interaction: { hover: true, tooltipDelay: 200 }
-      };
-
-      redNetwork = new vis.Network(container, data, options);
-
-      redNetwork.on("click", function(params) {
-        if (params.nodes.length > 0) {
-          const idSel = params.nodes[0];
-          const equipo = dispositivos.find(d => d.id === idSel);
-          if (equipo) {
-            document.getElementById("filtro-busqueda").value = equipo.nombre;
-            filtrarDispositivos();
-            abrirFilaDetalle(equipo.id);
-          }
-        }
-      });
-    }
-
-    function centrarGrafo() {
-      if (redNetwork) redNetwork.fit();
-    }
-
-    // RENDERIZAR TABLA CON FILAS Y SUS PANELES DESPLEGABLES
-    function renderizarTabla(lista = dispositivos) {
-      const tbody = document.getElementById("tabla-cuerpo");
-      tbody.innerHTML = "";
-
-      document.getElementById("conteo-filtrado").innerText = `Mostrando ${lista.length} de ${dispositivos.length} equipos`;
-
-      if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-10 text-slate-400 font-medium">No se encontraron equipos que coincidan con el filtro</td></tr>`;
-        return;
-      }
-
-      lista.forEach((d, idx) => {
-        let badgeColor = "bg-slate-100 text-slate-700";
-        if (d.alerta === "Crítico") badgeColor = "bg-red-100 text-red-700 font-bold animate-pulse border border-red-200";
-        else if (d.alerta === "Atención") badgeColor = "bg-amber-100 text-amber-700 font-semibold border border-amber-200";
-
-        // FILA PRINCIPAL RESUMIDA
-        const trPrincipal = document.createElement("tr");
-        trPrincipal.id = `fila-${d.id}`;
-        trPrincipal.className = "hover:bg-blue-50/40 cursor-pointer transition border-b border-slate-100 group";
-        trPrincipal.onclick = (e) => {
-          // Si el clic fue en un botón de acción, no alterar acordeón
-          if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select")) return;
-          toggleFilaDetalle(d.id);
-        };
-
-        trPrincipal.innerHTML = `
-          <td class="py-3.5 px-4 text-center">
-            <button class="text-slate-400 group-hover:text-blue-600 transition" onclick="toggleFilaDetalle('${d.id}')">
-              <i id="chevron-${d.id}" data-lucide="chevron-down" class="w-4 h-4 accordion-transition"></i>
-            </button>
-          </td>
-          <td class="py-3.5 px-4">
-            <div class="font-bold text-slate-800 text-xs">${d.nombre}</div>
-            <div class="text-[10px] text-slate-400 font-mono">${d.hostname || d.marca || "Sin hostname"}</div>
-          </td>
-          <td class="py-3.5 px-4">
-            <span class="px-2 py-0.5 rounded-md text-[11px] bg-slate-100 border text-slate-700 font-medium">${d.piso}</span>
-          </td>
-          <td class="py-3.5 px-4 font-mono font-medium text-slate-700">
-            ${d.ip || "-"}
-          </td>
-          <td class="py-3.5 px-4">
-            <div class="font-medium text-slate-800 text-[11px]">${d.usuario || "Sin asignar"}</div>
-            <div class="text-[10px] text-slate-400">${d.cargo || ""}</div>
-          </td>
-          <td class="py-3.5 px-4 text-slate-600">${d.tipo}</td>
-          <td class="py-3.5 px-4 text-slate-500 max-w-xs truncate">${d.conectado || "-"}</td>
-          <td class="py-3.5 px-4">
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] ${badgeColor}">${d.alerta}</span>
-          </td>
-          <td class="py-3.5 px-4 text-center" onclick="event.stopPropagation()">
-            <div class="flex items-center justify-center space-x-1.5">
-              <button onclick="toggleFilaDetalle('${d.id}')" title="Desplegar / Editar ficha" class="p-1.5 hover:bg-blue-100 text-blue-600 rounded-lg transition">
-                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-              </button>
-              <button onclick="eliminarDispositivo('${d.id}')" title="Eliminar" class="p-1.5 hover:bg-red-100 text-red-600 rounded-lg transition">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(trPrincipal);
-
-        // FILA DESPLEGABLE CON FORMULARIO INTEGRADO
-        const trDetalle = document.createElement("tr");
-        trDetalle.id = `detalle-${d.id}`;
-        trDetalle.className = "hidden bg-slate-50/90 border-b-2 border-blue-200";
-        trDetalle.innerHTML = `
-          <td colspan="9" class="p-4 sm:p-5">
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <div class="flex items-center space-x-2">
-                  <span class="bg-blue-600 text-white p-1.5 rounded-lg">
-                    <i data-lucide="sliders" class="w-4 h-4"></i>
-                  </span>
-                  <div>
-                    <h4 class="font-bold text-slate-800 text-sm">Ficha Técnica Completa: ${d.nombre}</h4>
-                    <p class="text-[11px] text-slate-400">Modifica los datos directamente y haz clic en Guardar Cambios</p>
-                  </div>
-                </div>
-                <button onclick="guardarFilaDetalle('${d.id}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center shadow transition">
-                  <i data-lucide="save" class="w-4 h-4 mr-1.5"></i> Guardar Cambios
-                </button>
-              </div>
-
-              <!-- FORMULARIO EN 3 COLUMNAS -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                
-                <!-- COLUMNA 1: RED Y CONECTIVIDAD -->
-                <div class="space-y-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
-                  <h5 class="font-bold text-slate-700 flex items-center gap-1.5 text-xs text-blue-700">
-                    <i data-lucide="wifi" class="w-3.5 h-3.5"></i> Parámetros de Red
-                  </h5>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Dirección IP:</label>
-                    <input type="text" id="edit-ip-${d.id}" value="${d.ip || ''}" placeholder="192.168.0.X" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-mono">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Dirección MAC:</label>
-                    <input type="text" id="edit-mac-${d.id}" value="${d.mac || ''}" placeholder="00:1A:2B:3C:4D:5E" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-mono">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Hostname en Red:</label>
-                    <input type="text" id="edit-hostname-${d.id}" value="${d.hostname || ''}" placeholder="PC-DESPACHO-01" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-mono">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Conectado a (Switch / Router):</label>
-                    <input type="text" id="edit-conectado-${d.id}" value="${d.conectado || ''}" placeholder="Switch Core HP..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Puerto del Switch / Tipo Enlace:</label>
-                    <input type="text" id="edit-puerto-${d.id}" value="${d.puerto_switch || ''}" placeholder="Puerto 12 (UTP Cat 6)" class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                </div>
-
-                <!-- COLUMNA 2: HARDWARE Y SISTEMA -->
-                <div class="space-y-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
-                  <h5 class="font-bold text-slate-700 flex items-center gap-1.5 text-xs text-indigo-700">
-                    <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Hardware y Usuario
-                  </h5>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Usuario Responsable:</label>
-                    <input type="text" id="edit-usuario-${d.id}" value="${d.usuario || ''}" placeholder="Nombre del empleado" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-medium">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Área / Cargo:</label>
-                    <input type="text" id="edit-cargo-${d.id}" value="${d.cargo || ''}" placeholder="Diseñador, Contador..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Piso / Ubicación:</label>
-                    <select id="edit-piso-${d.id}" class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                      <option value="Piso 1" ${d.piso === 'Piso 1' ? 'selected' : ''}>Piso 1 (Operaciones)</option>
-                      <option value="Piso 2" ${d.piso === 'Piso 2' ? 'selected' : ''}>Piso 2 (MDF / Core)</option>
-                      <option value="Piso 3" ${d.piso === 'Piso 3' ? 'selected' : ''}>Piso 3 (Admin / Gerencia)</option>
-                      <option value="WAN" ${d.piso === 'WAN' ? 'selected' : ''}>Perímetro WAN</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Marca y Modelo:</label>
-                    <input type="text" id="edit-marca-${d.id}" value="${d.marca || ''}" placeholder="HP, Lenovo, Zebra..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Hardware (RAM, Disco, CPU):</label>
-                    <input type="text" id="edit-hardware-${d.id}" value="${d.hardware || ''}" placeholder="Core i5, 16GB RAM, SSD 512GB" class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                </div>
-
-                <!-- COLUMNA 3: SOFTWARE, RIESGOS Y NOTAS -->
-                <div class="space-y-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
-                  <h5 class="font-bold text-slate-700 flex items-center gap-1.5 text-xs text-amber-700">
-                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Software y Diagnóstico
-                  </h5>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Sistema Operativo:</label>
-                    <input type="text" id="edit-so-${d.id}" value="${d.so || ''}" placeholder="Windows 11 Pro, Linux..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Programas Clave Instalados:</label>
-                    <input type="text" id="edit-software-${d.id}" value="${d.software || ''}" placeholder="Avansis, Illustrator, Office..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Nivel de Alerta / Riesgo:</label>
-                    <select id="edit-alerta-${d.id}" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-semibold">
-                      <option value="Normal" ${d.alerta === 'Normal' ? 'selected' : ''}>Normal (Operativo)</option>
-                      <option value="Atención" ${d.alerta === 'Atención' ? 'selected' : ''}>Atención (Revisión recomendada)</option>
-                      <option value="Crítico" ${d.alerta === 'Crítico' ? 'selected' : ''}>Crítico (SPOF / Alarma)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Observaciones de Consultoría:</label>
-                    <textarea id="edit-notas-${d.id}" rows="2" class="w-full px-2.5 py-1.5 border rounded-lg bg-white" placeholder="Riesgos, contraseñas, licencias...">${d.notas || ''}</textarea>
-                  </div>
-                </div>
-
-              </div>
 
 <!-- SCRIPT CON LA LÓGICA COMPLETA DE DESPLEGABLES, DATOS Y EXCEL -->
   <script>
@@ -1234,21 +599,35 @@
     let filaAbiertaId = null;
 
     // Inicialización al cargar la página
-    document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
+    function iniciarNetMap() {
+      if (window.lucide && typeof lucide.createIcons === "function") {
+        try { lucide.createIcons(); } catch (e) { console.error("Error al crear iconos Lucide:", e); }
+      }
       cargarDispositivos();
       inicializarGrafo();
       actualizarMetricas();
       renderizarTabla();
-    });
+    }
+    if (document.readyState === "loading") { 
+      document.addEventListener("DOMContentLoaded", iniciarNetMap); 
+    } else { 
+      iniciarNetMap(); 
+    }
 
     function cargarDispositivos() {
       const guardados = localStorage.getItem("netmap_pro_devices");
       if (guardados) {
         try {
-          dispositivos = JSON.parse(guardados);
+          const parsed = JSON.parse(guardados);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            dispositivos = parsed;
+          } else {
+            dispositivos = [...DATOS_INICIALES];
+            guardarEnLocalStorage();
+          }
         } catch (e) {
           dispositivos = [...DATOS_INICIALES];
+          guardarEnLocalStorage();
         }
       } else {
         dispositivos = [...DATOS_INICIALES];
@@ -1262,6 +641,7 @@
 
     function mostrarToast(mensaje) {
       const toast = document.getElementById("toast-notif");
+      if (!toast) return;
       document.getElementById("toast-texto").innerText = mensaje;
       toast.classList.remove("translate-y-20", "opacity-0");
       setTimeout(() => {
@@ -1270,15 +650,30 @@
     }
 
     function actualizarMetricas() {
-      document.getElementById("stat-total").innerText = dispositivos.length;
-      document.getElementById("stat-p1").innerText = dispositivos.filter(d => d.piso === "Piso 1").length;
-      document.getElementById("stat-p2").innerText = dispositivos.filter(d => d.piso === "Piso 2").length;
-      document.getElementById("stat-p3").innerText = dispositivos.filter(d => d.piso === "Piso 3").length;
+      const totalEl = document.getElementById("stat-total");
+      const p1El = document.getElementById("stat-p1");
+      const p2El = document.getElementById("stat-p2");
+      const p3El = document.getElementById("stat-p3");
+      if (totalEl) totalEl.innerText = dispositivos.length;
+      if (p1El) p1El.innerText = dispositivos.filter(d => d.piso === "Piso 1").length;
+      if (p2El) p2El.innerText = dispositivos.filter(d => d.piso === "Piso 2").length;
+      if (p3El) p3El.innerText = dispositivos.filter(d => d.piso === "Piso 3").length;
     }
 
     // INICIALIZACIÓN DEL MAPA VIS.JS
     function inicializarGrafo() {
       const container = document.getElementById("network-canvas");
+      if (!container) return;
+
+      if (typeof vis === "undefined" || !vis.DataSet || !vis.Network) {
+        console.warn("vis.js no está disponible aún. Reintentando...");
+        setTimeout(inicializarGrafo, 300);
+        return;
+      }
+
+      if (redNetwork) {
+        try { redNetwork.destroy(); } catch (e) {}
+      }
 
       const nodesArray = dispositivos.map(d => {
         let color = "#3b82f6";
@@ -1548,7 +943,9 @@
         tbody.appendChild(trDetalle);
       });
 
-      lucide.createIcons();
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        try { lucide.createIcons(); } catch (e) {}
+      }
     }
 
     // ABRIR Y CERRAR DESPLEGABLE (ACORDEÓN)
@@ -1646,7 +1043,9 @@
     function abrirModalNuevo() {
       document.getElementById("form-dispositivo").reset();
       document.getElementById("modal-dispositivo").classList.remove("hidden");
-      lucide.createIcons();
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        try { lucide.createIcons(); } catch (e) {}
+      }
     }
 
     function cerrarModal() {
