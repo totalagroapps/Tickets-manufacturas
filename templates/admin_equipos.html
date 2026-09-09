@@ -70,6 +70,10 @@
                     <i data-lucide="plus-circle" class="w-4 h-4 mr-1.5"></i> + Nuevo Equipo
                 </button>
 
+                <button onclick="restablecerInventarioBase()" title="Recargar topología y los 19 equipos de Olamtex" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-200 transition flex items-center">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4 mr-1.5"></i> Restablecer Mapa
+                </button>
+
                 <button onclick="exportarAExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center shadow-md shadow-emerald-200 transition">
                     <i data-lucide="file-spreadsheet" class="w-4 h-4 mr-1.5"></i> Descargar Excel (.xlsx)
                 </button>
@@ -88,7 +92,7 @@
 
 
 <!-- TARJETAS DE RESUMEN / MÉTRICAS -->
-    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <section class="grid grid-cols-2 sm:grid-cols-5 gap-4">
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Equipos</p>
@@ -96,6 +100,16 @@
         </div>
         <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600">
           <i data-lucide="server" class="w-6 h-6"></i>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Perímetro WAN</p>
+          <h3 id="stat-wan" class="text-2xl font-black text-slate-800 mt-1">0</h3>
+        </div>
+        <div class="bg-rose-50 p-2.5 rounded-xl text-rose-600">
+          <i data-lucide="globe" class="w-6 h-6"></i>
         </div>
       </div>
 
@@ -272,327 +286,387 @@
   <script>
     // BASE DE DATOS INICIAL CON CAMPOS TÉCNICOS DETALLADOS
     const DATOS_INICIALES = [
-      { 
-        id: "pc-server", 
-        nombre: "PC Servidor Principal", 
-        piso: "Piso 1", 
-        tipo: "Servidor", 
-        ip: "192.168.0.250", 
-        mac: "B4:2E:99:A1:10:02", 
-        hostname: "SRV-AVANSIS-PROD",
-        usuario: "Servidor Empresa (Acceso Todos)", 
-        cargo: "Servidor de Producción y Diseño",
-        so: "Windows 10 Pro 64-bit",
-        hardware: "Intel Core i7, 16GB RAM, 1TB SSD",
-        marca: "PC Ensamblado Desktop", 
-        conectado: "Switch Escritorio Piso 1 (Puerto 1)", 
-        puerto_switch: "Pto 1 (1 Gbps)",
-        enlace_tipo: "Cable UTP Cat 5e",
-        software: "Avansis Server, SQL Server, Carpetas Compartidas SMB",
-        alerta: "Crítico", 
-        notas: "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1." 
-      },
-      { 
-        id: "gw-ruijie", 
-        nombre: "Gateway Multi-WAN", 
-        piso: "Piso 2", 
-        tipo: "Router / Gateway", 
-        ip: "192.168.0.1", 
-        mac: "CC:81:DA:44:12:01", 
-        hostname: "GW-RUIJIE-MDF",
-        usuario: "Infraestructura TI", 
-        cargo: "Borde de Red / Seguridad",
-        so: "ReyeeOS / Ruijie Cloud",
-        hardware: "Router Balanceador Multi-WAN",
-        marca: "Ruijie Reyee RG-EG", 
-        conectado: "Modem Claro (WAN1) y Modem Ruijie (WAN2) / Switch HP (LAN)", 
-        puerto_switch: "LAN1 -> Switch HP Puerto 1",
-        enlace_tipo: "Cable UTP Cat 6",
-        software: "Ruijie Cloud, Multi-WAN Load Balancing, DHCP Server",
-        alerta: "Normal", 
-        notas: "Gateway principal y servidor DHCP general (192.168.0.1)." 
-      },
-      { 
-        id: "sw-hp", 
-        nombre: "Switch Core Principal", 
-        piso: "Piso 2", 
-        tipo: "Switch", 
-        ip: "192.168.0.2", 
-        mac: "70:10:5C:88:00:1A", 
-        hostname: "SW-HP-CORE-P2",
-        usuario: "Infraestructura TI", 
-        cargo: "Conmutación MDF",
-        so: "HP ProCurve OS",
-        hardware: "24 Puertos Gigabit 10/100/1000",
-        marca: "HP 24 Puertos", 
-        conectado: "Ruijie Reyee (Pto 1), DVR (Pto 2), Troncal Piso 3 (Pto 23), Troncal Piso 1 (Pto 24)", 
-        puerto_switch: "Troncal 24 Puertos",
-        enlace_tipo: "Cableado Vertical",
-        software: "VLAN 802.1Q disponible, Spanning Tree",
-        alerta: "Normal", 
-        notas: "Switch administrable central. Con capacidad de segmentar en VLANs." 
-      },
-      { 
-        id: "ups-p2", 
-        nombre: "UPS de Rack Piso 2", 
-        piso: "Piso 2", 
-        tipo: "Energía / UPS", 
-        ip: "N/A (No gestionable)", 
-        mac: "N/A", 
-        hostname: "UPS-RACK-P2",
-        usuario: "Gabinete Comunicaciones", 
-        cargo: "Protección Eléctrica",
-        so: "Hardware Eléctrico",
-        hardware: "UPS 1500VA / 2000VA para Rack",
-        marca: "Comercial / Genérica", 
-        conectado: "Alimenta Ruijie Reyee, Switch HP y DVR CCTV", 
-        puerto_switch: "N/A",
-        enlace_tipo: "Tomas eléctricas C13 / NEMA",
-        software: "N/A",
-        alerta: "Crítico", 
-        notas: "BATERÍAS INOPERATIVAS. Funciona como simple regleta. Ante corte de luz, la red y cámaras caen al instante." 
-      },
-      { 
-        id: "dvr-cctv", 
-        nombre: "DVR Cámaras de Seguridad", 
-        piso: "Piso 2", 
-        tipo: "Seguridad / CCTV", 
-        ip: "192.168.0.200", 
-        mac: "4C:11:BF:33:44:99", 
-        hostname: "DVR-CCTV-P2",
-        usuario: "Seguridad / Administración", 
-        cargo: "Circuito Cerrado de TV",
-        so: "Firmware DVR Embebido",
-        hardware: "DVR 16 Canales con Disco 2TB",
-        marca: "Dahua / Hikvision", 
-        conectado: "Switch Core HP (Puerto 2)", 
-        puerto_switch: "Pto 2",
-        enlace_tipo: "Cable UTP",
-        software: "App Móvil de visualización remota",
-        alerta: "Atención", 
-        notas: "Ubicado en la misma red de usuarios y finanzas sin aislamiento." 
-      },
-      { 
-        id: "sw-tenda", 
-        nombre: "Switch Rack Piso 3", 
-        piso: "Piso 3", 
-        tipo: "Switch", 
-        ip: "No administrable", 
-        mac: "No aplica", 
-        hostname: "SW-TENDA-P3",
-        usuario: "Área Administrativa", 
-        cargo: "Distribución Piso 3",
-        so: "Sin gestión",
-        hardware: "Switch Tenda 12/16 Puertos 10/100",
-        marca: "Tenda", 
-        conectado: "Switch HP Piso 2 (Enlace vertical)", 
-        puerto_switch: "Pto 1 uplink",
-        enlace_tipo: "Cable UTP",
-        software: "No soporta VLANs",
-        alerta: "Atención", 
-        notas: "Switch doméstico/SOHO en el piso de finanzas y gerencia." 
-      },
-      { 
-        id: "ap-gerencia", 
-        nombre: "Router/AP Wi-Fi Gerencia", 
-        piso: "Piso 3", 
-        tipo: "Wi-Fi / AP", 
-        ip: "192.168.0.15", 
-        mac: "50:D4:F7:11:22:33", 
-        hostname: "AP-GERENCIA-P3",
-        usuario: "Gerencia General", 
-        cargo: "Acceso Inalámbrico Ejecutivo",
-        so: "Firmware TP-Link",
-        hardware: "Router Wi-Fi AC1200",
-        marca: "TP-Link", 
-        conectado: "Switch Tenda Piso 3", 
-        puerto_switch: "LAN/WAN",
-        enlace_tipo: "Cable UTP",
-        software: "SSID: Gerencia_Privado",
-        alerta: "Atención", 
-        notas: "Verificar si tiene DHCP desactivado para prevenir colisión de IPs." 
-      },
-      { 
-        id: "ap-juntas", 
-        nombre: "Router/AP Sala de Juntas", 
-        piso: "Piso 3", 
-        tipo: "Wi-Fi / AP", 
-        ip: "192.168.0.16", 
-        mac: "50:D4:F7:44:55:66", 
-        hostname: "AP-JUNTAS-P3",
-        usuario: "Reuniones y Visitantes", 
-        cargo: "Wi-Fi Sala de Juntas",
-        so: "Firmware TP-Link",
-        hardware: "Router Wi-Fi N300/AC",
-        marca: "TP-Link", 
-        conectado: "Switch Tenda Piso 3", 
-        puerto_switch: "LAN",
-        enlace_tipo: "Cable UTP",
-        software: "SSID: Sala_Juntas",
-        alerta: "Normal", 
-        notas: "Usado para presentaciones y visitas." 
-      },
-      { 
-        id: "printer-admin", 
-        nombre: "Impresora Facturación", 
-        piso: "Piso 3", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.210", 
-        mac: "00:1E:C9:AA:BB:CC", 
-        hostname: "PRINTER-FACTURACION",
-        usuario: "Contabilidad y Facturación", 
-        cargo: "Impresión de facturas legales",
-        so: "Firmware Láser",
-        hardware: "Multifuncional Láser Monocromática",
-        marca: "HP LaserJet / Kyocera", 
-        conectado: "Switch Tenda Piso 3", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Driver PCL6 / WSD",
-        alerta: "Normal", 
-        notas: "Asignar IP fija estática en el Ruijie." 
-      },
-      { 
-        id: "plotter", 
-        nombre: "Plotter de Corte y Trazos", 
-        piso: "Piso 1", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.215", 
-        mac: "78:2B:CB:11:88:99", 
-        hostname: "PLOTTER-PRODUCCION",
-        usuario: "Operarios de Corte", 
-        cargo: "Trazos de moldería textil",
-        so: "Firmware Plotter",
-        hardware: "Plotter Gran Formato 1.80m",
-        marca: "Graphtec / HP / Roland", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Software de tizado / trazo textil",
-        alerta: "Normal", 
-        notas: "Impresión continua de patrones de confección." 
-      },
-      { 
-        id: "printer-stickers", 
-        nombre: "Impresora de Stickers", 
-        piso: "Piso 1", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.216", 
-        mac: "00:07:4D:22:33:44", 
-        hostname: "PRINTER-STICKERS",
-        usuario: "Empaque y Despacho", 
-        cargo: "Etiquetado de bolsas y cajas",
-        so: "Firmware Térmico",
-        hardware: "Impresora Térmica Directa 4x6",
-        marca: "Zebra / Xprinter", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Zebra Designer / BarTender",
-        alerta: "Normal", 
-        notas: "Impresión de códigos de barra para pedidos." 
-      },
-      { 
-        id: "printer-lavado", 
-        nombre: "Impresora Etiquetas de Lavado", 
-        piso: "Piso 1", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.217", 
-        mac: "00:07:4D:55:66:77", 
-        hostname: "PRINTER-LAVADO-TEXTIL",
-        usuario: "Producción Textil", 
-        cargo: "Etiquetas técnicas de poliamida/satín",
-        so: "Firmware Transferencia Térmica",
-        hardware: "Impresora de Ribbon Resina para Satín",
-        marca: "TSC / Zebra", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet directa",
-        enlace_tipo: "Cable UTP",
-        software: "Software de composición de etiquetas",
-        alerta: "Normal", 
-        notas: "Etiquetas con instrucciones de lavado y porcentaje de fibras." 
-      },
-      { 
-        id: "printers-wifi", 
-        nombre: "2x Impresoras Wi-Fi Oficina", 
-        piso: "Piso 2", 
-        tipo: "Periférico / Impresora", 
-        ip: "192.168.0.220 / DHCP", 
-        mac: "Varios", 
-        hostname: "PRINTERS-WIFI-P2",
-        usuario: "Diseño y Operaciones", 
-        cargo: "Impresión de fichas técnicas",
-        so: "Firmware Wi-Fi",
-        hardware: "Multifuncionales Color",
-        marca: "Epson / HP Ink Tank", 
-        conectado: "Wi-Fi Ruijie (2.4 GHz)", 
-        puerto_switch: "Wi-Fi",
-        enlace_tipo: "Inalámbrico",
-        software: "Drivers Wi-Fi",
-        alerta: "Atención", 
-        notas: "Se recomienda cablearlas por UTP para evitar desconfiguración de IP." 
-      },
-      { 
-        id: "ap-p1", 
-        nombre: "Access Point Planta Piso 1", 
-        piso: "Piso 1", 
-        tipo: "Wi-Fi / AP", 
-        ip: "192.168.0.18", 
-        mac: "24:A4:3C:99:88:77", 
-        hostname: "AP-PLANTA-P1",
-        usuario: "Planta y Operarios", 
-        cargo: "Cobertura Wi-Fi Planta",
-        so: "Firmware AP",
-        hardware: "Access Point de Techo/Pared",
-        marca: "Por confirmar", 
-        conectado: "Switch Escritorio Piso 1", 
-        puerto_switch: "Ethernet",
-        enlace_tipo: "Cable UTP",
-        software: "SSID: Planta_Operaciones",
-        alerta: "Normal", 
-        notas: "Wi-Fi para operarios y terminales móviles." 
-      },
-      { 
-        id: "pc-contab-01", 
-        nombre: "PC Contabilidad 01", 
-        piso: "Piso 3", 
-        tipo: "Puesto de Trabajo", 
-        ip: "192.168.0.101 (DHCP)", 
-        mac: "30:9C:23:45:67:89", 
-        hostname: "PC-CONTAB-01",
-        usuario: "María Gómez", 
-        cargo: "Contadora Principal",
-        so: "Windows 11 Pro",
-        hardware: "Core i5, 8GB RAM, 256GB SSD",
-        marca: "Lenovo ThinkCentre", 
-        conectado: "Switch Escritorio Piso 3", 
-        puerto_switch: "Pto 3",
-        enlace_tipo: "Cable UTP",
-        software: "Cliente Avansis, Office 365, Software Bancos",
-        alerta: "Atención", 
-        notas: "Accede a datos bancarios y nómina desde la red plana general." 
-      },
-      { 
-        id: "pc-diseno-01", 
-        nombre: "PC Diseño y Moldería 01", 
-        piso: "Piso 2", 
-        tipo: "Puesto de Trabajo", 
-        ip: "192.168.0.120 (DHCP)", 
-        mac: "A0:36:BC:55:44:33", 
-        hostname: "PC-DISENO-01",
-        usuario: "Carlos Rodríguez", 
-        cargo: "Diseñador Textil",
-        so: "Windows 11 Pro",
-        hardware: "Core i7, 32GB RAM, 1TB NVMe, Tarjeta Gráfica RTX",
-        marca: "Dell OptiPlex / Workstation", 
-        conectado: "Switch Escritorio Piso 2", 
-        puerto_switch: "Pto 2",
-        enlace_tipo: "Cable UTP",
-        software: "Adobe Illustrator, Photoshop, Audaces/Optitex, Avansis",
-        alerta: "Normal", 
-        notas: "Maneja archivos pesados en el PC Servidor de Piso 1." 
-      }
-    ];
+  {
+    "id": "isp-claro",
+    "nombre": "Módem ISP 1 (Claro)",
+    "piso": "WAN",
+    "tipo": "Router / Gateway",
+    "ip": "IP Pública Dinámica/Fija",
+    "mac": "Por confirmar",
+    "hostname": "MODEM-CLARO-WAN1",
+    "usuario": "Proveedor Claro",
+    "cargo": "Enlace Principal de Internet",
+    "so": "Firmware Claro HFC/Fibra",
+    "hardware": "Cablemódem / ONT Fibra",
+    "marca": "Claro / Huawei",
+    "conectado": "Gateway Ruijie (Puerto WAN 1)",
+    "puerto_switch": "WAN1 Ruijie",
+    "enlace_tipo": "Coaxial / Fibra Óptica",
+    "software": "Enlace Primario Claro",
+    "alerta": "Normal",
+    "notas": "Enlace principal de salida a Internet hacia el router Multi-WAN."
+  },
+  {
+    "id": "isp-ruijie",
+    "nombre": "Módem ISP 2 (Secundario)",
+    "piso": "WAN",
+    "tipo": "Router / Gateway",
+    "ip": "IP Pública Dinámica/Fija",
+    "mac": "Por confirmar",
+    "hostname": "MODEM-ISP2-WAN2",
+    "usuario": "Proveedor Secundario",
+    "cargo": "Enlace Respaldo / Balanceo",
+    "so": "Firmware ISP",
+    "hardware": "Módem Proveedor 2",
+    "marca": "Ruijie / Operador",
+    "conectado": "Gateway Ruijie (Puerto WAN 2)",
+    "puerto_switch": "WAN2 Ruijie",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "software": "Enlace Backup / Failover",
+    "alerta": "Normal",
+    "notas": "Segundo enlace para redundancia y balanceo de carga en caso de corte."
+  },
+  {
+    "id": "gw-ruijie",
+    "nombre": "Gateway Multi-WAN",
+    "piso": "Piso 2",
+    "tipo": "Router / Gateway",
+    "ip": "192.168.0.1",
+    "mac": "CC:81:DA:44:12:01",
+    "hostname": "GW-RUIJIE-MDF",
+    "usuario": "Infraestructura TI",
+    "cargo": "Borde de Red / Seguridad",
+    "so": "ReyeeOS / Ruijie Cloud",
+    "hardware": "Router Balanceador Multi-WAN",
+    "marca": "Ruijie Reyee RG-EG",
+    "conectado": "Módem Claro (WAN1) y Módem 2 (WAN2) / Switch HP (LAN)",
+    "puerto_switch": "LAN1 -> Switch HP Puerto 1",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "software": "Ruijie Cloud, Multi-WAN Load Balancing, DHCP Server",
+    "alerta": "Normal",
+    "notas": "Gateway principal y servidor DHCP general (192.168.0.1)."
+  },
+  {
+    "id": "sw-hp",
+    "nombre": "Switch Core Principal",
+    "piso": "Piso 2",
+    "tipo": "Switch",
+    "ip": "192.168.0.2",
+    "mac": "70:10:5C:88:00:1A",
+    "hostname": "SW-HP-CORE-P2",
+    "usuario": "Infraestructura TI",
+    "cargo": "Conmutación MDF",
+    "so": "HP ProCurve OS",
+    "hardware": "24 Puertos Gigabit 10/100/1000",
+    "marca": "HP 24 Puertos",
+    "conectado": "Ruijie Reyee (Pto 1), DVR (Pto 2), Troncal Piso 3 (Pto 23), Troncal Piso 1 (Pto 24)",
+    "puerto_switch": "Troncal 24 Puertos",
+    "enlace_tipo": "Cableado Vertical",
+    "software": "VLAN 802.1Q disponible, Spanning Tree",
+    "alerta": "Normal",
+    "notas": "Switch administrable central. Con capacidad de segmentar en VLANs."
+  },
+  {
+    "id": "ups-p2",
+    "nombre": "UPS de Rack Piso 2",
+    "piso": "Piso 2",
+    "tipo": "Energía / UPS",
+    "ip": "N/A (No gestionable)",
+    "mac": "N/A",
+    "hostname": "UPS-RACK-P2",
+    "usuario": "Gabinete Comunicaciones",
+    "cargo": "Protección Eléctrica",
+    "so": "Hardware Eléctrico",
+    "hardware": "UPS 1500VA / 2000VA para Rack",
+    "marca": "Comercial / Genérica",
+    "conectado": "Alimenta Ruijie Reyee, Switch HP y DVR CCTV",
+    "puerto_switch": "N/A",
+    "enlace_tipo": "Tomas eléctricas C13 / NEMA",
+    "software": "N/A",
+    "alerta": "Crítico",
+    "notas": "BATERÍAS INOPERATIVAS. Funciona como simple regleta. Ante corte de luz, la red y cámaras caen al instante."
+  },
+  {
+    "id": "dvr-cctv",
+    "nombre": "DVR Cámaras de Seguridad",
+    "piso": "Piso 2",
+    "tipo": "Seguridad / CCTV",
+    "ip": "192.168.0.200",
+    "mac": "4C:11:BF:33:44:99",
+    "hostname": "DVR-CCTV-P2",
+    "usuario": "Seguridad / Administración",
+    "cargo": "Circuito Cerrado de TV",
+    "so": "Firmware DVR Embebido",
+    "hardware": "DVR 16 Canales con Disco 2TB",
+    "marca": "Dahua / Hikvision",
+    "conectado": "Switch Core HP (Puerto 2)",
+    "puerto_switch": "Pto 2",
+    "enlace_tipo": "Cable UTP",
+    "software": "App Móvil de visualización remota",
+    "alerta": "Atención",
+    "notas": "Ubicado en la misma red de usuarios y finanzas sin aislamiento."
+  },
+  {
+    "id": "sw-tenda",
+    "nombre": "Switch Rack Piso 3",
+    "piso": "Piso 3",
+    "tipo": "Switch",
+    "ip": "No administrable",
+    "mac": "No aplica",
+    "hostname": "SW-TENDA-P3",
+    "usuario": "Área Administrativa",
+    "cargo": "Distribución Piso 3",
+    "so": "Sin gestión",
+    "hardware": "Switch Tenda 12/16 Puertos 10/100",
+    "marca": "Tenda",
+    "conectado": "Switch HP Piso 2 (Enlace vertical)",
+    "puerto_switch": "Pto 1 uplink",
+    "enlace_tipo": "Cable UTP",
+    "software": "No soporta VLANs",
+    "alerta": "Atención",
+    "notas": "Switch doméstico/SOHO en el piso de finanzas y gerencia."
+  },
+  {
+    "id": "ap-gerencia",
+    "nombre": "Router/AP Wi-Fi Gerencia",
+    "piso": "Piso 3",
+    "tipo": "Wi-Fi / AP",
+    "ip": "192.168.0.15",
+    "mac": "50:D4:F7:11:22:33",
+    "hostname": "AP-GERENCIA-P3",
+    "usuario": "Gerencia General",
+    "cargo": "Acceso Inalámbrico Ejecutivo",
+    "so": "Firmware TP-Link",
+    "hardware": "Router Wi-Fi AC1200",
+    "marca": "TP-Link",
+    "conectado": "Switch Tenda Piso 3",
+    "puerto_switch": "LAN/WAN",
+    "enlace_tipo": "Cable UTP",
+    "software": "SSID: Gerencia_Privado",
+    "alerta": "Atención",
+    "notas": "Verificar si tiene DHCP desactivado para prevenir colisión de IPs."
+  },
+  {
+    "id": "ap-juntas",
+    "nombre": "Router/AP Sala de Juntas",
+    "piso": "Piso 3",
+    "tipo": "Wi-Fi / AP",
+    "ip": "192.168.0.16",
+    "mac": "50:D4:F7:44:55:66",
+    "hostname": "AP-JUNTAS-P3",
+    "usuario": "Reuniones y Visitantes",
+    "cargo": "Wi-Fi Sala de Juntas",
+    "so": "Firmware TP-Link",
+    "hardware": "Router Wi-Fi N300/AC",
+    "marca": "TP-Link",
+    "conectado": "Switch Tenda Piso 3",
+    "puerto_switch": "LAN",
+    "enlace_tipo": "Cable UTP",
+    "software": "SSID: Sala_Juntas",
+    "alerta": "Normal",
+    "notas": "Usado para presentaciones y visitas."
+  },
+  {
+    "id": "printer-admin",
+    "nombre": "Impresora Facturación",
+    "piso": "Piso 3",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.210",
+    "mac": "00:1E:C9:AA:BB:CC",
+    "hostname": "PRINTER-FACTURACION",
+    "usuario": "Contabilidad y Facturación",
+    "cargo": "Impresión de facturas legales",
+    "so": "Firmware Láser",
+    "hardware": "Multifuncional Láser Monocromática",
+    "marca": "HP LaserJet / Kyocera",
+    "conectado": "Switch Tenda Piso 3",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Driver PCL6 / WSD",
+    "alerta": "Normal",
+    "notas": "Asignar IP fija estática en el Ruijie."
+  },
+  {
+    "id": "pc-contab-01",
+    "nombre": "PC Contabilidad 01",
+    "piso": "Piso 3",
+    "tipo": "Puesto de Trabajo",
+    "ip": "192.168.0.101 (DHCP)",
+    "mac": "30:9C:23:45:67:89",
+    "hostname": "PC-CONTAB-01",
+    "usuario": "María Gómez",
+    "cargo": "Contadora Principal",
+    "so": "Windows 11 Pro",
+    "hardware": "Core i5, 8GB RAM, 256GB SSD",
+    "marca": "Lenovo ThinkCentre",
+    "conectado": "Switch Rack Piso 3",
+    "puerto_switch": "Pto 3",
+    "enlace_tipo": "Cable UTP",
+    "software": "Cliente Avansis, Office 365, Software Bancos",
+    "alerta": "Atención",
+    "notas": "Accede a datos bancarios y nómina desde la red plana general."
+  },
+  {
+    "id": "pc-server",
+    "nombre": "PC Servidor Principal (Avansis)",
+    "piso": "Piso 1",
+    "tipo": "Servidor",
+    "ip": "192.168.0.250",
+    "mac": "B4:2E:99:A1:10:02",
+    "hostname": "SRV-AVANSIS-PROD",
+    "usuario": "Servidor Empresa (Acceso Todos)",
+    "cargo": "Servidor de Producción y Diseño",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Intel Core i7, 16GB RAM, 1TB SSD",
+    "marca": "PC Ensamblado Desktop",
+    "conectado": "Switch Escritorio Piso 1 (Puerto 1)",
+    "puerto_switch": "Pto 1 (1 Gbps)",
+    "enlace_tipo": "Cable UTP Cat 5e",
+    "software": "Avansis Server, SQL Server, Carpetas Compartidas SMB",
+    "alerta": "Crítico",
+    "notas": "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1."
+  },
+  {
+    "id": "sw-escritorio-p1",
+    "nombre": "Switch Escritorio Piso 1 (Planta)",
+    "piso": "Piso 1",
+    "tipo": "Switch",
+    "ip": "No gestionable",
+    "mac": "No aplica",
+    "hostname": "SW-ESCRITORIO-P1",
+    "usuario": "Operarios Planta y Corte",
+    "cargo": "Distribución Planta Piso 1",
+    "so": "Sin gestión",
+    "hardware": "Switch 16 Puertos 10/100/1000",
+    "marca": "TP-Link / Tenda",
+    "conectado": "Switch Core HP Piso 2 (Troncal vertical)",
+    "puerto_switch": "Pto 24 Troncal HP",
+    "enlace_tipo": "Cable UTP",
+    "software": "No administrable",
+    "alerta": "Atención",
+    "notas": "Conecta Servidor Avansis, Plotter, Etiquetadoras y PCs de confección."
+  },
+  {
+    "id": "plotter",
+    "nombre": "Plotter de Corte y Trazos",
+    "piso": "Piso 1",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.215",
+    "mac": "78:2B:CB:11:88:99",
+    "hostname": "PLOTTER-PRODUCCION",
+    "usuario": "Operarios de Corte",
+    "cargo": "Trazos de moldería textil",
+    "so": "Firmware Plotter",
+    "hardware": "Plotter Gran Formato 1.80m",
+    "marca": "Graphtec / HP / Roland",
+    "conectado": "Switch Escritorio Piso 1",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Software de tizado / trazo textil",
+    "alerta": "Normal",
+    "notas": "Impresión continua de patrones de confección."
+  },
+  {
+    "id": "printer-stickers",
+    "nombre": "Impresora de Stickers",
+    "piso": "Piso 1",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.216",
+    "mac": "00:07:4D:22:33:44",
+    "hostname": "PRINTER-STICKERS",
+    "usuario": "Empaque y Despacho",
+    "cargo": "Etiquetado de bolsas y cajas",
+    "so": "Firmware Térmico",
+    "hardware": "Impresora Térmica Directa 4x6",
+    "marca": "Zebra / Xprinter",
+    "conectado": "Switch Escritorio Piso 1",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Zebra Designer / BarTender",
+    "alerta": "Normal",
+    "notas": "Impresión de códigos de barra para pedidos."
+  },
+  {
+    "id": "printer-lavado",
+    "nombre": "Impresora Etiquetas de Lavado",
+    "piso": "Piso 1",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.217",
+    "mac": "00:07:4D:55:66:77",
+    "hostname": "PRINTER-LAVADO-TEXTIL",
+    "usuario": "Producción Textil",
+    "cargo": "Etiquetas técnicas de poliamida/satín",
+    "so": "Firmware Transferencia Térmica",
+    "hardware": "Impresora de Ribbon Resina para Satín",
+    "marca": "TSC / Zebra",
+    "conectado": "Switch Escritorio Piso 1",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Software de composición de etiquetas",
+    "alerta": "Normal",
+    "notas": "Etiquetas con instrucciones de lavado y porcentaje de fibras."
+  },
+  {
+    "id": "ap-p1",
+    "nombre": "Access Point Planta Piso 1",
+    "piso": "Piso 1",
+    "tipo": "Wi-Fi / AP",
+    "ip": "192.168.0.18",
+    "mac": "24:A4:3C:99:88:77",
+    "hostname": "AP-PLANTA-P1",
+    "usuario": "Planta y Operarios",
+    "cargo": "Cobertura Wi-Fi Planta",
+    "so": "Firmware AP",
+    "hardware": "Access Point de Techo/Pared",
+    "marca": "Por confirmar",
+    "conectado": "Switch Escritorio Piso 1",
+    "puerto_switch": "Ethernet",
+    "enlace_tipo": "Cable UTP",
+    "software": "SSID: Planta_Operaciones",
+    "alerta": "Normal",
+    "notas": "Wi-Fi para operarios y terminales móviles."
+  },
+  {
+    "id": "printers-wifi",
+    "nombre": "2x Impresoras Wi-Fi Oficina",
+    "piso": "Piso 2",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.220 / DHCP",
+    "mac": "Varios",
+    "hostname": "PRINTERS-WIFI-P2",
+    "usuario": "Diseño y Operaciones",
+    "cargo": "Impresión de fichas técnicas",
+    "so": "Firmware Wi-Fi",
+    "hardware": "Multifuncionales Color",
+    "marca": "Epson / HP Ink Tank",
+    "conectado": "Wi-Fi Ruijie (2.4 GHz)",
+    "puerto_switch": "Wi-Fi",
+    "enlace_tipo": "Inalámbrico",
+    "software": "Drivers Wi-Fi",
+    "alerta": "Atención",
+    "notas": "Se recomienda cablearlas por UTP para evitar desconfiguración de IP."
+  },
+  {
+    "id": "pc-diseno-01",
+    "nombre": "PC Diseño y Moldería 01",
+    "piso": "Piso 2",
+    "tipo": "Puesto de Trabajo",
+    "ip": "192.168.0.120 (DHCP)",
+    "mac": "A0:36:BC:55:44:33",
+    "hostname": "PC-DISENO-01",
+    "usuario": "Carlos Rodríguez",
+    "cargo": "Diseñador Textil",
+    "so": "Windows 11 Pro",
+    "hardware": "Core i7, 32GB RAM, 1TB NVMe, Tarjeta Gráfica RTX",
+    "marca": "Dell OptiPlex / Workstation",
+    "conectado": "Switch Core HP Piso 2",
+    "puerto_switch": "Pto 4",
+    "enlace_tipo": "Cable UTP",
+    "software": "Adobe Illustrator, Photoshop, Audaces/Optitex, Avansis",
+    "alerta": "Normal",
+    "notas": "Maneja archivos pesados en el PC Servidor de Piso 1."
+  }
+];
 
     let dispositivos = [];
     let redNetwork = null;
@@ -615,7 +689,7 @@
     }
 
     function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices");
+      const guardados = localStorage.getItem("netmap_pro_devices_v3");
       if (guardados) {
         try {
           const parsed = JSON.parse(guardados);
@@ -635,8 +709,19 @@
       }
     }
 
+    function restablecerInventarioBase() {
+      if (confirm("¿Deseas restablecer el mapa y la tabla a los 19 equipos originales de Manufacturas Olamtex?")) {
+        dispositivos = [...DATOS_INICIALES];
+        guardarEnLocalStorage();
+        actualizarMetricas();
+        filtrarDispositivos();
+        inicializarGrafo();
+        mostrarToast("¡Topología e inventario restablecidos!");
+      }
+    }
+
     function guardarEnLocalStorage() {
-      localStorage.setItem("netmap_pro_devices", JSON.stringify(dispositivos));
+      localStorage.setItem("netmap_pro_devices_v3", JSON.stringify(dispositivos));
     }
 
     function mostrarToast(mensaje) {
@@ -651,10 +736,12 @@
 
     function actualizarMetricas() {
       const totalEl = document.getElementById("stat-total");
+      const wanEl = document.getElementById("stat-wan");
       const p1El = document.getElementById("stat-p1");
       const p2El = document.getElementById("stat-p2");
       const p3El = document.getElementById("stat-p3");
       if (totalEl) totalEl.innerText = dispositivos.length;
+      if (wanEl) wanEl.innerText = dispositivos.filter(d => d.piso === "WAN").length;
       if (p1El) p1El.innerText = dispositivos.filter(d => d.piso === "Piso 1").length;
       if (p2El) p2El.innerText = dispositivos.filter(d => d.piso === "Piso 2").length;
       if (p3El) p3El.innerText = dispositivos.filter(d => d.piso === "Piso 3").length;
@@ -702,21 +789,24 @@
       });
 
       const edgesArray = [
+        { from: "isp-claro", to: "gw-ruijie", label: "WAN 1 (Claro)" },
+        { from: "isp-ruijie", to: "gw-ruijie", label: "WAN 2 (Backup)" },
         { from: "gw-ruijie", to: "sw-hp", label: "Troncal LAN" },
-        { from: "ups-p2", to: "gw-ruijie", dashes: true },
-        { from: "ups-p2", to: "sw-hp", dashes: true },
-        { from: "ups-p2", to: "dvr-cctv", dashes: true },
+        { from: "ups-p2", to: "gw-ruijie", dashes: true, color: { color: "#f59e0b" } },
+        { from: "ups-p2", to: "sw-hp", dashes: true, color: { color: "#f59e0b" } },
+        { from: "ups-p2", to: "dvr-cctv", dashes: true, color: { color: "#f59e0b" } },
         { from: "sw-hp", to: "dvr-cctv" },
-        { from: "sw-hp", to: "sw-tenda", label: "Troncal P3" },
-        { from: "sw-hp", to: "pc-server", label: "Troncal P1" },
+        { from: "sw-hp", to: "sw-tenda", label: "Troncal Piso 3" },
+        { from: "sw-hp", to: "sw-escritorio-p1", label: "Troncal Piso 1" },
+        { from: "sw-escritorio-p1", to: "pc-server", label: "Avansis (SPOF)", color: { color: "#dc2626" }, width: 2 },
+        { from: "sw-escritorio-p1", to: "plotter" },
+        { from: "sw-escritorio-p1", to: "printer-stickers" },
+        { from: "sw-escritorio-p1", to: "printer-lavado" },
+        { from: "sw-escritorio-p1", to: "ap-p1" },
         { from: "sw-tenda", to: "ap-gerencia" },
         { from: "sw-tenda", to: "ap-juntas" },
         { from: "sw-tenda", to: "printer-admin" },
         { from: "sw-tenda", to: "pc-contab-01" },
-        { from: "sw-hp", to: "plotter" },
-        { from: "sw-hp", to: "printer-stickers" },
-        { from: "sw-hp", to: "printer-lavado" },
-        { from: "sw-hp", to: "ap-p1" },
         { from: "sw-hp", to: "pc-diseno-01" },
         { from: "gw-ruijie", to: "printers-wifi", dashes: true, label: "Wi-Fi" }
       ];
