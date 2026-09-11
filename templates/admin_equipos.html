@@ -304,36 +304,69 @@
       <form id="form-dispositivo" onsubmit="guardarDispositivoModal(event)" class="space-y-3.5 text-xs">
         <div>
           <label class="block font-semibold text-slate-700 mb-1">Nombre del Dispositivo / Rol *</label>
-          <input type="text" id="disp-nombre" required placeholder="Ej: PC-CONTAB-01, Impresora Etiquetas..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+          <input type="text" id="disp-nombre" required placeholder="Ej: PC-CONTAB-01, Laptop Gerencia, Impresora..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Piso / Ubicación *</label>
-            <select id="disp-piso" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+            <select id="disp-piso" required onchange="alCambiarPisoModal()" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium text-slate-700">
               <option value="Piso 1">Piso 1 (Planta & Servidor)</option>
-              <option value="Piso 2">Piso 2 (MDF, Core & Diseño)</option>
+              <option value="Piso 2" selected>Piso 2 (MDF, Core & Diseño)</option>
               <option value="Piso 3">Piso 3 (Admin & Gerencia)</option>
             </select>
           </div>
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Tipo de Equipo *</label>
-            <select id="disp-tipo" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-              <option value="Puesto de Trabajo">Puesto de Trabajo</option>
-              <option value="Router / Gateway">Router / Gateway</option>
-              <option value="Switch">Switch</option>
-              <option value="Servidor">Servidor</option>
+            <select id="disp-tipo" required onchange="alCambiarTipoModal()" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium text-slate-700">
+              <option value="Puesto de Trabajo">Puesto de Trabajo (PC Fijo)</option>
+              <option value="Laptop / Portátil">Laptop / Portátil</option>
               <option value="Periférico / Impresora">Periférico / Impresora</option>
-              <option value="Wi-Fi / AP">Wi-Fi / AP</option>
-              <option value="Seguridad / CCTV">Seguridad / CCTV</option>
+              <option value="Servidor">Servidor</option>
+              <option value="Switch">Switch</option>
+              <option value="Wi-Fi / AP">Punto de Acceso Wi-Fi (AP)</option>
+              <option value="Router / Gateway">Router / Gateway / Módem</option>
+              <option value="Seguridad / CCTV">Seguridad / Cámara CCTV</option>
               <option value="Energía / UPS">Energía / UPS</option>
             </select>
           </div>
         </div>
 
+        <!-- SELECCIÓN DE CONEXIÓN A LA RED (SWITCH, WI-FI O MÓDEM) -->
+        <div class="p-3.5 bg-indigo-50/50 rounded-xl border border-indigo-200/80 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-indigo-900 flex items-center gap-1.5 text-xs">
+              <i data-lucide="git-merge" class="w-4 h-4 text-indigo-600"></i> Conexión de Red (¿A qué se conecta?) *
+            </span>
+            <span class="text-[10px] text-indigo-600 bg-indigo-100/70 font-semibold px-2 py-0.5 rounded-full">Switch / AP / Módem</span>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Dispositivo Concentrador / Enlace *</label>
+            <select id="disp-conectado" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-medium text-slate-800 shadow-2xs">
+              <!-- Rellenado dinámicamente con los switches, APs y módems de la empresa -->
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Medio de Enlace *</label>
+              <select id="disp-enlace-tipo" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                <option value="Cable UTP">Cable UTP (Ethernet)</option>
+                <option value="Wi-Fi (Inalámbrico)">Wi-Fi (Inalámbrico)</option>
+                <option value="Fibra Óptica / Coaxial">Fibra Óptica / Coaxial</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Puerto del Switch / Red SSID</label>
+              <input type="text" id="disp-puerto" placeholder="Ej: Puerto 6, SSID Gerencia..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Dirección IP</label>
+            <label class="block font-semibold text-slate-700 mb-1">Dirección IP (Estática o DHCP)</label>
             <input type="text" id="disp-ip" placeholder="192.168.0.X o DHCP" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
           </div>
           <div>
@@ -372,7 +405,8 @@
     "enlace_tipo": "Coaxial / Fibra Óptica",
     "software": "Enlace Primario Claro",
     "alerta": "Normal",
-    "notas": "Enlace principal de salida a Internet ubicado en el rack del Piso 2."
+    "notas": "Enlace principal de salida a Internet ubicado en el rack del Piso 2.",
+    "conectado_id": "gw-ruijie"
   },
   {
     "id": "isp-ruijie",
@@ -392,7 +426,8 @@
     "enlace_tipo": "Cable UTP Cat 6",
     "software": "Enlace Backup / Failover",
     "alerta": "Normal",
-    "notas": "Segundo enlace para redundancia y balanceo de carga en el rack del Piso 2."
+    "notas": "Segundo enlace para redundancia y balanceo de carga en el rack del Piso 2.",
+    "conectado_id": "gw-ruijie"
   },
   {
     "id": "gw-ruijie",
@@ -412,7 +447,8 @@
     "enlace_tipo": "Cable UTP Cat 6",
     "software": "Ruijie Cloud, Multi-WAN Load Balancing, DHCP Server",
     "alerta": "Normal",
-    "notas": "Gateway principal y servidor DHCP general (192.168.0.1) en Rack Piso 2."
+    "notas": "Gateway principal y servidor DHCP general (192.168.0.1) en Rack Piso 2.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "sw-hp",
@@ -432,7 +468,8 @@
     "enlace_tipo": "Cableado Vertical",
     "software": "VLAN 802.1Q disponible, Spanning Tree",
     "alerta": "Normal",
-    "notas": "Switch administrable central en Piso 2. Conecta MDF y troncales a Pisos 1 y 3."
+    "notas": "Switch administrable central en Piso 2. Conecta MDF y troncales a Pisos 1 y 3.",
+    "conectado_id": "gw-ruijie"
   },
   {
     "id": "ups-p2",
@@ -452,7 +489,8 @@
     "enlace_tipo": "Tomas eléctricas C13 / NEMA",
     "software": "N/A",
     "alerta": "Crítico",
-    "notas": "BATERÍAS INOPERATIVAS. Funciona como simple regleta. Ante corte de luz, la red y cámaras caen al instante."
+    "notas": "BATERÍAS INOPERATIVAS. Funciona como simple regleta. Ante corte de luz, la red y cámaras caen al instante.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "dvr-cctv",
@@ -472,7 +510,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "App Móvil de visualización remota",
     "alerta": "Atención",
-    "notas": "Ubicado en el rack del Piso 2 sin aislamiento de red."
+    "notas": "Ubicado en el rack del Piso 2 sin aislamiento de red.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "plotter",
@@ -492,7 +531,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "Software de tizado / trazo textil (Audaces/Optitex)",
     "alerta": "Normal",
-    "notas": "Plotter ubicado en área de Diseño/Moldería en Piso 2."
+    "notas": "Plotter ubicado en área de Diseño/Moldería en Piso 2.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "printer-stickers",
@@ -512,7 +552,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "Zebra Designer / BarTender",
     "alerta": "Normal",
-    "notas": "Impresión de códigos de barra para pedidos ubicada en Piso 2."
+    "notas": "Impresión de códigos de barra para pedidos ubicada en Piso 2.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "printer-lavado",
@@ -532,7 +573,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "Software de composición de etiquetas",
     "alerta": "Normal",
-    "notas": "Etiquetas técnicas con instrucciones de lavado ubicada en Piso 2."
+    "notas": "Etiquetas técnicas con instrucciones de lavado ubicada en Piso 2.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "pc-diseno-01",
@@ -552,7 +594,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "Adobe Illustrator, Photoshop, Audaces/Optitex, Avansis",
     "alerta": "Normal",
-    "notas": "Maneja archivos pesados en el PC Servidor de Piso 1."
+    "notas": "Maneja archivos pesados en el PC Servidor de Piso 1.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "printers-wifi",
@@ -572,7 +615,8 @@
     "enlace_tipo": "Inalámbrico",
     "software": "Drivers Wi-Fi",
     "alerta": "Atención",
-    "notas": "Se recomienda cablearlas por UTP para evitar desconfiguración de IP."
+    "notas": "Se recomienda cablearlas por UTP para evitar desconfiguración de IP.",
+    "conectado_id": "gw-ruijie"
   },
   {
     "id": "pc-server",
@@ -592,7 +636,8 @@
     "enlace_tipo": "Cable UTP Cat 5e",
     "software": "Avansis Server, SQL Server, Carpetas Compartidas SMB",
     "alerta": "Crítico",
-    "notas": "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1."
+    "notas": "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1.",
+    "conectado_id": "sw-escritorio-p1"
   },
   {
     "id": "sw-escritorio-p1",
@@ -612,7 +657,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "No administrable",
     "alerta": "Atención",
-    "notas": "Conecta Servidor Avansis y AP de Planta. Conectado por troncal vertical al Piso 2."
+    "notas": "Conecta Servidor Avansis y AP de Planta. Conectado por troncal vertical al Piso 2.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "ap-p1",
@@ -632,7 +678,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "SSID: Planta_Operaciones",
     "alerta": "Normal",
-    "notas": "Wi-Fi para operarios y terminales móviles de Piso 1."
+    "notas": "Wi-Fi para operarios y terminales móviles de Piso 1.",
+    "conectado_id": "sw-escritorio-p1"
   },
   {
     "id": "sw-tenda",
@@ -652,7 +699,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "No soporta VLANs",
     "alerta": "Atención",
-    "notas": "Switch en rack del Piso 3 conectado por troncal vertical al Switch Core HP."
+    "notas": "Switch en rack del Piso 3 conectado por troncal vertical al Switch Core HP.",
+    "conectado_id": "sw-hp"
   },
   {
     "id": "ap-gerencia",
@@ -672,7 +720,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "SSID: Gerencia_Privado",
     "alerta": "Atención",
-    "notas": "Verificar si tiene DHCP desactivado para prevenir colisión de IPs."
+    "notas": "Verificar si tiene DHCP desactivado para prevenir colisión de IPs.",
+    "conectado_id": "sw-tenda"
   },
   {
     "id": "ap-juntas",
@@ -692,7 +741,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "SSID: Sala_Juntas",
     "alerta": "Normal",
-    "notas": "Usado para presentaciones y visitas en Piso 3."
+    "notas": "Usado para presentaciones y visitas en Piso 3.",
+    "conectado_id": "sw-tenda"
   },
   {
     "id": "printer-admin",
@@ -712,7 +762,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "Driver PCL6 / WSD",
     "alerta": "Normal",
-    "notas": "Asignar IP fija estática en el Ruijie."
+    "notas": "Asignar IP fija estática en el Ruijie.",
+    "conectado_id": "sw-tenda"
   },
   {
     "id": "pc-contab-01",
@@ -732,7 +783,8 @@
     "enlace_tipo": "Cable UTP",
     "software": "Cliente Avansis, Office 365, Software Bancos",
     "alerta": "Atención",
-    "notas": "Accede a datos bancarios y nómina desde la red plana general."
+    "notas": "Accede a datos bancarios y nómina desde la red plana general.",
+    "conectado_id": "sw-tenda"
   }
 ];
 
@@ -773,7 +825,7 @@
     }
 
     function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices_v5");
+      const guardados = localStorage.getItem("netmap_pro_devices_v6");
       if (guardados) {
         try {
           const parsed = JSON.parse(guardados);
@@ -805,7 +857,7 @@
     }
 
     function guardarEnLocalStorage() {
-      localStorage.setItem("netmap_pro_devices_v5", JSON.stringify(dispositivos));
+      localStorage.setItem("netmap_pro_devices_v6", JSON.stringify(dispositivos));
     }
 
     function mostrarToast(mensaje) {
@@ -964,6 +1016,101 @@
 
     // INICIALIZACIÓN DEL MAPA VIS.JS
     
+    
+    // ========================================================
+    // GESTIÓN DE CONEXIONES (SWITCHES, WI-FI, ROUTERS Y MÓDEMS)
+    // ========================================================
+    function obtenerDispositivosConectores(excluirId = null) {
+      return dispositivos.filter(d => {
+        if (excluirId && d.id === excluirId) return false;
+        const tipo = (d.tipo || "").toLowerCase();
+        const nombre = (d.nombre || "").toLowerCase();
+        return tipo.includes("switch") || 
+               tipo.includes("router") || 
+               tipo.includes("gateway") || 
+               tipo.includes("wi-fi") || 
+               tipo.includes("ap") || 
+               nombre.includes("switch") ||
+               nombre.includes("módem") ||
+               nombre.includes("modem") ||
+               nombre.includes("gateway") ||
+               nombre.includes("ap") ||
+               d.id.startsWith("sw-") || 
+               d.id.startsWith("gw-") || 
+               d.id.startsWith("ap-") || 
+               d.id.startsWith("isp-");
+      });
+    }
+
+    function generarHtmlOpcionesConectores(seleccionadoVal, excluirId = null) {
+      const conectores = obtenerDispositivosConectores(excluirId);
+      const pisos = ["Piso 1", "Piso 2", "Piso 3"];
+      let html = `<option value="">-- Seleccionar Switch, Wi-Fi o Módem --</option>`;
+
+      pisos.forEach(piso => {
+        const equiposPiso = conectores.filter(c => c.piso === piso);
+        if (equiposPiso.length > 0) {
+          html += `<optgroup label="📍 ${piso.toUpperCase()}">`;
+          equiposPiso.forEach(c => {
+            const isSelected = (c.id === seleccionadoVal || c.nombre === seleccionadoVal || (seleccionadoVal && seleccionadoVal.includes(c.nombre)));
+            let badge = "🔀 Switch";
+            if (c.tipo === "Wi-Fi / AP" || c.id.startsWith("ap-")) badge = "📶 Wi-Fi";
+            else if (c.tipo.includes("Router") || c.id.startsWith("isp-") || c.id.startsWith("gw-")) badge = "🌐 Gateway/Módem";
+            
+            html += `<option value="${c.id}" ${isSelected ? 'selected' : ''}>${c.nombre} (${badge} - ${c.ip || 'DHCP'})</option>`;
+          });
+          html += `</optgroup>`;
+        }
+      });
+
+      // Equipos sin piso estándar
+      const otros = conectores.filter(c => !pisos.includes(c.piso));
+      if (otros.length > 0) {
+        html += `<optgroup label="Otros Concentradores">`;
+        otros.forEach(c => {
+          const isSelected = (c.id === seleccionadoVal || c.nombre === seleccionadoVal);
+          html += `<option value="${c.id}" ${isSelected ? 'selected' : ''}>${c.nombre}</option>`;
+        });
+        html += `</optgroup>`;
+      }
+
+      return html;
+    }
+
+    function poblarSelectorConectoresModal(pisoSugerido = null) {
+      const select = document.getElementById("disp-conectado");
+      if (!select) return;
+
+      const pisoActual = pisoSugerido || document.getElementById("disp-piso").value;
+      const tipoActual = document.getElementById("disp-tipo").value;
+
+      select.innerHTML = generarHtmlOpcionesConectores("", null);
+
+      // Sugerencia automática inteligente según piso y tipo
+      if (pisoActual === "Piso 1") {
+        select.value = (tipoActual === "Wi-Fi / AP" || tipoActual === "Laptop / Portátil") ? "ap-p1" : "sw-escritorio-p1";
+      } else if (pisoActual === "Piso 2") {
+        select.value = "sw-hp";
+      } else if (pisoActual === "Piso 3") {
+        select.value = (tipoActual === "Laptop / Portátil") ? "ap-gerencia" : "sw-tenda";
+      }
+    }
+
+    function alCambiarPisoModal() {
+      poblarSelectorConectoresModal();
+    }
+
+    function alCambiarTipoModal() {
+      const tipo = document.getElementById("disp-tipo").value;
+      const selectEnlace = document.getElementById("disp-enlace-tipo");
+      if (tipo === "Laptop / Portátil") {
+        if (selectEnlace) selectEnlace.value = "Wi-Fi (Inalámbrico)";
+      } else if (tipo === "Puesto de Trabajo" || tipo === "Switch" || tipo === "Servidor") {
+        if (selectEnlace) selectEnlace.value = "Cable UTP";
+      }
+      poblarSelectorConectoresModal();
+    }
+
     // ==========================================
     // RENDERIZADO DINÁMICO Y DRAG & DROP DE RACKS
     // ==========================================
@@ -1350,33 +1497,57 @@ ${rol}`,
       dispositivos.forEach(d => {
         if (idsTroncales.includes(d.id)) return;
 
-        let switchPadre = "sw-hp";
+        let switchPadre = null;
+
+        // 1. Prioridad: conectado_id explícito si existe el dispositivo
+        if (d.conectado_id && dispositivos.some(x => x.id === d.conectado_id)) {
+          switchPadre = d.conectado_id;
+        }
+        // 2. Coincidencia por nombre o texto en d.conectado
+        else if (d.conectado) {
+          const match = dispositivos.find(x => 
+            x.id === d.conectado ||
+            x.nombre.toLowerCase() === d.conectado.toLowerCase() ||
+            d.conectado.toLowerCase().includes(x.nombre.toLowerCase()) ||
+            d.conectado.toLowerCase().includes(x.id.toLowerCase())
+          );
+          if (match) {
+            switchPadre = match.id;
+          }
+        }
+
+        // 3. Fallback inteligente por piso si no hay conexión explícita
+        if (!switchPadre) {
+          if (d.tipo === "Wi-Fi / AP" || d.id === "printers-wifi") {
+            switchPadre = (d.piso === "Piso 3") ? "sw-tenda" : ((d.piso === "Piso 1") ? "sw-escritorio-p1" : "gw-ruijie");
+          } else if (d.piso === "Piso 1") {
+            switchPadre = "sw-escritorio-p1";
+          } else if (d.piso === "Piso 3") {
+            switchPadre = "sw-tenda";
+          } else {
+            switchPadre = "sw-hp";
+          }
+        }
+
+        const padreObj = dispositivos.find(x => x.id === switchPadre);
+        const esWifi = (d.enlace_tipo && d.enlace_tipo.toLowerCase().includes("wi-fi")) || 
+                       (d.conectado && d.conectado.toLowerCase().includes("wi-fi")) ||
+                       (padreObj && padreObj.tipo === "Wi-Fi / AP") ||
+                       (d.tipo === "Wi-Fi / AP");
+
         let colorEnlace = "#4f46e5";
         let edgeWidth = 1.5;
-        let labelEnlace = `${d.nombre} (${d.piso})`;
+        let labelEnlace = d.puerto_switch ? d.puerto_switch : (esWifi ? "Wi-Fi" : `${d.nombre}`);
 
-        if (d.id === "printers-wifi") {
-          switchPadre = "gw-ruijie";
-          colorEnlace = "#8b5cf6";
-          labelEnlace = "Wi-Fi 2.4 GHz";
-        } else if (d.id === "dvr-cctv") {
-          switchPadre = "sw-hp";
-          colorEnlace = "#4f46e5";
-          labelEnlace = "CCTV";
+        if (esWifi) {
+          colorEnlace = "#8b5cf6"; // Púrpura distintivo para Wi-Fi
+        } else if (d.alerta === "Crítico") {
+          colorEnlace = "#dc2626";
+          edgeWidth = 2.5;
         } else if (d.piso === "Piso 1") {
-          switchPadre = "sw-escritorio-p1";
-          colorEnlace = d.alerta === "Crítico" ? "#dc2626" : "#059669";
-          if (d.alerta === "Crítico") edgeWidth = 3;
-          labelEnlace = d.id === "pc-server" ? "Avansis (SPOF)" : (d.tipo === "Wi-Fi / AP" ? "Wi-Fi Planta" : `${d.nombre} (P1)`);
+          colorEnlace = "#059669";
         } else if (d.piso === "Piso 3") {
-          switchPadre = "sw-tenda";
           colorEnlace = "#7c3aed";
-          labelEnlace = d.tipo === "Wi-Fi / AP" ? "Wi-Fi" : `${d.nombre} (P3)`;
-        } else {
-          // Piso 2 u otro
-          switchPadre = "sw-hp";
-          colorEnlace = "#4f46e5";
-          labelEnlace = `${d.nombre} (P2)`;
         }
 
         edgesArray.push({
@@ -1386,7 +1557,7 @@ ${rol}`,
           arrows: "to",
           width: edgeWidth,
           color: { color: colorEnlace },
-          dashes: d.tipo === "Wi-Fi / AP" || d.id === "printers-wifi" ? [4, 4] : false
+          dashes: esWifi ? [4, 4] : false
         });
       });
 
@@ -1573,12 +1744,24 @@ ${rol}`,
                     <input type="text" id="edit-hostname-${d.id}" value="${d.hostname || ''}" placeholder="PC-DESPACHO-01" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-mono">
                   </div>
                   <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Conectado a (Switch / Router):</label>
-                    <input type="text" id="edit-conectado-${d.id}" value="${d.conectado || ''}" placeholder="Switch Core HP..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
+                    <label class="block font-medium text-slate-600 mb-0.5">Conectado a (Switch, Wi-Fi o Módem):</label>
+                    <select id="edit-conectado-${d.id}" class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-medium text-slate-800">
+                      ${generarHtmlOpcionesConectores(d.conectado_id || d.conectado, d.id)}
+                    </select>
                   </div>
-                  <div>
-                    <label class="block font-medium text-slate-600 mb-0.5">Puerto del Switch / Tipo Enlace:</label>
-                    <input type="text" id="edit-puerto-${d.id}" value="${d.puerto_switch || ''}" placeholder="Puerto 12 (UTP Cat 6)" class="w-full px-2.5 py-1.5 border rounded-lg bg-white">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block font-medium text-slate-600 mb-0.5">Medio de Enlace:</label>
+                      <select id="edit-enlace-tipo-${d.id}" class="w-full px-2 py-1.5 border rounded-lg bg-white">
+                        <option value="Cable UTP" ${(!d.enlace_tipo || d.enlace_tipo.includes('UTP') || d.enlace_tipo.includes('Cable')) ? 'selected' : ''}>Cable UTP</option>
+                        <option value="Wi-Fi (Inalámbrico)" ${(d.enlace_tipo && d.enlace_tipo.includes('Wi-Fi')) ? 'selected' : ''}>Wi-Fi</option>
+                        <option value="Fibra Óptica / Coaxial" ${(d.enlace_tipo && (d.enlace_tipo.includes('Fibra') || d.enlace_tipo.includes('Coaxial'))) ? 'selected' : ''}>Fibra / Coaxial</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block font-medium text-slate-600 mb-0.5">Puerto / SSID:</label>
+                      <input type="text" id="edit-puerto-${d.id}" value="${d.puerto_switch || ''}" placeholder="Pto 12, SSID..." class="w-full px-2.5 py-1.5 border rounded-lg bg-white font-mono">
+                    </div>
                   </div>
                 </div>
 
@@ -1700,7 +1883,18 @@ ${rol}`,
       dispositivos[idx].ip = document.getElementById(`edit-ip-${id}`).value;
       dispositivos[idx].mac = document.getElementById(`edit-mac-${id}`).value;
       dispositivos[idx].hostname = document.getElementById(`edit-hostname-${id}`).value;
-      dispositivos[idx].conectado = document.getElementById(`edit-conectado-${id}`).value;
+      
+      const selCon = document.getElementById(`edit-conectado-${id}`);
+      if (selCon) {
+        dispositivos[idx].conectado_id = selCon.value;
+        const objCon = dispositivos.find(x => x.id === selCon.value);
+        dispositivos[idx].conectado = objCon ? objCon.nombre : (selCon.selectedOptions[0]?.text || "");
+      }
+      
+      const selEnlace = document.getElementById(`edit-enlace-tipo-${id}`);
+      if (selEnlace) {
+        dispositivos[idx].enlace_tipo = selEnlace.value;
+      }
       dispositivos[idx].puerto_switch = document.getElementById(`edit-puerto-${id}`).value;
       
       dispositivos[idx].usuario = document.getElementById(`edit-usuario-${id}`).value;
@@ -1755,6 +1949,8 @@ ${rol}`,
     // MODAL DE NUEVO DISPOSITIVO
     function abrirModalNuevo() {
       document.getElementById("form-dispositivo").reset();
+      document.getElementById("disp-piso").value = "Piso 2";
+      poblarSelectorConectoresModal("Piso 2");
       document.getElementById("modal-dispositivo").classList.remove("hidden");
       if (window.lucide && typeof lucide.createIcons === 'function') {
         try { lucide.createIcons(); } catch (e) {}
@@ -1768,24 +1964,33 @@ ${rol}`,
     function guardarDispositivoModal(e) {
       e.preventDefault();
       const nuevoId = "dev-" + Date.now();
+      const selectConectado = document.getElementById("disp-conectado");
+      const conectadoId = selectConectado ? selectConectado.value : "";
+      const objConectado = dispositivos.find(x => x.id === conectadoId);
+      const conectadoTexto = objConectado ? objConectado.nombre : (selectConectado?.selectedOptions[0]?.text || "");
+      const enlaceTipo = document.getElementById("disp-enlace-tipo") ? document.getElementById("disp-enlace-tipo").value : "Cable UTP";
+      const puertoSwitch = document.getElementById("disp-puerto") ? document.getElementById("disp-puerto").value : "";
+
       const nuevo = {
         id: nuevoId,
         nombre: document.getElementById("disp-nombre").value,
         piso: document.getElementById("disp-piso").value,
         tipo: document.getElementById("disp-tipo").value,
-        ip: document.getElementById("disp-ip").value,
+        ip: document.getElementById("disp-ip").value || "DHCP",
         mac: "",
-        hostname: "",
-        usuario: document.getElementById("disp-usuario").value,
+        hostname: (document.getElementById("disp-nombre").value || "DEV").toUpperCase().replace(/[^A-Z0-9]/g, '-'),
+        usuario: document.getElementById("disp-usuario").value || "Sin asignar",
         cargo: "",
         so: "Windows 11 Pro",
         hardware: "",
         marca: "",
-        conectado: "",
-        puerto_switch: "",
+        conectado_id: conectadoId,
+        conectado: conectadoTexto,
+        enlace_tipo: enlaceTipo,
+        puerto_switch: puertoSwitch,
         software: "",
         alerta: "Normal",
-        notas: ""
+        notas: `Conectado vía ${enlaceTipo} a ${conectadoTexto}${puertoSwitch ? ' (' + puertoSwitch + ')' : ''}.`
       };
 
       dispositivos.push(nuevo);
