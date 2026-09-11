@@ -200,216 +200,32 @@
         <div id="network-canvas" class="w-full rounded-xl border border-slate-200 bg-slate-50/40"></div>
       </div>
 
-      <!-- Contenedor de la Vista Racks por Pisos (Orden Secuencial: Piso 1, Piso 2, Piso 3) -->
+      <!-- Contenedor de la Vista Racks por Pisos (Dinámico, Intercambiable y Drag & Drop) -->
       <div id="contenedor-racks" class="hidden space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-          
-          <!-- PISO 1: PLANTA, CORTE & SERVIDOR -->
-          <div class="bg-emerald-50/40 border-2 border-emerald-300 rounded-2xl p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between border-b border-emerald-200 pb-2.5 mb-3">
-                <span class="text-sm font-black text-emerald-900 uppercase tracking-wider flex items-center gap-2">
-                  <i data-lucide="factory" class="w-5 h-5 text-emerald-600"></i> PISO 1 (PLANTA & SERVIDOR)
-                </span>
-                <span class="text-xs bg-emerald-200 text-emerald-900 font-bold px-2.5 py-0.5 rounded-full">3 Equipos</span>
-              </div>
-              <div class="space-y-2.5 text-xs">
-                <!-- PC SERVIDOR (CRÍTICO) -->
-                <div onclick="abrirFilaDetalle('pc-server')" class="p-3 bg-rose-50 rounded-xl border-2 border-rose-400 shadow-xs hover:border-rose-600 cursor-pointer transition">
-                  <div class="font-bold text-rose-900 flex items-center justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="server" class="w-4 h-4 text-rose-600"></i> PC Servidor Principal</span>
-                    <span class="text-[10px] bg-rose-200 text-rose-900 font-bold px-2 py-0.5 rounded-full animate-pulse">⚠️ SPOF</span>
-                  </div>
-                  <div class="text-[11px] text-rose-700 font-mono mt-1">192.168.0.250 • Avansis / Diseños SMB</div>
-                  <div class="text-[10px] text-rose-600 mt-0.5">Desktop sin RAID ni UPS. Punto único de falla.</div>
-                </div>
-
-                <!-- SWITCH PLANTA -->
-                <div onclick="abrirFilaDetalle('sw-escritorio-p1')" class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex items-center justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="git-branch" class="w-4 h-4 text-emerald-600"></i> Switch Escritorio Planta</span>
-                    <span class="text-[10px] text-emerald-700 font-bold">Distribución</span>
-                  </div>
-                  <div class="text-[11px] text-emerald-600 font-mono mt-0.5">Troncal vertical desde Switch Core HP (P2)</div>
-                  <div class="text-[10px] text-slate-400">Conecta Servidor Avansis y AP de Planta</div>
-                </div>
-
-                <!-- AP PLANTA -->
-                <div onclick="abrirFilaDetalle('ap-p1')" class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex items-center justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="wifi" class="w-4 h-4 text-emerald-600"></i> Access Point Planta Piso 1</span>
-                    <span class="text-[10px] text-emerald-700 font-mono font-bold">192.168.0.18</span>
-                  </div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">Wi-Fi para operarios y terminales de confección</div>
-                </div>
-              </div>
-            </div>
-            <div class="text-[11px] text-emerald-800 font-medium text-center pt-2.5 border-t border-emerald-200/60 bg-emerald-100/40 rounded-xl p-2">
-              🔗 Conectado por troncal vertical UTP hacia Switch Core en Piso 2
-            </div>
+        
+        <!-- Barra de Controles y Ayuda para Intercambio -->
+        <div class="flex flex-wrap items-center justify-between text-xs text-slate-600 bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs gap-3">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold px-2.5 py-1 rounded-lg text-xs flex items-center gap-1.5 shadow-2xs">
+              <i data-lucide="move" class="w-3.5 h-3.5 text-indigo-600"></i> Pisos y Equipos Intercambiables
+            </span>
+            <span class="text-slate-500 hidden sm:inline">
+              🖱️ <b>Arrastra equipos</b> entre pisos para reubicarlos • ↔️ Usa <b>◀ ▶</b> o arrastra las cabeceras para reordenar las columnas.
+            </span>
           </div>
 
-          <!-- PISO 2: MDF, CORE & DISEÑO -->
-          <div class="bg-indigo-50/40 border-2 border-indigo-300 rounded-2xl p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between border-b border-indigo-200 pb-2.5 mb-3">
-                <span class="text-sm font-black text-indigo-900 uppercase tracking-wider flex items-center gap-2">
-                  <i data-lucide="server" class="w-5 h-5 text-indigo-600"></i> PISO 2 (MDF, CORE & DISEÑO)
-                </span>
-                <span class="text-xs bg-indigo-200 text-indigo-900 font-bold px-2.5 py-0.5 rounded-full">11 Equipos • MDF</span>
-              </div>
-              <div class="space-y-2 text-xs">
-                
-                <!-- SUB-SECCIÓN WAN: MÓDEMS DE INTERNET -->
-                <div class="bg-sky-100/60 border border-sky-300 rounded-xl p-2.5 space-y-1.5">
-                  <span class="text-[10px] font-black text-sky-900 uppercase tracking-wider flex items-center gap-1">
-                    <i data-lucide="globe" class="w-3.5 h-3.5 text-sky-600"></i> ENLACES DE INTERNET (WAN) EN RACK P2
-                  </span>
-                  <div class="grid grid-cols-2 gap-1.5">
-                    <div onclick="abrirFilaDetalle('isp-claro')" class="p-2 bg-white rounded-lg border border-sky-200 hover:border-sky-400 cursor-pointer transition">
-                      <div class="font-bold text-slate-800 text-[11px]">Módem Claro</div>
-                      <div class="text-[9px] text-sky-700 font-mono">WAN 1 • Salida Principal</div>
-                    </div>
-                    <div onclick="abrirFilaDetalle('isp-ruijie')" class="p-2 bg-white rounded-lg border border-sky-200 hover:border-sky-400 cursor-pointer transition">
-                      <div class="font-bold text-slate-800 text-[11px]">Módem Secundario</div>
-                      <div class="text-[9px] text-sky-700 font-mono">WAN 2 • Backup / Failover</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- GATEWAY RUIJIE -->
-                <div onclick="abrirFilaDetalle('gw-ruijie')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-indigo-600"></i> Gateway Multi-WAN</span>
-                    <span class="text-[10px] text-indigo-600 font-bold">192.168.0.1</span>
-                  </div>
-                  <div class="text-[10px] text-slate-500 font-mono">Ruijie Reyee RG-EG (Balanceador + DHCP)</div>
-                </div>
-
-                <!-- SWITCH CORE HP -->
-                <div onclick="abrirFilaDetalle('sw-hp')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-indigo-600"></i> Switch Core HP 24p</span>
-                    <span class="text-[10px] text-indigo-600 font-bold">192.168.0.2</span>
-                  </div>
-                  <div class="text-[10px] text-slate-500">Conmutación central Gigabit y troncales</div>
-                </div>
-
-                <!-- UPS RACK -->
-                <div onclick="abrirFilaDetalle('ups-p2')" class="p-2.5 bg-rose-50 rounded-xl border border-rose-300 shadow-xs hover:border-rose-400 cursor-pointer transition">
-                  <div class="font-bold text-rose-900 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="zap" class="w-3.5 h-3.5 text-rose-600"></i> UPS de Rack</span>
-                    <span class="text-[10px] text-rose-700 font-bold">⚠️ Sin Batería</span>
-                  </div>
-                  <div class="text-[10px] text-rose-600">Alimenta Router, Switch HP y DVR</div>
-                </div>
-
-                <!-- DVR CCTV -->
-                <div onclick="abrirFilaDetalle('dvr-cctv')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span>DVR Cámaras CCTV</span>
-                    <span class="text-[10px] text-indigo-600 font-mono">192.168.0.200</span>
-                  </div>
-                </div>
-
-                <!-- EQUIPOS DE DISEÑO Y MOLDERÍA EN PISO 2 -->
-                <div class="grid grid-cols-2 gap-1.5">
-                  <div onclick="abrirFilaDetalle('plotter')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
-                    <div class="font-bold text-slate-800 text-[11px]">Plotter de Corte</div>
-                    <div class="text-[10px] text-indigo-600 font-mono">192.168.0.215</div>
-                  </div>
-                  <div onclick="abrirFilaDetalle('printer-stickers')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
-                    <div class="font-bold text-slate-800 text-[11px]">Impresora Stickers</div>
-                    <div class="text-[10px] text-indigo-600 font-mono">192.168.0.216</div>
-                  </div>
-                  <div onclick="abrirFilaDetalle('printer-lavado')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
-                    <div class="font-bold text-slate-800 text-[11px]">Etiquetas Lavado</div>
-                    <div class="text-[10px] text-indigo-600 font-mono">192.168.0.217</div>
-                  </div>
-                  <div onclick="abrirFilaDetalle('pc-diseno-01')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
-                    <div class="font-bold text-slate-800 text-[11px]">PC Diseño 01</div>
-                    <div class="text-[10px] text-slate-500">Optitex / Adobe</div>
-                  </div>
-                </div>
-
-                <!-- IMPRESORAS WIFI -->
-                <div onclick="abrirFilaDetalle('printers-wifi')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 text-[11px]">2x Impresoras Wi-Fi Oficina</div>
-                  <div class="text-[10px] text-slate-400">Wi-Fi Ruijie 2.4 GHz</div>
-                </div>
-
-              </div>
-            </div>
-            <div class="text-[11px] text-indigo-800 font-medium text-center pt-2.5 border-t border-indigo-200/60 bg-indigo-100/40 rounded-xl p-2">
-              ⭐ Corazón de la red: Conecta WAN y distribuye a Pisos 1 y 3
-            </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="restablecerOrdenColumnas()" title="Volver al orden secuencial Piso 1, 2, 3" class="px-2.5 py-1 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-slate-200 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restablecer Orden (1 - 2 - 3)
+            </button>
           </div>
-
-          <!-- PISO 3: ADMINISTRACIÓN, FINANZAS & GERENCIA -->
-          <div class="bg-purple-50/40 border-2 border-purple-300 rounded-2xl p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between border-b border-purple-200 pb-2.5 mb-3">
-                <span class="text-sm font-black text-purple-900 uppercase tracking-wider flex items-center gap-2">
-                  <i data-lucide="briefcase" class="w-5 h-5 text-purple-600"></i> PISO 3 (ADMINISTRACIÓN & GERENCIA)
-                </span>
-                <span class="text-xs bg-purple-200 text-purple-900 font-bold px-2.5 py-0.5 rounded-full">5 Equipos</span>
-              </div>
-              <div class="space-y-2.5 text-xs">
-                
-                <!-- SWITCH PISO 3 -->
-                <div onclick="abrirFilaDetalle('sw-tenda')" class="p-3 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex items-center justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="git-branch" class="w-4 h-4 text-purple-600"></i> Switch Rack Piso 3 (Tenda)</span>
-                    <span class="text-[10px] text-purple-700 font-bold">12/16 Puertos</span>
-                  </div>
-                  <div class="text-[11px] text-purple-600 font-mono mt-0.5">Troncal vertical desde Switch Core HP (P2)</div>
-                  <div class="text-[10px] text-slate-400">Distribución para Gerencia y Finanzas</div>
-                </div>
-
-                <!-- AP GERENCIA -->
-                <div onclick="abrirFilaDetalle('ap-gerencia')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="wifi" class="w-3.5 h-3.5 text-purple-600"></i> AP TP-Link Gerencia</span>
-                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.15</span>
-                  </div>
-                  <div class="text-[10px] text-slate-400 mt-0.5">Wi-Fi exclusivo Gerencia General</div>
-                </div>
-
-                <!-- AP SALA DE JUNTAS -->
-                <div onclick="abrirFilaDetalle('ap-juntas')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="wifi" class="w-3.5 h-3.5 text-purple-600"></i> AP TP-Link Sala de Juntas</span>
-                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.16</span>
-                  </div>
-                  <div class="text-[10px] text-slate-400 mt-0.5">Wi-Fi para reuniones y visitas ejecutivas</div>
-                </div>
-
-                <!-- IMPRESORA FACTURACIÓN -->
-                <div onclick="abrirFilaDetalle('printer-admin')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="printer" class="w-3.5 h-3.5 text-purple-600"></i> Impresora Facturación</span>
-                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.210</span>
-                  </div>
-                  <div class="text-[10px] text-slate-400 mt-0.5">Impresión de facturas y documentos contables</div>
-                </div>
-
-                <!-- PC CONTABILIDAD -->
-                <div onclick="abrirFilaDetalle('pc-contab-01')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                  <div class="font-bold text-slate-800 flex justify-between">
-                    <span class="flex items-center gap-1.5"><i data-lucide="monitor" class="w-3.5 h-3.5 text-purple-600"></i> PC Contabilidad 01</span>
-                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.101</span>
-                  </div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">María Gómez (Cliente Avansis / Bancos)</div>
-                </div>
-
-              </div>
-            </div>
-            <div class="text-[11px] text-purple-800 font-medium text-center pt-2.5 border-t border-purple-200/60 bg-purple-100/40 rounded-xl p-2">
-              🔗 Conectado por troncal vertical UTP hacia Switch Core en Piso 2
-            </div>
-          </div>
-
         </div>
+
+        <!-- Grid de Columnas por Pisos (Generado dinámicamente por renderizarRacks()) -->
+        <div id="grid-racks-columnas" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Columnas de Pisos generadas dinámicamente -->
+        </div>
+
       </div>
     </section>
 
@@ -924,6 +740,21 @@
     let redNetwork = null;
     let filaAbiertaId = null;
 
+    // ORDEN DE COLUMNAS INTERCAMBIABLES
+    let ordenPisos = ["Piso 1", "Piso 2", "Piso 3"];
+    try {
+      const ordenGuardado = localStorage.getItem("netmap_column_order");
+      if (ordenGuardado) {
+        const parsed = JSON.parse(ordenGuardado);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          ordenPisos = parsed;
+        }
+      }
+    } catch (e) {}
+
+    let dispositivoArrastradoId = null;
+    let columnaArrastrada = null;
+
     // Inicialización al cargar la página
     function iniciarNetMap() {
       if (window.lucide && typeof lucide.createIcons === "function") {
@@ -932,6 +763,7 @@
       cargarDispositivos();
       inicializarGrafo();
       actualizarMetricas();
+      renderizarRacks();
       renderizarTabla();
     }
     if (document.readyState === "loading") { 
@@ -941,7 +773,7 @@
     }
 
     function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices_v4");
+      const guardados = localStorage.getItem("netmap_pro_devices_v5");
       if (guardados) {
         try {
           const parsed = JSON.parse(guardados);
@@ -973,7 +805,7 @@
     }
 
     function guardarEnLocalStorage() {
-      localStorage.setItem("netmap_pro_devices_v4", JSON.stringify(dispositivos));
+      localStorage.setItem("netmap_pro_devices_v5", JSON.stringify(dispositivos));
     }
 
     function mostrarToast(mensaje) {
@@ -1021,7 +853,7 @@
         if (contenedorVis) contenedorVis.classList.add("hidden");
         if (contenedorRacks) contenedorRacks.classList.remove("hidden");
         if (controlesGrafo) controlesGrafo.classList.add("hidden");
-        if (window.lucide) lucide.createIcons();
+        renderizarRacks();
       } else {
         if (contenedorVis) contenedorVis.classList.remove("hidden");
         if (contenedorRacks) contenedorRacks.classList.add("hidden");
@@ -1131,12 +963,328 @@
     }
 
     // INICIALIZACIÓN DEL MAPA VIS.JS
+    
+    // ==========================================
+    // RENDERIZADO DINÁMICO Y DRAG & DROP DE RACKS
+    // ==========================================
+    function renderizarRacks() {
+      const grid = document.getElementById("grid-racks-columnas");
+      if (!grid) return;
+
+      const configPisos = {
+        "Piso 1": {
+          nombre: "PISO 1 (PLANTA & SERVIDOR)",
+          subtitulo: "Planta, Confección y Servidor Avansis",
+          icono: "factory",
+          colorBorde: "border-emerald-300",
+          colorBg: "bg-emerald-50/40",
+          colorTitulo: "text-emerald-900",
+          colorIcono: "text-emerald-600",
+          colorBadge: "bg-emerald-200 text-emerald-900",
+          colorFooter: "text-emerald-800 border-emerald-200/60 bg-emerald-100/40",
+          footerTexto: "🔗 Troncal vertical UTP conectada hacia Switch Core en Piso 2"
+        },
+        "Piso 2": {
+          nombre: "PISO 2 (MDF, CORE & DISEÑO)",
+          subtitulo: "Rack MDF Principal, Conmutación Core y Diseño",
+          icono: "server",
+          colorBorde: "border-indigo-300",
+          colorBg: "bg-indigo-50/40",
+          colorTitulo: "text-indigo-900",
+          colorIcono: "text-indigo-600",
+          colorBadge: "bg-indigo-200 text-indigo-900",
+          colorFooter: "text-indigo-800 border-indigo-200/60 bg-indigo-100/40",
+          footerTexto: "⭐ Corazón de la red: Conecta WAN y distribuye a Pisos 1 y 3"
+        },
+        "Piso 3": {
+          nombre: "PISO 3 (ADMINISTRACIÓN & GERENCIA)",
+          subtitulo: "Gerencia General, Finanzas y Contabilidad",
+          icono: "briefcase",
+          colorBorde: "border-purple-300",
+          colorBg: "bg-purple-50/40",
+          colorTitulo: "text-purple-900",
+          colorIcono: "text-purple-600",
+          colorBadge: "bg-purple-200 text-purple-900",
+          colorFooter: "text-purple-800 border-purple-200/60 bg-purple-100/40",
+          footerTexto: "🔗 Troncal vertical UTP conectada hacia Switch Core en Piso 2"
+        }
+      };
+
+      let htmlGrid = "";
+
+      ordenPisos.forEach((piso, idx) => {
+        const cfg = configPisos[piso] || {
+          nombre: piso.toUpperCase(),
+          subtitulo: "Ubicación de red",
+          icono: "box",
+          colorBorde: "border-slate-300",
+          colorBg: "bg-slate-50/40",
+          colorTitulo: "text-slate-900",
+          colorIcono: "text-slate-600",
+          colorBadge: "bg-slate-200 text-slate-900",
+          colorFooter: "text-slate-700 border-slate-200 bg-slate-100",
+          footerTexto: "Conexión de red"
+        };
+
+        const equiposPiso = dispositivos.filter(d => d.piso === piso);
+        const isFirst = (idx === 0);
+        const isLast = (idx === ordenPisos.length - 1);
+
+        let cardsHtml = "";
+        if (equiposPiso.length === 0) {
+          cardsHtml = `
+            <div class="border-2 border-dashed border-slate-300/80 rounded-xl p-6 text-center text-slate-400 text-xs">
+              <i data-lucide="inbox" class="w-6 h-6 mx-auto mb-1 text-slate-300"></i>
+              Sin equipos asignados<br><span class="text-[10px] text-slate-400">Arrastra equipos aquí para reubicarlos</span>
+            </div>
+          `;
+        } else {
+          equiposPiso.forEach(d => {
+            let iconName = "monitor";
+            let iconColor = "text-slate-600";
+            if (d.tipo === "Router / Gateway") { iconName = "globe"; iconColor = "text-sky-600"; }
+            else if (d.tipo === "Switch") { iconName = "git-branch"; iconColor = "text-indigo-600"; }
+            else if (d.tipo === "Servidor") { iconName = "server"; iconColor = "text-rose-600"; }
+            else if (d.tipo === "Wi-Fi / AP") { iconName = "wifi"; iconColor = "text-emerald-600"; }
+            else if (d.tipo === "Periférico / Impresora") { iconName = "printer"; iconColor = "text-indigo-500"; }
+            else if (d.tipo === "Seguridad / CCTV") { iconName = "video"; iconColor = "text-indigo-600"; }
+            else if (d.tipo === "Energía / UPS") { iconName = "zap"; iconColor = "text-amber-500"; }
+
+            let borderClass = "border border-slate-200 hover:border-indigo-400";
+            let badgeHtml = "";
+
+            if (d.alerta === "Crítico") {
+              borderClass = "border-2 border-rose-400 bg-rose-50/80 hover:border-rose-600 shadow-xs";
+              const badgeText = d.id === "pc-server" ? "⚠️ SPOF" : (d.id === "ups-p2" ? "⚠️ Sin Batería" : "⚠️ Crítico");
+              badgeHtml = `<span class="text-[10px] bg-rose-200 text-rose-900 font-bold px-2 py-0.5 rounded-full animate-pulse">${badgeText}</span>`;
+            } else if (d.alerta === "Atención") {
+              borderClass = "border border-amber-300 bg-amber-50/30 hover:border-amber-500";
+              badgeHtml = `<span class="text-[10px] bg-amber-200 text-amber-900 font-bold px-1.5 py-0.5 rounded">Atención</span>`;
+            } else if (d.id === "isp-claro") {
+              badgeHtml = `<span class="text-[9px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">WAN 1</span>`;
+            } else if (d.id === "isp-ruijie") {
+              badgeHtml = `<span class="text-[9px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">WAN 2</span>`;
+            } else {
+              badgeHtml = `<span class="text-[10px] text-slate-500 font-mono font-medium">${d.ip || 'DHCP'}</span>`;
+            }
+
+            cardsHtml += `
+              <div id="rack-card-${d.id}"
+                   draggable="true" 
+                   ondragstart="iniciarArrastre(event, '${d.id}')" 
+                   ondragend="finalizarArrastre(event)"
+                   onclick="abrirFilaDetalle('${d.id}')"
+                   class="p-2.5 bg-white rounded-xl ${borderClass} shadow-xs hover:shadow-md cursor-grab active:cursor-grabbing transition select-none group">
+                <div class="flex items-center justify-between font-bold text-slate-800">
+                  <span class="flex items-center gap-1.5 truncate">
+                    <i data-lucide="grip-vertical" class="w-3.5 h-3.5 text-slate-300 opacity-60 group-hover:opacity-100 transition shrink-0"></i>
+                    <i data-lucide="${iconName}" class="w-4 h-4 ${iconColor} shrink-0"></i>
+                    <span class="truncate text-xs">${d.nombre}</span>
+                  </span>
+                  <div class="shrink-0 ml-1.5">${badgeHtml}</div>
+                </div>
+                <div class="text-[11px] font-mono mt-1 text-slate-600 flex items-center justify-between">
+                  <span class="truncate text-[10px] font-sans font-medium text-slate-500">${d.cargo || d.tipo}</span>
+                  <span class="text-[10px] font-mono text-slate-400 shrink-0">${d.ip || ''}</span>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-0.5 truncate">
+                  ${d.conectado ? '↳ Conectado a: ' + d.conectado : (d.notas ? d.notas.slice(0, 45) : '')}
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        const pisoSafeId = piso.replace(/\s+/g, '-');
+
+        htmlGrid += `
+          <!-- COLUMNA ${piso} -->
+          <div id="columna-piso-${pisoSafeId}"
+               class="${cfg.colorBg} border-2 ${cfg.colorBorde} rounded-2xl p-4 shadow-xs space-y-3.5 flex flex-col justify-between transition-all duration-200">
+            <div>
+              <!-- Cabecera de Columna -->
+              <div class="flex items-center justify-between border-b pb-2.5 mb-3 border-slate-200/70"
+                   draggable="true"
+                   ondragstart="iniciarArrastreColumna(event, '${piso}')"
+                   ondragover="permitirSoltarColumna(event)"
+                   ondrop="soltarColumna(event, '${piso}')">
+                
+                <div class="flex items-center gap-2">
+                  <!-- Botones de Reordenamiento Izquierda / Derecha -->
+                  <div class="flex items-center bg-white/90 rounded-lg p-0.5 border border-slate-200 shadow-2xs">
+                    <button type="button" onclick="moverColumnaPiso('${piso}', -1)" title="Mover columna a la izquierda" class="p-1 rounded hover:bg-slate-100 transition ${isFirst ? 'opacity-30 cursor-not-allowed' : 'text-slate-700 hover:text-indigo-600'}" ${isFirst ? 'disabled' : ''}>
+                      <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <span title="Arrastra esta cabecera para intercambiar la columna" class="cursor-grab px-0.5 text-slate-400 hover:text-slate-600">
+                      <i data-lucide="grip-horizontal" class="w-3 h-3"></i>
+                    </span>
+                    <button type="button" onclick="moverColumnaPiso('${piso}', 1)" title="Mover columna a la derecha" class="p-1 rounded hover:bg-slate-100 transition ${isLast ? 'opacity-30 cursor-not-allowed' : 'text-slate-700 hover:text-indigo-600'}" ${isLast ? 'disabled' : ''}>
+                      <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                  </div>
+
+                  <span class="text-xs font-black ${cfg.colorTitulo} uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="${cfg.icono}" class="w-4 h-4 ${cfg.colorIcono}"></i> ${cfg.nombre}
+                  </span>
+                </div>
+
+                <span class="text-xs ${cfg.colorBadge} font-bold px-2.5 py-0.5 rounded-full shadow-2xs">${equiposPiso.length} Equipos</span>
+              </div>
+
+              <!-- Zona Dropzone de Equipos (Kanban) -->
+              <div id="dropzone-${pisoSafeId}"
+                   ondragover="permitirSoltar(event, '${piso}')"
+                   ondragleave="salirDropzone(event, '${piso}')"
+                   ondrop="soltarDispositivo(event, '${piso}')"
+                   class="dropzone-piso space-y-2 text-xs min-h-[160px] p-1 rounded-xl transition-all">
+                ${cardsHtml}
+              </div>
+            </div>
+
+            <div class="text-[11px] ${cfg.colorFooter} font-medium text-center pt-2.5 border-t rounded-xl p-2">
+              ${cfg.footerTexto}
+            </div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = htmlGrid;
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+    }
+
+    // CONTROLADORES DE DRAG & DROP DE EQUIPOS
+    function iniciarArrastre(event, id) {
+      dispositivoArrastradoId = id;
+      event.dataTransfer.setData("text/plain", id);
+      event.dataTransfer.effectAllowed = "move";
+      const el = document.getElementById(`rack-card-${id}`);
+      if (el) {
+        el.classList.add("opacity-40", "scale-95");
+      }
+    }
+
+    function finalizarArrastre(event) {
+      dispositivoArrastradoId = null;
+      document.querySelectorAll("[id^='rack-card-']").forEach(el => {
+        el.classList.remove("opacity-40", "scale-95");
+      });
+      document.querySelectorAll(".dropzone-piso").forEach(el => {
+        el.classList.remove("ring-4", "ring-indigo-400", "bg-indigo-50/70", "border-dashed");
+      });
+    }
+
+    function permitirSoltar(event, piso) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      const dz = document.getElementById(`dropzone-${piso.replace(/\s+/g, '-')}`);
+      if (dz) {
+        dz.classList.add("ring-4", "ring-indigo-400", "bg-indigo-50/70", "border-dashed");
+      }
+    }
+
+    function salirDropzone(event, piso) {
+      const dz = document.getElementById(`dropzone-${piso.replace(/\s+/g, '-')}`);
+      if (dz) {
+        dz.classList.remove("ring-4", "ring-indigo-400", "bg-indigo-50/70", "border-dashed");
+      }
+    }
+
+    function soltarDispositivo(event, nuevoPiso) {
+      event.preventDefault();
+      salirDropzone(event, nuevoPiso);
+      const id = event.dataTransfer.getData("text/plain") || dispositivoArrastradoId;
+      if (!id) return;
+      const disp = dispositivos.find(d => d.id === id);
+      if (!disp || disp.piso === nuevoPiso) return;
+
+      const pisoAnterior = disp.piso;
+      disp.piso = nuevoPiso;
+
+      // Si es un dispositivo terminal/periférico, reasignar switch de conexión por defecto
+      if (!disp.id.startsWith("sw-") && !disp.id.startsWith("gw-") && !disp.id.startsWith("isp-")) {
+        if (nuevoPiso === "Piso 1") {
+          disp.conectado = "Switch Escritorio Planta Piso 1";
+        } else if (nuevoPiso === "Piso 2") {
+          disp.conectado = "Switch Core HP Piso 2";
+        } else if (nuevoPiso === "Piso 3") {
+          disp.conectado = "Switch Rack Piso 3 (Tenda)";
+        }
+      }
+
+      guardarEnLocalStorage();
+      actualizarMetricas();
+      renderizarRacks();
+      renderizarTabla();
+      actualizarNodoEnGrafo(disp);
+      mostrarToast(`📍 "${disp.nombre}" reubicado de ${pisoAnterior} a ${nuevoPiso}`);
+    }
+
+    // CONTROLADORES DE REORDENAMIENTO DE COLUMNAS DE PISOS
+    function iniciarArrastreColumna(event, piso) {
+      columnaArrastrada = piso;
+      event.dataTransfer.setData("text/column", piso);
+      event.dataTransfer.effectAllowed = "move";
+    }
+
+    function permitirSoltarColumna(event) {
+      if (!columnaArrastrada) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+    }
+
+    function soltarColumna(event, destinoPiso) {
+      if (!columnaArrastrada || columnaArrastrada === destinoPiso) return;
+      event.preventDefault();
+      const idxOrigen = ordenPisos.indexOf(columnaArrastrada);
+      const idxDestino = ordenPisos.indexOf(destinoPiso);
+      if (idxOrigen !== -1 && idxDestino !== -1) {
+        ordenPisos.splice(idxOrigen, 1);
+        ordenPisos.splice(idxDestino, 0, columnaArrastrada);
+        guardarOrdenColumnas();
+      }
+      columnaArrastrada = null;
+    }
+
+    function moverColumnaPiso(piso, direccion) {
+      const idx = ordenPisos.indexOf(piso);
+      if (idx === -1) return;
+      const newIdx = idx + direccion;
+      if (newIdx < 0 || newIdx >= ordenPisos.length) return;
+
+      const temp = ordenPisos[idx];
+      ordenPisos[idx] = ordenPisos[newIdx];
+      ordenPisos[newIdx] = temp;
+      guardarOrdenColumnas();
+    }
+
+    function guardarOrdenColumnas() {
+      localStorage.setItem("netmap_column_order", JSON.stringify(ordenPisos));
+      renderizarRacks();
+      if (modoGrafoActual !== "racks") {
+        inicializarGrafo();
+      }
+      mostrarToast(`↔️ Orden de columnas: ${ordenPisos.join(" → ")}`);
+    }
+
+    function restablecerOrdenColumnas() {
+      ordenPisos = ["Piso 1", "Piso 2", "Piso 3"];
+      guardarOrdenColumnas();
+      mostrarToast("🔄 Orden de pisos restablecido a: Piso 1, Piso 2, Piso 3");
+    }
+
+    // SINCRONIZACIÓN REACTIVA DEL GRAFO CUANDO SE MUEVE UN EQUIPO
+    function actualizarNodoEnGrafo(disp) {
+      // Re-inicializamos el grafo para recalcular conexiones jerárquicas y orden
+      inicializarGrafo();
+    }
+
     function inicializarGrafo() {
       const container = document.getElementById("network-canvas");
       if (!container) return;
 
       if (typeof vis === "undefined" || !vis.DataSet || !vis.Network) {
-        console.warn("vis.js no está disponible aún. Reintentando...");
         setTimeout(inicializarGrafo, 300);
         return;
       }
@@ -1147,7 +1295,15 @@
 
       const esJerarquico = (modoGrafoActual === "jerarquica");
 
-      const nodesArray = dispositivos.map(d => {
+      // Ordenar dispositivos según ordenPisos para que la jerarquía de Vis.js ordene las ramas de izquierda a derecha según las columnas
+      const dispositivosOrdenados = [...dispositivos].sort((a, b) => {
+        const idxA = ordenPisos.indexOf(a.piso);
+        const idxB = ordenPisos.indexOf(b.piso);
+        if (idxA !== idxB) return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+        return a.nombre.localeCompare(b.nombre);
+      });
+
+      const nodesArray = dispositivosOrdenados.map(d => {
         const { level, bg, border, textColor, icon } = clasificarNodo(d);
         const sub = d.ip ? d.ip : (d.hostname || 'DHCP');
         const rol = d.cargo ? d.cargo : d.tipo;
@@ -1155,7 +1311,9 @@
         return {
           id: d.id,
           level: level,
-          label: `${icon} ${d.nombre}\n[${d.piso}] - ${sub}\n${rol}`,
+          label: `${icon} ${d.nombre}
+[${d.piso}] - ${sub}
+${rol}`,
           shape: "box",
           margin: 10,
           borderWidth: d.alerta === "Crítico" ? 3 : 2,
@@ -1175,6 +1333,7 @@
         };
       });
 
+      // Construcción dinámica de enlaces de red
       const edgesArray = [
         { from: "isp-claro", to: "gw-ruijie", label: "WAN 1 (Claro)", arrows: "to", color: { color: "#0284c7" } },
         { from: "isp-ruijie", to: "gw-ruijie", label: "WAN 2 (Backup)", arrows: "to", color: { color: "#0284c7" } },
@@ -1182,21 +1341,54 @@
         { from: "ups-p2", to: "gw-ruijie", dashes: [6, 4], color: { color: "#d97706" }, arrows: { to: { enabled: false } }, label: "Alimentación" },
         { from: "ups-p2", to: "sw-hp", dashes: [6, 4], color: { color: "#d97706" }, arrows: { to: { enabled: false } }, label: "Alimentación" },
         { from: "ups-p2", to: "dvr-cctv", dashes: [6, 4], color: { color: "#d97706" }, arrows: { to: { enabled: false } }, label: "Alimentación" },
-        { from: "sw-hp", to: "dvr-cctv", arrows: "to", label: "CCTV" },
-        { from: "sw-hp", to: "plotter", arrows: "to", label: "Plotter Corte (P2)" },
-        { from: "sw-hp", to: "printer-stickers", arrows: "to", label: "Stickers (P2)" },
-        { from: "sw-hp", to: "printer-lavado", arrows: "to", label: "Etiquetas Lavado (P2)" },
-        { from: "sw-hp", to: "pc-diseno-01", arrows: "to", label: "Diseño (P2)" },
-        { from: "gw-ruijie", to: "printers-wifi", dashes: [4, 4], arrows: "to", label: "Wi-Fi 2.4 GHz", color: { color: "#8b5cf6" } },
         { from: "sw-hp", to: "sw-tenda", label: "Troncal Vertical Piso 3", arrows: "to", width: 2.5, color: { color: "#7c3aed" } },
-        { from: "sw-hp", to: "sw-escritorio-p1", label: "Troncal Vertical Piso 1", arrows: "to", width: 2.5, color: { color: "#059669" } },
-        { from: "sw-tenda", to: "ap-gerencia", arrows: "to", label: "Wi-Fi Gerencia" },
-        { from: "sw-tenda", to: "ap-juntas", arrows: "to", label: "Wi-Fi Juntas" },
-        { from: "sw-tenda", to: "printer-admin", arrows: "to", label: "Facturación" },
-        { from: "sw-tenda", to: "pc-contab-01", arrows: "to", label: "Contabilidad" },
-        { from: "sw-escritorio-p1", to: "pc-server", label: "Avansis (SPOF)", color: { color: "#dc2626" }, width: 3, arrows: "to" },
-        { from: "sw-escritorio-p1", to: "ap-p1", arrows: "to", label: "Wi-Fi Planta" }
+        { from: "sw-hp", to: "sw-escritorio-p1", label: "Troncal Vertical Piso 1", arrows: "to", width: 2.5, color: { color: "#059669" } }
       ];
+
+      const idsTroncales = ["isp-claro", "isp-ruijie", "gw-ruijie", "sw-hp", "ups-p2", "sw-tenda", "sw-escritorio-p1"];
+
+      dispositivos.forEach(d => {
+        if (idsTroncales.includes(d.id)) return;
+
+        let switchPadre = "sw-hp";
+        let colorEnlace = "#4f46e5";
+        let edgeWidth = 1.5;
+        let labelEnlace = `${d.nombre} (${d.piso})`;
+
+        if (d.id === "printers-wifi") {
+          switchPadre = "gw-ruijie";
+          colorEnlace = "#8b5cf6";
+          labelEnlace = "Wi-Fi 2.4 GHz";
+        } else if (d.id === "dvr-cctv") {
+          switchPadre = "sw-hp";
+          colorEnlace = "#4f46e5";
+          labelEnlace = "CCTV";
+        } else if (d.piso === "Piso 1") {
+          switchPadre = "sw-escritorio-p1";
+          colorEnlace = d.alerta === "Crítico" ? "#dc2626" : "#059669";
+          if (d.alerta === "Crítico") edgeWidth = 3;
+          labelEnlace = d.id === "pc-server" ? "Avansis (SPOF)" : (d.tipo === "Wi-Fi / AP" ? "Wi-Fi Planta" : `${d.nombre} (P1)`);
+        } else if (d.piso === "Piso 3") {
+          switchPadre = "sw-tenda";
+          colorEnlace = "#7c3aed";
+          labelEnlace = d.tipo === "Wi-Fi / AP" ? "Wi-Fi" : `${d.nombre} (P3)`;
+        } else {
+          // Piso 2 u otro
+          switchPadre = "sw-hp";
+          colorEnlace = "#4f46e5";
+          labelEnlace = `${d.nombre} (P2)`;
+        }
+
+        edgesArray.push({
+          from: switchPadre,
+          to: d.id,
+          label: labelEnlace,
+          arrows: "to",
+          width: edgeWidth,
+          color: { color: colorEnlace },
+          dashes: d.tipo === "Wi-Fi / AP" || d.id === "printers-wifi" ? [4, 4] : false
+        });
+      });
 
       const data = {
         nodes: new vis.DataSet(nodesArray),
@@ -1524,6 +1716,7 @@
 
       guardarEnLocalStorage();
       actualizarMetricas();
+      renderizarRacks();
       mostrarToast(`¡Ficha de ${dispositivos[idx].nombre} guardada!`);
       
       // Re-renderizar para reflejar cambios en la fila padre
@@ -1598,6 +1791,7 @@
       dispositivos.push(nuevo);
       guardarEnLocalStorage();
       actualizarMetricas();
+      renderizarRacks();
       cerrarModal();
       filtrarDispositivos();
       inicializarGrafo();
