@@ -92,44 +92,54 @@
 
 
 <!-- TARJETAS DE RESUMEN / MÉTRICAS -->
-    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Equipos</p>
-          <h3 id="stat-total" class="text-2xl font-black text-slate-800 mt-1">19</h3>
+          <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Total Equipos</p>
+          <h3 id="stat-total" class="text-2xl font-black text-slate-800 mt-0.5">19</h3>
         </div>
-        <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600">
-          <i data-lucide="server" class="w-6 h-6"></i>
+        <div class="bg-blue-50 p-2 rounded-xl text-blue-600">
+          <i data-lucide="server" class="w-5 h-5"></i>
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 1 (Planta & Servidor)</p>
-          <h3 id="stat-p1" class="text-2xl font-black text-slate-800 mt-1">3</h3>
+          <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Sótano (Bodega)</p>
+          <h3 id="stat-sotano" class="text-2xl font-black text-slate-800 mt-0.5">0</h3>
         </div>
-        <div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
-          <i data-lucide="factory" class="w-6 h-6"></i>
+        <div class="bg-amber-50 p-2 rounded-xl text-amber-600">
+          <i data-lucide="archive" class="w-5 h-5"></i>
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 2 (MDF, Core & Diseño)</p>
-          <h3 id="stat-p2" class="text-2xl font-black text-slate-800 mt-1">11</h3>
+          <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Piso 1 (Planta)</p>
+          <h3 id="stat-p1" class="text-2xl font-black text-slate-800 mt-0.5">3</h3>
         </div>
-        <div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-600">
-          <i data-lucide="router" class="w-6 h-6"></i>
+        <div class="bg-emerald-50 p-2 rounded-xl text-emerald-600">
+          <i data-lucide="factory" class="w-5 h-5"></i>
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 3 (Admin & Gerencia)</p>
-          <h3 id="stat-p3" class="text-2xl font-black text-slate-800 mt-1">5</h3>
+          <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Piso 2 (MDF Core)</p>
+          <h3 id="stat-p2" class="text-2xl font-black text-slate-800 mt-0.5">11</h3>
         </div>
-        <div class="bg-purple-50 p-2.5 rounded-xl text-purple-600">
-          <i data-lucide="briefcase" class="w-6 h-6"></i>
+        <div class="bg-indigo-50 p-2 rounded-xl text-indigo-600">
+          <i data-lucide="router" class="w-5 h-5"></i>
+        </div>
+      </div>
+
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Piso 3 (Admin)</p>
+          <h3 id="stat-p3" class="text-2xl font-black text-slate-800 mt-0.5">5</h3>
+        </div>
+        <div class="bg-purple-50 p-2 rounded-xl text-purple-600">
+          <i data-lucide="briefcase" class="w-5 h-5"></i>
         </div>
       </div>
     </section>
@@ -145,7 +155,7 @@
           </div>
           <div>
             <h2 class="text-base font-bold text-slate-800">Topología de Red & Arquitectura (Manufacturas Olamtex)</h2>
-            <p class="text-xs text-slate-400">Esquema físico-lógico de 3 pisos, rack principal MDF y perímetro Multi-WAN</p>
+            <p class="text-xs text-slate-400">Esquema físico-lógico de Sótano y 3 pisos, rack principal MDF y perímetro Multi-WAN</p>
           </div>
         </div>
 
@@ -187,6 +197,7 @@
         <div class="flex flex-wrap items-center gap-3">
           <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Leyenda:</span>
           <span class="inline-flex items-center gap-1 text-sky-700 font-bold"><span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> WAN / Internet</span>
+          <span class="inline-flex items-center gap-1 text-amber-700 font-bold"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Sótano (Bodega)</span>
           <span class="inline-flex items-center gap-1 text-indigo-700 font-bold"><span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> Piso 2 (MDF / Core)</span>
           <span class="inline-flex items-center gap-1 text-purple-700 font-bold"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Piso 3 (Administración)</span>
           <span class="inline-flex items-center gap-1 text-emerald-700 font-bold"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Piso 1 (Planta & Operaciones)</span>
@@ -216,13 +227,13 @@
 
           <div class="flex items-center gap-2">
             <button type="button" onclick="restablecerOrdenColumnas()" title="Volver al orden secuencial Piso 1, 2, 3" class="px-2.5 py-1 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-slate-200 transition">
-              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restablecer Orden (1 - 2 - 3)
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restablecer Orden (Sótano - 1 - 2 - 3)
             </button>
           </div>
         </div>
 
         <!-- Grid de Columnas por Pisos (Generado dinámicamente por renderizarRacks()) -->
-        <div id="grid-racks-columnas" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div id="grid-racks-columnas" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <!-- Columnas de Pisos generadas dinámicamente -->
         </div>
 
@@ -242,6 +253,7 @@
 
           <select id="filtro-piso" onchange="filtrarDispositivos()" class="text-xs py-2 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm">
             <option value="todos">Todos los Pisos</option>
+            <option value="Sótano">Sótano (Bodega & Almacén)</option>
             <option value="Piso 1">Piso 1 (Planta & Servidor)</option>
             <option value="Piso 2">Piso 2 (MDF, Core & Diseño)</option>
             <option value="Piso 3">Piso 3 (Admin & Gerencia)</option>
@@ -311,6 +323,7 @@
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Piso / Ubicación *</label>
             <select id="disp-piso" required onchange="alCambiarPisoModal()" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white font-medium text-slate-700">
+              <option value="Sótano">Sótano (Bodega & Almacén)</option>
               <option value="Piso 1">Piso 1 (Planta & Servidor)</option>
               <option value="Piso 2" selected>Piso 2 (MDF, Core & Diseño)</option>
               <option value="Piso 3">Piso 3 (Admin & Gerencia)</option>
@@ -793,12 +806,15 @@
     let filaAbiertaId = null;
 
     // ORDEN DE COLUMNAS INTERCAMBIABLES
-    let ordenPisos = ["Piso 1", "Piso 2", "Piso 3"];
+    let ordenPisos = ["Sótano", "Piso 1", "Piso 2", "Piso 3"];
     try {
       const ordenGuardado = localStorage.getItem("netmap_column_order");
       if (ordenGuardado) {
         const parsed = JSON.parse(ordenGuardado);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          if (!parsed.includes("Sótano")) {
+            parsed.unshift("Sótano");
+          }
           ordenPisos = parsed;
         }
       }
@@ -825,7 +841,7 @@
     }
 
     function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices_v6");
+      const guardados = localStorage.getItem("netmap_pro_devices_v7");
       if (guardados) {
         try {
           const parsed = JSON.parse(guardados);
@@ -857,7 +873,7 @@
     }
 
     function guardarEnLocalStorage() {
-      localStorage.setItem("netmap_pro_devices_v6", JSON.stringify(dispositivos));
+      localStorage.setItem("netmap_pro_devices_v7", JSON.stringify(dispositivos));
     }
 
     function mostrarToast(mensaje) {
@@ -872,10 +888,12 @@
 
     function actualizarMetricas() {
       const totalEl = document.getElementById("stat-total");
+      const sotanoEl = document.getElementById("stat-sotano");
       const p1El = document.getElementById("stat-p1");
       const p2El = document.getElementById("stat-p2");
       const p3El = document.getElementById("stat-p3");
       if (totalEl) totalEl.innerText = dispositivos.length;
+      if (sotanoEl) sotanoEl.innerText = dispositivos.filter(d => d.piso === "Sótano").length;
       if (p1El) p1El.innerText = dispositivos.filter(d => d.piso === "Piso 1").length;
       if (p2El) p2El.innerText = dispositivos.filter(d => d.piso === "Piso 2").length;
       if (p3El) p3El.innerText = dispositivos.filter(d => d.piso === "Piso 3").length;
@@ -1002,6 +1020,12 @@
         border = "#10b981";
         textColor = "#065f46";
         icon = d.tipo === "Servidor" ? "🖥️" : (d.tipo === "Wi-Fi / AP" ? "📶" : "💻");
+      } else if (d.piso === "Sótano") {
+        level = 5;
+        bg = "#fffbeb";
+        border = "#f59e0b";
+        textColor = "#b45309";
+        icon = d.tipo === "Seguridad / CCTV" ? "📹" : (d.tipo === "Wi-Fi / AP" ? "📶" : (d.tipo === "Periférico / Impresora" ? "🖨️" : "💻"));
       }
 
       // Alerta Crítica (Servidor Avansis / UPS)
@@ -1044,7 +1068,7 @@
 
     function generarHtmlOpcionesConectores(seleccionadoVal, excluirId = null) {
       const conectores = obtenerDispositivosConectores(excluirId);
-      const pisos = ["Piso 1", "Piso 2", "Piso 3"];
+      const pisos = ["Sótano", "Piso 1", "Piso 2", "Piso 3"];
       let html = `<option value="">-- Seleccionar Switch, Wi-Fi o Módem --</option>`;
 
       pisos.forEach(piso => {
@@ -1087,7 +1111,9 @@
       select.innerHTML = generarHtmlOpcionesConectores("", null);
 
       // Sugerencia automática inteligente según piso y tipo
-      if (pisoActual === "Piso 1") {
+      if (pisoActual === "Sótano") {
+        select.value = (tipoActual === "Wi-Fi / AP" || tipoActual === "Laptop / Portátil") ? "ap-p1" : "sw-escritorio-p1";
+      } else if (pisoActual === "Piso 1") {
         select.value = (tipoActual === "Wi-Fi / AP" || tipoActual === "Laptop / Portátil") ? "ap-p1" : "sw-escritorio-p1";
       } else if (pisoActual === "Piso 2") {
         select.value = "sw-hp";
@@ -1119,6 +1145,18 @@
       if (!grid) return;
 
       const configPisos = {
+        "Sótano": {
+          nombre: "SÓTANO (BODEGA & ALMACÉN)",
+          subtitulo: "Almacén de Telas, Materia Prima y Despacho",
+          icono: "archive",
+          colorBorde: "border-amber-300",
+          colorBg: "bg-amber-50/40",
+          colorTitulo: "text-amber-900",
+          colorIcono: "text-amber-600",
+          colorBadge: "bg-amber-200 text-amber-900",
+          colorFooter: "text-amber-800 border-amber-200/60 bg-amber-100/40",
+          footerTexto: "🔗 Conectado por troncal UTP / Wi-Fi hacia Switch Planta / Core"
+        },
         "Piso 1": {
           nombre: "PISO 1 (PLANTA & SERVIDOR)",
           subtitulo: "Planta, Confección y Servidor Avansis",
@@ -1351,7 +1389,10 @@
 
       // Si es un dispositivo terminal/periférico, reasignar switch de conexión por defecto
       if (!disp.id.startsWith("sw-") && !disp.id.startsWith("gw-") && !disp.id.startsWith("isp-")) {
-        if (nuevoPiso === "Piso 1") {
+        if (nuevoPiso === "Sótano") {
+          disp.conectado = "Switch Escritorio Planta (Troncal Sótano)";
+          disp.conectado_id = "sw-escritorio-p1";
+        } else if (nuevoPiso === "Piso 1") {
           disp.conectado = "Switch Escritorio Planta Piso 1";
         } else if (nuevoPiso === "Piso 2") {
           disp.conectado = "Switch Core HP Piso 2";
@@ -1416,9 +1457,9 @@
     }
 
     function restablecerOrdenColumnas() {
-      ordenPisos = ["Piso 1", "Piso 2", "Piso 3"];
+      ordenPisos = ["Sótano", "Piso 1", "Piso 2", "Piso 3"];
       guardarOrdenColumnas();
-      mostrarToast("🔄 Orden de pisos restablecido a: Piso 1, Piso 2, Piso 3");
+      mostrarToast("🔄 Orden de pisos restablecido a: Sótano, Piso 1, Piso 2, Piso 3");
     }
 
     // SINCRONIZACIÓN REACTIVA DEL GRAFO CUANDO SE MUEVE UN EQUIPO
