@@ -92,11 +92,11 @@
 
 
 <!-- TARJETAS DE RESUMEN / MÉTRICAS -->
-    <section class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Equipos</p>
-          <h3 id="stat-total" class="text-2xl font-black text-slate-800 mt-1">0</h3>
+          <h3 id="stat-total" class="text-2xl font-black text-slate-800 mt-1">19</h3>
         </div>
         <div class="bg-blue-50 p-2.5 rounded-xl text-blue-600">
           <i data-lucide="server" class="w-6 h-6"></i>
@@ -105,28 +105,18 @@
 
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Perímetro WAN</p>
-          <h3 id="stat-wan" class="text-2xl font-black text-slate-800 mt-1">0</h3>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 1 (Planta & Servidor)</p>
+          <h3 id="stat-p1" class="text-2xl font-black text-slate-800 mt-1">3</h3>
         </div>
-        <div class="bg-rose-50 p-2.5 rounded-xl text-rose-600">
-          <i data-lucide="globe" class="w-6 h-6"></i>
-        </div>
-      </div>
-
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-        <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 1 (Operativo)</p>
-          <h3 id="stat-p1" class="text-2xl font-black text-slate-800 mt-1">0</h3>
-        </div>
-        <div class="bg-amber-50 p-2.5 rounded-xl text-amber-600">
+        <div class="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
           <i data-lucide="factory" class="w-6 h-6"></i>
         </div>
       </div>
 
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 2 (MDF & Core)</p>
-          <h3 id="stat-p2" class="text-2xl font-black text-slate-800 mt-1">0</h3>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 2 (MDF, Core & Diseño)</p>
+          <h3 id="stat-p2" class="text-2xl font-black text-slate-800 mt-1">11</h3>
         </div>
         <div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-600">
           <i data-lucide="router" class="w-6 h-6"></i>
@@ -135,8 +125,8 @@
 
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div>
-          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 3 (Admin/Gerencia)</p>
-          <h3 id="stat-p3" class="text-2xl font-black text-slate-800 mt-1">0</h3>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Piso 3 (Admin & Gerencia)</p>
+          <h3 id="stat-p3" class="text-2xl font-black text-slate-800 mt-1">5</h3>
         </div>
         <div class="bg-purple-50 p-2.5 rounded-xl text-purple-600">
           <i data-lucide="briefcase" class="w-6 h-6"></i>
@@ -210,161 +200,217 @@
         <div id="network-canvas" class="w-full rounded-xl border border-slate-200 bg-slate-50/40"></div>
       </div>
 
-      <!-- Contenedor de la Vista Racks por Pisos (Cards Estilo PlantUML) -->
+      <!-- Contenedor de la Vista Racks por Pisos (Orden Secuencial: Piso 1, Piso 2, Piso 3) -->
       <div id="contenedor-racks" class="hidden space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
           
-          <!-- Bloque WAN -->
-          <div class="bg-sky-50/50 border-2 border-sky-300 rounded-2xl p-4 shadow-xs space-y-3">
-            <div class="flex items-center justify-between border-b border-sky-200 pb-2">
-              <span class="text-xs font-black text-sky-900 uppercase tracking-wider flex items-center gap-1.5">
-                <i data-lucide="globe" class="w-4 h-4 text-sky-600"></i> Perímetro WAN
-              </span>
-              <span class="text-[10px] bg-sky-200 text-sky-900 font-bold px-2 py-0.5 rounded-full">2 Enlaces</span>
-            </div>
-            <div class="space-y-2 text-xs">
-              <div onclick="abrirFilaDetalle('isp-claro')" class="p-2.5 bg-white rounded-xl border border-sky-200 shadow-xs hover:border-sky-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Módem ISP 1 (Claro)</div>
-                <div class="text-[11px] text-sky-600 font-mono">WAN 1 • Salida Principal</div>
+          <!-- PISO 1: PLANTA, CORTE & SERVIDOR -->
+          <div class="bg-emerald-50/40 border-2 border-emerald-300 rounded-2xl p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-emerald-200 pb-2.5 mb-3">
+                <span class="text-sm font-black text-emerald-900 uppercase tracking-wider flex items-center gap-2">
+                  <i data-lucide="factory" class="w-5 h-5 text-emerald-600"></i> PISO 1 (PLANTA & SERVIDOR)
+                </span>
+                <span class="text-xs bg-emerald-200 text-emerald-900 font-bold px-2.5 py-0.5 rounded-full">3 Equipos</span>
               </div>
-              <div onclick="abrirFilaDetalle('isp-ruijie')" class="p-2.5 bg-white rounded-xl border border-sky-200 shadow-xs hover:border-sky-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Módem ISP 2 (Secundario)</div>
-                <div class="text-[11px] text-sky-600 font-mono">WAN 2 • Backup / Failover</div>
+              <div class="space-y-2.5 text-xs">
+                <!-- PC SERVIDOR (CRÍTICO) -->
+                <div onclick="abrirFilaDetalle('pc-server')" class="p-3 bg-rose-50 rounded-xl border-2 border-rose-400 shadow-xs hover:border-rose-600 cursor-pointer transition">
+                  <div class="font-bold text-rose-900 flex items-center justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="server" class="w-4 h-4 text-rose-600"></i> PC Servidor Principal</span>
+                    <span class="text-[10px] bg-rose-200 text-rose-900 font-bold px-2 py-0.5 rounded-full animate-pulse">⚠️ SPOF</span>
+                  </div>
+                  <div class="text-[11px] text-rose-700 font-mono mt-1">192.168.0.250 • Avansis / Diseños SMB</div>
+                  <div class="text-[10px] text-rose-600 mt-0.5">Desktop sin RAID ni UPS. Punto único de falla.</div>
+                </div>
+
+                <!-- SWITCH PLANTA -->
+                <div onclick="abrirFilaDetalle('sw-escritorio-p1')" class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex items-center justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="git-branch" class="w-4 h-4 text-emerald-600"></i> Switch Escritorio Planta</span>
+                    <span class="text-[10px] text-emerald-700 font-bold">Distribución</span>
+                  </div>
+                  <div class="text-[11px] text-emerald-600 font-mono mt-0.5">Troncal vertical desde Switch Core HP (P2)</div>
+                  <div class="text-[10px] text-slate-400">Conecta Servidor Avansis y AP de Planta</div>
+                </div>
+
+                <!-- AP PLANTA -->
+                <div onclick="abrirFilaDetalle('ap-p1')" class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex items-center justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="wifi" class="w-4 h-4 text-emerald-600"></i> Access Point Planta Piso 1</span>
+                    <span class="text-[10px] text-emerald-700 font-mono font-bold">192.168.0.18</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Wi-Fi para operarios y terminales de confección</div>
+                </div>
               </div>
             </div>
-            <div class="text-[10px] text-sky-700/80 font-medium text-center pt-1 border-t border-sky-200/60">
-              ⬇️ Conectados al Gateway Ruijie en Piso 2
+            <div class="text-[11px] text-emerald-800 font-medium text-center pt-2.5 border-t border-emerald-200/60 bg-emerald-100/40 rounded-xl p-2">
+              🔗 Conectado por troncal vertical UTP hacia Switch Core en Piso 2
             </div>
           </div>
 
-          <!-- Bloque Piso 2 (MDF Core) -->
-          <div class="bg-indigo-50/50 border-2 border-indigo-300 rounded-2xl p-4 shadow-xs space-y-3">
-            <div class="flex items-center justify-between border-b border-indigo-200 pb-2">
-              <span class="text-xs font-black text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
-                <i data-lucide="server" class="w-4 h-4 text-indigo-600"></i> Piso 2 (MDF & Core)
-              </span>
-              <span class="text-[10px] bg-indigo-200 text-indigo-900 font-bold px-2 py-0.5 rounded-full">Rack MDF</span>
+          <!-- PISO 2: MDF, CORE & DISEÑO -->
+          <div class="bg-indigo-50/40 border-2 border-indigo-300 rounded-2xl p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-indigo-200 pb-2.5 mb-3">
+                <span class="text-sm font-black text-indigo-900 uppercase tracking-wider flex items-center gap-2">
+                  <i data-lucide="server" class="w-5 h-5 text-indigo-600"></i> PISO 2 (MDF, CORE & DISEÑO)
+                </span>
+                <span class="text-xs bg-indigo-200 text-indigo-900 font-bold px-2.5 py-0.5 rounded-full">11 Equipos • MDF</span>
+              </div>
+              <div class="space-y-2 text-xs">
+                
+                <!-- SUB-SECCIÓN WAN: MÓDEMS DE INTERNET -->
+                <div class="bg-sky-100/60 border border-sky-300 rounded-xl p-2.5 space-y-1.5">
+                  <span class="text-[10px] font-black text-sky-900 uppercase tracking-wider flex items-center gap-1">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-sky-600"></i> ENLACES DE INTERNET (WAN) EN RACK P2
+                  </span>
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <div onclick="abrirFilaDetalle('isp-claro')" class="p-2 bg-white rounded-lg border border-sky-200 hover:border-sky-400 cursor-pointer transition">
+                      <div class="font-bold text-slate-800 text-[11px]">Módem Claro</div>
+                      <div class="text-[9px] text-sky-700 font-mono">WAN 1 • Salida Principal</div>
+                    </div>
+                    <div onclick="abrirFilaDetalle('isp-ruijie')" class="p-2 bg-white rounded-lg border border-sky-200 hover:border-sky-400 cursor-pointer transition">
+                      <div class="font-bold text-slate-800 text-[11px]">Módem Secundario</div>
+                      <div class="text-[9px] text-sky-700 font-mono">WAN 2 • Backup / Failover</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- GATEWAY RUIJIE -->
+                <div onclick="abrirFilaDetalle('gw-ruijie')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-indigo-600"></i> Gateway Multi-WAN</span>
+                    <span class="text-[10px] text-indigo-600 font-bold">192.168.0.1</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 font-mono">Ruijie Reyee RG-EG (Balanceador + DHCP)</div>
+                </div>
+
+                <!-- SWITCH CORE HP -->
+                <div onclick="abrirFilaDetalle('sw-hp')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-indigo-600"></i> Switch Core HP 24p</span>
+                    <span class="text-[10px] text-indigo-600 font-bold">192.168.0.2</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500">Conmutación central Gigabit y troncales</div>
+                </div>
+
+                <!-- UPS RACK -->
+                <div onclick="abrirFilaDetalle('ups-p2')" class="p-2.5 bg-rose-50 rounded-xl border border-rose-300 shadow-xs hover:border-rose-400 cursor-pointer transition">
+                  <div class="font-bold text-rose-900 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="zap" class="w-3.5 h-3.5 text-rose-600"></i> UPS de Rack</span>
+                    <span class="text-[10px] text-rose-700 font-bold">⚠️ Sin Batería</span>
+                  </div>
+                  <div class="text-[10px] text-rose-600">Alimenta Router, Switch HP y DVR</div>
+                </div>
+
+                <!-- DVR CCTV -->
+                <div onclick="abrirFilaDetalle('dvr-cctv')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span>DVR Cámaras CCTV</span>
+                    <span class="text-[10px] text-indigo-600 font-mono">192.168.0.200</span>
+                  </div>
+                </div>
+
+                <!-- EQUIPOS DE DISEÑO Y MOLDERÍA EN PISO 2 -->
+                <div class="grid grid-cols-2 gap-1.5">
+                  <div onclick="abrirFilaDetalle('plotter')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
+                    <div class="font-bold text-slate-800 text-[11px]">Plotter de Corte</div>
+                    <div class="text-[10px] text-indigo-600 font-mono">192.168.0.215</div>
+                  </div>
+                  <div onclick="abrirFilaDetalle('printer-stickers')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
+                    <div class="font-bold text-slate-800 text-[11px]">Impresora Stickers</div>
+                    <div class="text-[10px] text-indigo-600 font-mono">192.168.0.216</div>
+                  </div>
+                  <div onclick="abrirFilaDetalle('printer-lavado')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
+                    <div class="font-bold text-slate-800 text-[11px]">Etiquetas Lavado</div>
+                    <div class="text-[10px] text-indigo-600 font-mono">192.168.0.217</div>
+                  </div>
+                  <div onclick="abrirFilaDetalle('pc-diseno-01')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
+                    <div class="font-bold text-slate-800 text-[11px]">PC Diseño 01</div>
+                    <div class="text-[10px] text-slate-500">Optitex / Adobe</div>
+                  </div>
+                </div>
+
+                <!-- IMPRESORAS WIFI -->
+                <div onclick="abrirFilaDetalle('printers-wifi')" class="p-2 bg-white rounded-xl border border-indigo-200 hover:border-indigo-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 text-[11px]">2x Impresoras Wi-Fi Oficina</div>
+                  <div class="text-[10px] text-slate-400">Wi-Fi Ruijie 2.4 GHz</div>
+                </div>
+
+              </div>
             </div>
-            <div class="space-y-2 text-xs">
-              <div onclick="abrirFilaDetalle('gw-ruijie')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800 flex justify-between">
-                  <span>Gateway Multi-WAN</span>
-                  <span class="text-[10px] text-indigo-600 font-bold">192.168.0.1</span>
-                </div>
-                <div class="text-[11px] text-slate-500 font-mono">Ruijie Reyee RG-EG</div>
-              </div>
-              <div onclick="abrirFilaDetalle('sw-hp')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800 flex justify-between">
-                  <span>Switch Core HP 24p</span>
-                  <span class="text-[10px] text-indigo-600 font-bold">192.168.0.2</span>
-                </div>
-                <div class="text-[11px] text-slate-500">Conmutador central Gigabit</div>
-              </div>
-              <div onclick="abrirFilaDetalle('ups-p2')" class="p-2.5 bg-rose-50 rounded-xl border-2 border-rose-300 shadow-xs hover:border-rose-400 cursor-pointer transition">
-                <div class="font-bold text-rose-900 flex justify-between">
-                  <span>UPS de Rack</span>
-                  <span class="text-[10px] text-rose-700 font-bold">⚠️ Sin Batería</span>
-                </div>
-                <div class="text-[10px] text-rose-700">Alimenta Router, Switch y CCTV</div>
-              </div>
-              <div onclick="abrirFilaDetalle('dvr-cctv')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">DVR Cámaras de Seguridad</div>
-                <div class="text-[11px] text-indigo-600 font-mono">192.168.0.200 (16 Canales)</div>
-              </div>
-              <div onclick="abrirFilaDetalle('pc-diseno-01')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">PC Diseño y Moldería 01</div>
-                <div class="text-[10px] text-slate-500">Carlos Rodríguez (Optitex/Adobe)</div>
-              </div>
-              <div onclick="abrirFilaDetalle('printers-wifi')" class="p-2.5 bg-white rounded-xl border border-indigo-200 shadow-xs hover:border-indigo-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">2x Impresoras Wi-Fi Oficina</div>
-                <div class="text-[10px] text-slate-500">Wi-Fi Ruijie 2.4 GHz</div>
-              </div>
-            </div>
-            <div class="text-[10px] text-indigo-700/80 font-medium text-center pt-1 border-t border-indigo-200/60">
-              ⬇️ Troncales hacia Piso 3 y Piso 1
+            <div class="text-[11px] text-indigo-800 font-medium text-center pt-2.5 border-t border-indigo-200/60 bg-indigo-100/40 rounded-xl p-2">
+              ⭐ Corazón de la red: Conecta WAN y distribuye a Pisos 1 y 3
             </div>
           </div>
 
-          <!-- Bloque Piso 3 (Administración) -->
-          <div class="bg-purple-50/50 border-2 border-purple-300 rounded-2xl p-4 shadow-xs space-y-3">
-            <div class="flex items-center justify-between border-b border-purple-200 pb-2">
-              <span class="text-xs font-black text-purple-900 uppercase tracking-wider flex items-center gap-1.5">
-                <i data-lucide="briefcase" class="w-4 h-4 text-purple-600"></i> Piso 3 (Administración)
-              </span>
-              <span class="text-[10px] bg-purple-200 text-purple-900 font-bold px-2 py-0.5 rounded-full">Gerencia</span>
-            </div>
-            <div class="space-y-2 text-xs">
-              <div onclick="abrirFilaDetalle('sw-tenda')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Switch Rack Piso 3 (Tenda)</div>
-                <div class="text-[11px] text-purple-600 font-mono">Troncal desde Switch Core HP</div>
+          <!-- PISO 3: ADMINISTRACIÓN, FINANZAS & GERENCIA -->
+          <div class="bg-purple-50/40 border-2 border-purple-300 rounded-2xl p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-purple-200 pb-2.5 mb-3">
+                <span class="text-sm font-black text-purple-900 uppercase tracking-wider flex items-center gap-2">
+                  <i data-lucide="briefcase" class="w-5 h-5 text-purple-600"></i> PISO 3 (ADMINISTRACIÓN & GERENCIA)
+                </span>
+                <span class="text-xs bg-purple-200 text-purple-900 font-bold px-2.5 py-0.5 rounded-full">5 Equipos</span>
               </div>
-              <div onclick="abrirFilaDetalle('ap-gerencia')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">AP TP-Link Gerencia</div>
-                <div class="text-[11px] text-purple-600 font-mono">192.168.0.15 • Wi-Fi Ejecutivo</div>
-              </div>
-              <div onclick="abrirFilaDetalle('ap-juntas')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">AP TP-Link Sala de Juntas</div>
-                <div class="text-[11px] text-purple-600 font-mono">192.168.0.16 • Visitas/Reuniones</div>
-              </div>
-              <div onclick="abrirFilaDetalle('printer-admin')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Impresora Facturación</div>
-                <div class="text-[11px] text-purple-600 font-mono">192.168.0.210 • Facturas legales</div>
-              </div>
-              <div onclick="abrirFilaDetalle('pc-contab-01')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">PC Contabilidad 01</div>
-                <div class="text-[10px] text-slate-500">María Gómez (Avansis/Bancos)</div>
-              </div>
-            </div>
-            <div class="text-[10px] text-purple-700/80 font-medium text-center pt-1 border-t border-purple-200/60">
-              Distribución conectada por troncal UTP
-            </div>
-          </div>
-
-          <!-- Bloque Piso 1 (Operaciones y Servidor) -->
-          <div class="bg-emerald-50/50 border-2 border-emerald-300 rounded-2xl p-4 shadow-xs space-y-3">
-            <div class="flex items-center justify-between border-b border-emerald-200 pb-2">
-              <span class="text-xs font-black text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
-                <i data-lucide="factory" class="w-4 h-4 text-emerald-600"></i> Piso 1 (Planta & Corte)
-              </span>
-              <span class="text-[10px] bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded-full">Producción</span>
-            </div>
-            <div class="space-y-2 text-xs">
-              <div onclick="abrirFilaDetalle('pc-server')" class="p-2.5 bg-rose-50 rounded-xl border-2 border-rose-400 shadow-xs hover:border-rose-500 cursor-pointer transition">
-                <div class="font-bold text-rose-900 flex justify-between">
-                  <span>PC Servidor Avansis</span>
-                  <span class="text-[10px] text-rose-700 font-bold">⚠️ SPOF</span>
+              <div class="space-y-2.5 text-xs">
+                
+                <!-- SWITCH PISO 3 -->
+                <div onclick="abrirFilaDetalle('sw-tenda')" class="p-3 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex items-center justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="git-branch" class="w-4 h-4 text-purple-600"></i> Switch Rack Piso 3 (Tenda)</span>
+                    <span class="text-[10px] text-purple-700 font-bold">12/16 Puertos</span>
+                  </div>
+                  <div class="text-[11px] text-purple-600 font-mono mt-0.5">Troncal vertical desde Switch Core HP (P2)</div>
+                  <div class="text-[10px] text-slate-400">Distribución para Gerencia y Finanzas</div>
                 </div>
-                <div class="text-[11px] text-rose-700 font-mono">192.168.0.250 (Diseños / BD)</div>
-              </div>
-              <div onclick="abrirFilaDetalle('sw-escritorio-p1')" class="p-2.5 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Switch Escritorio Planta</div>
-                <div class="text-[11px] text-emerald-600 font-mono">Troncal desde Switch Core HP</div>
-              </div>
-              <div onclick="abrirFilaDetalle('plotter')" class="p-2.5 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Plotter de Corte y Trazos</div>
-                <div class="text-[11px] text-emerald-600 font-mono">192.168.0.215 • Moldería textil</div>
-              </div>
-              <div onclick="abrirFilaDetalle('printer-stickers')" class="p-2.5 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Impresora de Stickers</div>
-                <div class="text-[11px] text-emerald-600 font-mono">192.168.0.216 • Etiquetas pedidos</div>
-              </div>
-              <div onclick="abrirFilaDetalle('printer-lavado')" class="p-2.5 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Impresora Etiquetas Lavado</div>
-                <div class="text-[11px] text-emerald-600 font-mono">192.168.0.217 • Satín/Ribbon</div>
-              </div>
-              <div onclick="abrirFilaDetalle('ap-p1')" class="p-2.5 bg-white rounded-xl border border-emerald-200 shadow-xs hover:border-emerald-400 cursor-pointer transition">
-                <div class="font-bold text-slate-800">Access Point Planta</div>
-                <div class="text-[11px] text-emerald-600 font-mono">192.168.0.18 • Wi-Fi Operarios</div>
+
+                <!-- AP GERENCIA -->
+                <div onclick="abrirFilaDetalle('ap-gerencia')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="wifi" class="w-3.5 h-3.5 text-purple-600"></i> AP TP-Link Gerencia</span>
+                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.15</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Wi-Fi exclusivo Gerencia General</div>
+                </div>
+
+                <!-- AP SALA DE JUNTAS -->
+                <div onclick="abrirFilaDetalle('ap-juntas')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="wifi" class="w-3.5 h-3.5 text-purple-600"></i> AP TP-Link Sala de Juntas</span>
+                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.16</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Wi-Fi para reuniones y visitas ejecutivas</div>
+                </div>
+
+                <!-- IMPRESORA FACTURACIÓN -->
+                <div onclick="abrirFilaDetalle('printer-admin')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="printer" class="w-3.5 h-3.5 text-purple-600"></i> Impresora Facturación</span>
+                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.210</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Impresión de facturas y documentos contables</div>
+                </div>
+
+                <!-- PC CONTABILIDAD -->
+                <div onclick="abrirFilaDetalle('pc-contab-01')" class="p-2.5 bg-white rounded-xl border border-purple-200 shadow-xs hover:border-purple-400 cursor-pointer transition">
+                  <div class="font-bold text-slate-800 flex justify-between">
+                    <span class="flex items-center gap-1.5"><i data-lucide="monitor" class="w-3.5 h-3.5 text-purple-600"></i> PC Contabilidad 01</span>
+                    <span class="text-[10px] text-purple-600 font-bold font-mono">192.168.0.101</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">María Gómez (Cliente Avansis / Bancos)</div>
+                </div>
+
               </div>
             </div>
-            <div class="text-[10px] text-emerald-700/80 font-medium text-center pt-1 border-t border-emerald-200/60">
-              Alimentado desde Switch Escritorio P1
+            <div class="text-[11px] text-purple-800 font-medium text-center pt-2.5 border-t border-purple-200/60 bg-purple-100/40 rounded-xl p-2">
+              🔗 Conectado por troncal vertical UTP hacia Switch Core en Piso 2
             </div>
           </div>
 
         </div>
       </div>
-
     </section>
 
     <!-- TABLA DE INVENTARIO CON DESPLEGABLES INLINE -->
@@ -380,10 +426,9 @@
 
           <select id="filtro-piso" onchange="filtrarDispositivos()" class="text-xs py-2 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm">
             <option value="todos">Todos los Pisos</option>
-            <option value="Piso 1">Piso 1 (Operaciones)</option>
-            <option value="Piso 2">Piso 2 (MDF / Core)</option>
-            <option value="Piso 3">Piso 3 (Admin / Gerencia)</option>
-            <option value="WAN">Perímetro WAN</option>
+            <option value="Piso 1">Piso 1 (Planta & Servidor)</option>
+            <option value="Piso 2">Piso 2 (MDF, Core & Diseño)</option>
+            <option value="Piso 3">Piso 3 (Admin & Gerencia)</option>
           </select>
 
           <select id="filtro-tipo" onchange="filtrarDispositivos()" class="text-xs py-2 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm">
@@ -450,10 +495,9 @@
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Piso / Ubicación *</label>
             <select id="disp-piso" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-              <option value="Piso 1">Piso 1 (Operaciones)</option>
-              <option value="Piso 2">Piso 2 (MDF / Core)</option>
-              <option value="Piso 3">Piso 3 (Admin / Gerencia)</option>
-              <option value="WAN">Perímetro WAN</option>
+              <option value="Piso 1">Piso 1 (Planta & Servidor)</option>
+              <option value="Piso 2">Piso 2 (MDF, Core & Diseño)</option>
+              <option value="Piso 3">Piso 3 (Admin & Gerencia)</option>
             </select>
           </div>
           <div>
@@ -497,7 +541,7 @@
   {
     "id": "isp-claro",
     "nombre": "Módem ISP 1 (Claro)",
-    "piso": "WAN",
+    "piso": "Piso 2",
     "tipo": "Router / Gateway",
     "ip": "IP Pública Dinámica/Fija",
     "mac": "Por confirmar",
@@ -512,12 +556,12 @@
     "enlace_tipo": "Coaxial / Fibra Óptica",
     "software": "Enlace Primario Claro",
     "alerta": "Normal",
-    "notas": "Enlace principal de salida a Internet hacia el router Multi-WAN."
+    "notas": "Enlace principal de salida a Internet ubicado en el rack del Piso 2."
   },
   {
     "id": "isp-ruijie",
     "nombre": "Módem ISP 2 (Secundario)",
-    "piso": "WAN",
+    "piso": "Piso 2",
     "tipo": "Router / Gateway",
     "ip": "IP Pública Dinámica/Fija",
     "mac": "Por confirmar",
@@ -532,7 +576,7 @@
     "enlace_tipo": "Cable UTP Cat 6",
     "software": "Enlace Backup / Failover",
     "alerta": "Normal",
-    "notas": "Segundo enlace para redundancia y balanceo de carga en caso de corte."
+    "notas": "Segundo enlace para redundancia y balanceo de carga en el rack del Piso 2."
   },
   {
     "id": "gw-ruijie",
@@ -552,7 +596,7 @@
     "enlace_tipo": "Cable UTP Cat 6",
     "software": "Ruijie Cloud, Multi-WAN Load Balancing, DHCP Server",
     "alerta": "Normal",
-    "notas": "Gateway principal y servidor DHCP general (192.168.0.1)."
+    "notas": "Gateway principal y servidor DHCP general (192.168.0.1) en Rack Piso 2."
   },
   {
     "id": "sw-hp",
@@ -572,7 +616,7 @@
     "enlace_tipo": "Cableado Vertical",
     "software": "VLAN 802.1Q disponible, Spanning Tree",
     "alerta": "Normal",
-    "notas": "Switch administrable central. Con capacidad de segmentar en VLANs."
+    "notas": "Switch administrable central en Piso 2. Conecta MDF y troncales a Pisos 1 y 3."
   },
   {
     "id": "ups-p2",
@@ -612,7 +656,167 @@
     "enlace_tipo": "Cable UTP",
     "software": "App Móvil de visualización remota",
     "alerta": "Atención",
-    "notas": "Ubicado en la misma red de usuarios y finanzas sin aislamiento."
+    "notas": "Ubicado en el rack del Piso 2 sin aislamiento de red."
+  },
+  {
+    "id": "plotter",
+    "nombre": "Plotter de Corte y Trazos",
+    "piso": "Piso 2",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.215",
+    "mac": "78:2B:CB:11:88:99",
+    "hostname": "PLOTTER-PRODUCCION",
+    "usuario": "Operarios de Moldería",
+    "cargo": "Trazos de moldería textil",
+    "so": "Firmware Plotter",
+    "hardware": "Plotter Gran Formato 1.80m",
+    "marca": "Graphtec / HP / Roland",
+    "conectado": "Switch Core HP Piso 2",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Software de tizado / trazo textil (Audaces/Optitex)",
+    "alerta": "Normal",
+    "notas": "Plotter ubicado en área de Diseño/Moldería en Piso 2."
+  },
+  {
+    "id": "printer-stickers",
+    "nombre": "Impresora de Stickers",
+    "piso": "Piso 2",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.216",
+    "mac": "00:07:4D:22:33:44",
+    "hostname": "PRINTER-STICKERS",
+    "usuario": "Empaque y Despacho",
+    "cargo": "Etiquetado de bolsas y cajas",
+    "so": "Firmware Térmico",
+    "hardware": "Impresora Térmica Directa 4x6",
+    "marca": "Zebra / Xprinter",
+    "conectado": "Switch Core HP Piso 2",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Zebra Designer / BarTender",
+    "alerta": "Normal",
+    "notas": "Impresión de códigos de barra para pedidos ubicada en Piso 2."
+  },
+  {
+    "id": "printer-lavado",
+    "nombre": "Impresora Etiquetas de Lavado",
+    "piso": "Piso 2",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.217",
+    "mac": "00:07:4D:55:66:77",
+    "hostname": "PRINTER-LAVADO-TEXTIL",
+    "usuario": "Producción y Calidad",
+    "cargo": "Etiquetas técnicas de poliamida/satín",
+    "so": "Firmware Transferencia Térmica",
+    "hardware": "Impresora de Ribbon Resina para Satín",
+    "marca": "TSC / Zebra",
+    "conectado": "Switch Core HP Piso 2",
+    "puerto_switch": "Ethernet directa",
+    "enlace_tipo": "Cable UTP",
+    "software": "Software de composición de etiquetas",
+    "alerta": "Normal",
+    "notas": "Etiquetas técnicas con instrucciones de lavado ubicada en Piso 2."
+  },
+  {
+    "id": "pc-diseno-01",
+    "nombre": "PC Diseño y Moldería 01",
+    "piso": "Piso 2",
+    "tipo": "Puesto de Trabajo",
+    "ip": "192.168.0.120 (DHCP)",
+    "mac": "A0:36:BC:55:44:33",
+    "hostname": "PC-DISENO-01",
+    "usuario": "Carlos Rodríguez",
+    "cargo": "Diseñador Textil",
+    "so": "Windows 11 Pro",
+    "hardware": "Core i7, 32GB RAM, 1TB NVMe, Tarjeta Gráfica RTX",
+    "marca": "Dell OptiPlex / Workstation",
+    "conectado": "Switch Core HP Piso 2",
+    "puerto_switch": "Pto 4",
+    "enlace_tipo": "Cable UTP",
+    "software": "Adobe Illustrator, Photoshop, Audaces/Optitex, Avansis",
+    "alerta": "Normal",
+    "notas": "Maneja archivos pesados en el PC Servidor de Piso 1."
+  },
+  {
+    "id": "printers-wifi",
+    "nombre": "2x Impresoras Wi-Fi Oficina",
+    "piso": "Piso 2",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.0.220 / DHCP",
+    "mac": "Varios",
+    "hostname": "PRINTERS-WIFI-P2",
+    "usuario": "Diseño y Operaciones",
+    "cargo": "Impresión de fichas técnicas",
+    "so": "Firmware Wi-Fi",
+    "hardware": "Multifuncionales Color",
+    "marca": "Epson / HP Ink Tank",
+    "conectado": "Wi-Fi Ruijie (2.4 GHz)",
+    "puerto_switch": "Wi-Fi",
+    "enlace_tipo": "Inalámbrico",
+    "software": "Drivers Wi-Fi",
+    "alerta": "Atención",
+    "notas": "Se recomienda cablearlas por UTP para evitar desconfiguración de IP."
+  },
+  {
+    "id": "pc-server",
+    "nombre": "PC Servidor Principal (Avansis)",
+    "piso": "Piso 1",
+    "tipo": "Servidor",
+    "ip": "192.168.0.250",
+    "mac": "B4:2E:99:A1:10:02",
+    "hostname": "SRV-AVANSIS-PROD",
+    "usuario": "Servidor Empresa (Acceso Todos)",
+    "cargo": "Servidor de Producción y Diseño",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Intel Core i7, 16GB RAM, 1TB SSD",
+    "marca": "PC Ensamblado Desktop",
+    "conectado": "Switch Escritorio Planta Piso 1",
+    "puerto_switch": "Pto 1 (1 Gbps)",
+    "enlace_tipo": "Cable UTP Cat 5e",
+    "software": "Avansis Server, SQL Server, Carpetas Compartidas SMB",
+    "alerta": "Crítico",
+    "notas": "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1."
+  },
+  {
+    "id": "sw-escritorio-p1",
+    "nombre": "Switch Escritorio Planta Piso 1",
+    "piso": "Piso 1",
+    "tipo": "Switch",
+    "ip": "No gestionable",
+    "mac": "No aplica",
+    "hostname": "SW-ESCRITORIO-P1",
+    "usuario": "Operarios Planta y Confección",
+    "cargo": "Distribución Planta Piso 1",
+    "so": "Sin gestión",
+    "hardware": "Switch 16 Puertos 10/100/1000",
+    "marca": "TP-Link / Tenda",
+    "conectado": "Switch Core HP Piso 2 (Troncal vertical)",
+    "puerto_switch": "Pto 24 Troncal HP",
+    "enlace_tipo": "Cable UTP",
+    "software": "No administrable",
+    "alerta": "Atención",
+    "notas": "Conecta Servidor Avansis y AP de Planta. Conectado por troncal vertical al Piso 2."
+  },
+  {
+    "id": "ap-p1",
+    "nombre": "Access Point Planta Piso 1",
+    "piso": "Piso 1",
+    "tipo": "Wi-Fi / AP",
+    "ip": "192.168.0.18",
+    "mac": "24:A4:3C:99:88:77",
+    "hostname": "AP-PLANTA-P1",
+    "usuario": "Planta y Operarios",
+    "cargo": "Cobertura Wi-Fi Planta",
+    "so": "Firmware AP",
+    "hardware": "Access Point de Techo/Pared",
+    "marca": "Por confirmar",
+    "conectado": "Switch Escritorio Planta Piso 1",
+    "puerto_switch": "Ethernet",
+    "enlace_tipo": "Cable UTP",
+    "software": "SSID: Planta_Operaciones",
+    "alerta": "Normal",
+    "notas": "Wi-Fi para operarios y terminales móviles de Piso 1."
   },
   {
     "id": "sw-tenda",
@@ -627,12 +831,12 @@
     "so": "Sin gestión",
     "hardware": "Switch Tenda 12/16 Puertos 10/100",
     "marca": "Tenda",
-    "conectado": "Switch HP Piso 2 (Enlace vertical)",
+    "conectado": "Switch Core HP Piso 2 (Troncal vertical)",
     "puerto_switch": "Pto 1 uplink",
     "enlace_tipo": "Cable UTP",
     "software": "No soporta VLANs",
     "alerta": "Atención",
-    "notas": "Switch doméstico/SOHO en el piso de finanzas y gerencia."
+    "notas": "Switch en rack del Piso 3 conectado por troncal vertical al Switch Core HP."
   },
   {
     "id": "ap-gerencia",
@@ -647,7 +851,7 @@
     "so": "Firmware TP-Link",
     "hardware": "Router Wi-Fi AC1200",
     "marca": "TP-Link",
-    "conectado": "Switch Tenda Piso 3",
+    "conectado": "Switch Rack Piso 3",
     "puerto_switch": "LAN/WAN",
     "enlace_tipo": "Cable UTP",
     "software": "SSID: Gerencia_Privado",
@@ -667,12 +871,12 @@
     "so": "Firmware TP-Link",
     "hardware": "Router Wi-Fi N300/AC",
     "marca": "TP-Link",
-    "conectado": "Switch Tenda Piso 3",
+    "conectado": "Switch Rack Piso 3",
     "puerto_switch": "LAN",
     "enlace_tipo": "Cable UTP",
     "software": "SSID: Sala_Juntas",
     "alerta": "Normal",
-    "notas": "Usado para presentaciones y visitas."
+    "notas": "Usado para presentaciones y visitas en Piso 3."
   },
   {
     "id": "printer-admin",
@@ -687,7 +891,7 @@
     "so": "Firmware Láser",
     "hardware": "Multifuncional Láser Monocromática",
     "marca": "HP LaserJet / Kyocera",
-    "conectado": "Switch Tenda Piso 3",
+    "conectado": "Switch Rack Piso 3",
     "puerto_switch": "Ethernet directa",
     "enlace_tipo": "Cable UTP",
     "software": "Driver PCL6 / WSD",
@@ -713,166 +917,6 @@
     "software": "Cliente Avansis, Office 365, Software Bancos",
     "alerta": "Atención",
     "notas": "Accede a datos bancarios y nómina desde la red plana general."
-  },
-  {
-    "id": "pc-server",
-    "nombre": "PC Servidor Principal (Avansis)",
-    "piso": "Piso 1",
-    "tipo": "Servidor",
-    "ip": "192.168.0.250",
-    "mac": "B4:2E:99:A1:10:02",
-    "hostname": "SRV-AVANSIS-PROD",
-    "usuario": "Servidor Empresa (Acceso Todos)",
-    "cargo": "Servidor de Producción y Diseño",
-    "so": "Windows 10 Pro 64-bit",
-    "hardware": "Intel Core i7, 16GB RAM, 1TB SSD",
-    "marca": "PC Ensamblado Desktop",
-    "conectado": "Switch Escritorio Piso 1 (Puerto 1)",
-    "puerto_switch": "Pto 1 (1 Gbps)",
-    "enlace_tipo": "Cable UTP Cat 5e",
-    "software": "Avansis Server, SQL Server, Carpetas Compartidas SMB",
-    "alerta": "Crítico",
-    "notas": "PUNTO ÚNICO DE FALLA (SPOF). Corre Avansis y almacena archivos de diseño. Sin RAID ni UPS dedicada en Piso 1."
-  },
-  {
-    "id": "sw-escritorio-p1",
-    "nombre": "Switch Escritorio Piso 1 (Planta)",
-    "piso": "Piso 1",
-    "tipo": "Switch",
-    "ip": "No gestionable",
-    "mac": "No aplica",
-    "hostname": "SW-ESCRITORIO-P1",
-    "usuario": "Operarios Planta y Corte",
-    "cargo": "Distribución Planta Piso 1",
-    "so": "Sin gestión",
-    "hardware": "Switch 16 Puertos 10/100/1000",
-    "marca": "TP-Link / Tenda",
-    "conectado": "Switch Core HP Piso 2 (Troncal vertical)",
-    "puerto_switch": "Pto 24 Troncal HP",
-    "enlace_tipo": "Cable UTP",
-    "software": "No administrable",
-    "alerta": "Atención",
-    "notas": "Conecta Servidor Avansis, Plotter, Etiquetadoras y PCs de confección."
-  },
-  {
-    "id": "plotter",
-    "nombre": "Plotter de Corte y Trazos",
-    "piso": "Piso 1",
-    "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.215",
-    "mac": "78:2B:CB:11:88:99",
-    "hostname": "PLOTTER-PRODUCCION",
-    "usuario": "Operarios de Corte",
-    "cargo": "Trazos de moldería textil",
-    "so": "Firmware Plotter",
-    "hardware": "Plotter Gran Formato 1.80m",
-    "marca": "Graphtec / HP / Roland",
-    "conectado": "Switch Escritorio Piso 1",
-    "puerto_switch": "Ethernet directa",
-    "enlace_tipo": "Cable UTP",
-    "software": "Software de tizado / trazo textil",
-    "alerta": "Normal",
-    "notas": "Impresión continua de patrones de confección."
-  },
-  {
-    "id": "printer-stickers",
-    "nombre": "Impresora de Stickers",
-    "piso": "Piso 1",
-    "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.216",
-    "mac": "00:07:4D:22:33:44",
-    "hostname": "PRINTER-STICKERS",
-    "usuario": "Empaque y Despacho",
-    "cargo": "Etiquetado de bolsas y cajas",
-    "so": "Firmware Térmico",
-    "hardware": "Impresora Térmica Directa 4x6",
-    "marca": "Zebra / Xprinter",
-    "conectado": "Switch Escritorio Piso 1",
-    "puerto_switch": "Ethernet directa",
-    "enlace_tipo": "Cable UTP",
-    "software": "Zebra Designer / BarTender",
-    "alerta": "Normal",
-    "notas": "Impresión de códigos de barra para pedidos."
-  },
-  {
-    "id": "printer-lavado",
-    "nombre": "Impresora Etiquetas de Lavado",
-    "piso": "Piso 1",
-    "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.217",
-    "mac": "00:07:4D:55:66:77",
-    "hostname": "PRINTER-LAVADO-TEXTIL",
-    "usuario": "Producción Textil",
-    "cargo": "Etiquetas técnicas de poliamida/satín",
-    "so": "Firmware Transferencia Térmica",
-    "hardware": "Impresora de Ribbon Resina para Satín",
-    "marca": "TSC / Zebra",
-    "conectado": "Switch Escritorio Piso 1",
-    "puerto_switch": "Ethernet directa",
-    "enlace_tipo": "Cable UTP",
-    "software": "Software de composición de etiquetas",
-    "alerta": "Normal",
-    "notas": "Etiquetas con instrucciones de lavado y porcentaje de fibras."
-  },
-  {
-    "id": "ap-p1",
-    "nombre": "Access Point Planta Piso 1",
-    "piso": "Piso 1",
-    "tipo": "Wi-Fi / AP",
-    "ip": "192.168.0.18",
-    "mac": "24:A4:3C:99:88:77",
-    "hostname": "AP-PLANTA-P1",
-    "usuario": "Planta y Operarios",
-    "cargo": "Cobertura Wi-Fi Planta",
-    "so": "Firmware AP",
-    "hardware": "Access Point de Techo/Pared",
-    "marca": "Por confirmar",
-    "conectado": "Switch Escritorio Piso 1",
-    "puerto_switch": "Ethernet",
-    "enlace_tipo": "Cable UTP",
-    "software": "SSID: Planta_Operaciones",
-    "alerta": "Normal",
-    "notas": "Wi-Fi para operarios y terminales móviles."
-  },
-  {
-    "id": "printers-wifi",
-    "nombre": "2x Impresoras Wi-Fi Oficina",
-    "piso": "Piso 2",
-    "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.220 / DHCP",
-    "mac": "Varios",
-    "hostname": "PRINTERS-WIFI-P2",
-    "usuario": "Diseño y Operaciones",
-    "cargo": "Impresión de fichas técnicas",
-    "so": "Firmware Wi-Fi",
-    "hardware": "Multifuncionales Color",
-    "marca": "Epson / HP Ink Tank",
-    "conectado": "Wi-Fi Ruijie (2.4 GHz)",
-    "puerto_switch": "Wi-Fi",
-    "enlace_tipo": "Inalámbrico",
-    "software": "Drivers Wi-Fi",
-    "alerta": "Atención",
-    "notas": "Se recomienda cablearlas por UTP para evitar desconfiguración de IP."
-  },
-  {
-    "id": "pc-diseno-01",
-    "nombre": "PC Diseño y Moldería 01",
-    "piso": "Piso 2",
-    "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.120 (DHCP)",
-    "mac": "A0:36:BC:55:44:33",
-    "hostname": "PC-DISENO-01",
-    "usuario": "Carlos Rodríguez",
-    "cargo": "Diseñador Textil",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 32GB RAM, 1TB NVMe, Tarjeta Gráfica RTX",
-    "marca": "Dell OptiPlex / Workstation",
-    "conectado": "Switch Core HP Piso 2",
-    "puerto_switch": "Pto 4",
-    "enlace_tipo": "Cable UTP",
-    "software": "Adobe Illustrator, Photoshop, Audaces/Optitex, Avansis",
-    "alerta": "Normal",
-    "notas": "Maneja archivos pesados en el PC Servidor de Piso 1."
   }
 ];
 
@@ -897,7 +941,7 @@
     }
 
     function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices_v3");
+      const guardados = localStorage.getItem("netmap_pro_devices_v4");
       if (guardados) {
         try {
           const parsed = JSON.parse(guardados);
@@ -929,7 +973,7 @@
     }
 
     function guardarEnLocalStorage() {
-      localStorage.setItem("netmap_pro_devices_v3", JSON.stringify(dispositivos));
+      localStorage.setItem("netmap_pro_devices_v4", JSON.stringify(dispositivos));
     }
 
     function mostrarToast(mensaje) {
@@ -944,12 +988,10 @@
 
     function actualizarMetricas() {
       const totalEl = document.getElementById("stat-total");
-      const wanEl = document.getElementById("stat-wan");
       const p1El = document.getElementById("stat-p1");
       const p2El = document.getElementById("stat-p2");
       const p3El = document.getElementById("stat-p3");
       if (totalEl) totalEl.innerText = dispositivos.length;
-      if (wanEl) wanEl.innerText = dispositivos.filter(d => d.piso === "WAN").length;
       if (p1El) p1El.innerText = dispositivos.filter(d => d.piso === "Piso 1").length;
       if (p2El) p2El.innerText = dispositivos.filter(d => d.piso === "Piso 2").length;
       if (p3El) p3El.innerText = dispositivos.filter(d => d.piso === "Piso 3").length;
@@ -1013,19 +1055,22 @@
 
     // NIVELES Y ESTILOS PARA CADA EQUIPO SEGÚN PISO Y ROL
     function clasificarNodo(d) {
-      let level = 5;
+      let level = 4;
       let bg = "#ffffff";
       let border = "#3b82f6";
       let textColor = "#1e293b";
       let icon = "💻";
 
-      if (d.piso === "WAN" || d.id.startsWith("isp-")) {
+      // Nivel 1: Módems de Internet (WAN)
+      if (d.id === "isp-claro" || d.id === "isp-ruijie") {
         level = 1;
         bg = "#f0f9ff";
         border = "#0284c7";
         textColor = "#0369a1";
         icon = "🌐";
-      } else if (d.id === "gw-ruijie") {
+      } 
+      // Nivel 2: Gateway Multi-WAN y UPS de Rack
+      else if (d.id === "gw-ruijie") {
         level = 2;
         bg = "#eef2ff";
         border = "#4f46e5";
@@ -1037,31 +1082,31 @@
         border = "#d97706";
         textColor = "#92400e";
         icon = "⚡";
-      } else if (d.id === "sw-hp") {
+      } 
+      // Nivel 3: Switch Core Principal HP
+      else if (d.id === "sw-hp") {
         level = 3;
         bg = "#eef2ff";
         border = "#4f46e5";
         textColor = "#312e81";
         icon = "🔀";
+      } 
+      // Nivel 4: Equipos en Piso 2 y Troncales hacia Pisos 1 y 3
+      else if (d.id === "sw-tenda" || d.id === "sw-escritorio-p1") {
+        level = 4;
+        bg = d.piso === "Piso 3" ? "#f5f3ff" : "#ecfdf5";
+        border = d.piso === "Piso 3" ? "#7c3aed" : "#059669";
+        textColor = d.piso === "Piso 3" ? "#5b21b6" : "#065f46";
+        icon = "🔀";
       } else if (d.piso === "Piso 2") {
-        level = 3;
+        level = 4;
         bg = "#eef2ff";
         border = "#6366f1";
         textColor = "#3730a3";
         icon = d.tipo === "Seguridad / CCTV" ? "📹" : (d.tipo === "Periférico / Impresora" ? "🖨️" : "💻");
-      } else if (d.id === "sw-tenda") {
-        level = 4;
-        bg = "#f5f3ff";
-        border = "#7c3aed";
-        textColor = "#5b21b6";
-        icon = "🔀";
-      } else if (d.id === "sw-escritorio-p1") {
-        level = 4;
-        bg = "#ecfdf5";
-        border = "#059669";
-        textColor = "#065f46";
-        icon = "🔀";
-      } else if (d.piso === "Piso 3") {
+      } 
+      // Nivel 5: Dispositivos finales de Piso 1 y Piso 3
+      else if (d.piso === "Piso 3") {
         level = 5;
         bg = "#f5f3ff";
         border = "#8b5cf6";
@@ -1072,10 +1117,10 @@
         bg = "#ecfdf5";
         border = "#10b981";
         textColor = "#065f46";
-        icon = d.tipo === "Servidor" ? "🖥️" : (d.tipo === "Wi-Fi / AP" ? "📶" : (d.tipo === "Periférico / Impresora" ? "🖨️" : "💻"));
+        icon = d.tipo === "Servidor" ? "🖥️" : (d.tipo === "Wi-Fi / AP" ? "📶" : "💻");
       }
 
-      // Alerta Crítica (Avansis / Batería UPS)
+      // Alerta Crítica (Servidor Avansis / UPS)
       if (d.alerta === "Crítico") {
         bg = "#fef2f2";
         border = "#dc2626";
@@ -1138,18 +1183,18 @@
         { from: "ups-p2", to: "sw-hp", dashes: [6, 4], color: { color: "#d97706" }, arrows: { to: { enabled: false } }, label: "Alimentación" },
         { from: "ups-p2", to: "dvr-cctv", dashes: [6, 4], color: { color: "#d97706" }, arrows: { to: { enabled: false } }, label: "Alimentación" },
         { from: "sw-hp", to: "dvr-cctv", arrows: "to", label: "CCTV" },
-        { from: "sw-hp", to: "sw-tenda", label: "Troncal Piso 3 (Vertical)", arrows: "to", width: 2.5, color: { color: "#7c3aed" } },
-        { from: "sw-hp", to: "sw-escritorio-p1", label: "Troncal Piso 1 (Vertical)", arrows: "to", width: 2.5, color: { color: "#059669" } },
-        { from: "sw-hp", to: "pc-diseno-01", arrows: "to", label: "UTP Cat 6" },
-        { from: "gw-ruijie", to: "printers-wifi", dashes: [4, 4], arrows: "to", label: "Wi-Fi (2.4 GHz)", color: { color: "#8b5cf6" } },
+        { from: "sw-hp", to: "plotter", arrows: "to", label: "Plotter Corte (P2)" },
+        { from: "sw-hp", to: "printer-stickers", arrows: "to", label: "Stickers (P2)" },
+        { from: "sw-hp", to: "printer-lavado", arrows: "to", label: "Etiquetas Lavado (P2)" },
+        { from: "sw-hp", to: "pc-diseno-01", arrows: "to", label: "Diseño (P2)" },
+        { from: "gw-ruijie", to: "printers-wifi", dashes: [4, 4], arrows: "to", label: "Wi-Fi 2.4 GHz", color: { color: "#8b5cf6" } },
+        { from: "sw-hp", to: "sw-tenda", label: "Troncal Vertical Piso 3", arrows: "to", width: 2.5, color: { color: "#7c3aed" } },
+        { from: "sw-hp", to: "sw-escritorio-p1", label: "Troncal Vertical Piso 1", arrows: "to", width: 2.5, color: { color: "#059669" } },
         { from: "sw-tenda", to: "ap-gerencia", arrows: "to", label: "Wi-Fi Gerencia" },
         { from: "sw-tenda", to: "ap-juntas", arrows: "to", label: "Wi-Fi Juntas" },
         { from: "sw-tenda", to: "printer-admin", arrows: "to", label: "Facturación" },
         { from: "sw-tenda", to: "pc-contab-01", arrows: "to", label: "Contabilidad" },
         { from: "sw-escritorio-p1", to: "pc-server", label: "Avansis (SPOF)", color: { color: "#dc2626" }, width: 3, arrows: "to" },
-        { from: "sw-escritorio-p1", to: "plotter", arrows: "to", label: "Plotter Corte" },
-        { from: "sw-escritorio-p1", to: "printer-stickers", arrows: "to", label: "Stickers" },
-        { from: "sw-escritorio-p1", to: "printer-lavado", arrows: "to", label: "Etiquetas Lavado" },
         { from: "sw-escritorio-p1", to: "ap-p1", arrows: "to", label: "Wi-Fi Planta" }
       ];
 
