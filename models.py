@@ -75,3 +75,11 @@ class TicketAdjunto(Base):
     fecha_subida = Column(DateTime, default=func.now())
     
     ticket = relationship("Ticket", back_populates="adjuntos")
+
+class RedConfig(Base):
+    __tablename__ = "red_config"
+
+    id = Column(Integer, primary_key=True, index=True)
+    clave = Column(String, unique=True, index=True)
+    valor = Column(Text)
+    fecha_actualizacion = Column(DateTime, default=func.now(), onupdate=func.now())

@@ -60,29 +60,36 @@
                 </div>
             </div>
 
-            <!-- BOTONES DE ACCIÓN -->
+            <!-- BOTONES DE ACCIÓN Y ESTADO DE SINCRONIZACIÓN -->
             <div class="flex flex-wrap items-center gap-2.5">
-                <a href="/admin" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl flex items-center transition border border-slate-200">
+                <!-- Indicador de Sincronización en Tiempo Real con Base de Datos -->
+                <div id="badge-sync" class="flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs transition-all">
+                    <span id="badge-sync-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="badge-sync-text">Base de Datos Conectada</span>
+                </div>
+
+                <a href="/admin" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center transition border border-slate-200">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-1.5"></i> Volver a Tickets
                 </a>
 
-                <button onclick="abrirModalNuevo()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl flex items-center shadow-md shadow-indigo-200 transition">
+                <button onclick="abrirModalNuevo()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl flex items-center shadow-md shadow-indigo-200 transition">
                     <i data-lucide="plus-circle" class="w-4 h-4 mr-1.5"></i> + Nuevo Equipo
                 </button>
 
-                <button onclick="restablecerInventarioBase()" title="Recargar topología y los 46 equipos de Olamtex" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-200 transition flex items-center">
+                <button onclick="restablecerInventarioBase()" title="Recargar topología y los 46 equipos de Olamtex" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl border border-slate-200 transition flex items-center">
                     <i data-lucide="rotate-ccw" class="w-4 h-4 mr-1.5"></i> Restablecer Mapa
                 </button>
 
-                <button onclick="exportarAExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center shadow-md shadow-emerald-200 transition">
+                <button onclick="exportarAExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl flex items-center shadow-md shadow-emerald-200 transition">
                     <i data-lucide="file-spreadsheet" class="w-4 h-4 mr-1.5"></i> Descargar Excel (.xlsx)
                 </button>
 
-                <button onclick="guardarCopiaSeguridad()" title="Descargar backup JSON" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl border border-slate-200 transition">
-                    <i data-lucide="download" class="w-4 h-4"></i>
+                <!-- Botón de Descarga Backup JSON (Directo desde Servidor o Local) -->
+                <button onclick="guardarCopiaSeguridad()" title="Descargar copia de seguridad JSON" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-2 rounded-xl border border-indigo-200 transition flex items-center">
+                    <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Backup JSON
                 </button>
 
-                <label title="Restaurar backup JSON" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl border border-slate-200 transition cursor-pointer">
+                <label title="Restaurar backup JSON" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-2.5 py-2 rounded-xl border border-slate-200 transition cursor-pointer flex items-center" title="Subir backup JSON">
                     <i data-lucide="upload" class="w-4 h-4"></i>
                     <input type="file" id="file-upload" class="hidden" accept=".json" onchange="cargarCopiaSeguridad(event)">
                 </label>
@@ -116,7 +123,7 @@
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Piso 1 (Planta)</p>
-          <h3 id="stat-p1" class="text-2xl font-black text-slate-800 mt-0.5">4</h3>
+          <h3 id="stat-p1" class="text-2xl font-black text-slate-800 mt-0.5">5</h3>
         </div>
         <div class="bg-emerald-50 p-2 rounded-xl text-emerald-600">
           <i data-lucide="factory" class="w-5 h-5"></i>
@@ -126,7 +133,7 @@
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Piso 2 (MDF Core)</p>
-          <h3 id="stat-p2" class="text-2xl font-black text-slate-800 mt-0.5">29</h3>
+          <h3 id="stat-p2" class="text-2xl font-black text-slate-800 mt-0.5">27</h3>
         </div>
         <div class="bg-indigo-50 p-2 rounded-xl text-indigo-600">
           <i data-lucide="router" class="w-5 h-5"></i>
@@ -136,7 +143,7 @@
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Piso 3 (Admin)</p>
-          <h3 id="stat-p3" class="text-2xl font-black text-slate-800 mt-0.5">12</h3>
+          <h3 id="stat-p3" class="text-2xl font-black text-slate-800 mt-0.5">13</h3>
         </div>
         <div class="bg-purple-50 p-2 rounded-xl text-purple-600">
           <i data-lucide="briefcase" class="w-5 h-5"></i>
@@ -406,41 +413,41 @@
     "piso": "Sótano",
     "tipo": "Laptop / Portátil",
     "ip": "192.168.0.140",
-    "mac": "48:2A:E3:88:99:11",
+    "mac": "C8:3A:35:71:00:22",
     "hostname": "LAPTOP-SOTANO-BOD",
     "usuario": "Operario Almacén / Telas",
     "cargo": "Recepción y Despacho Telas",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo / HP",
+    "so": "Windows 11 Home 64-bit",
+    "hardware": "Core i5 / 8GB RAM / 512GB SSD",
+    "marca": "Lenovo ThinkPad",
     "conectado_id": "modem-corte",
     "conectado": "Módem de Corte (Piso 1)",
     "enlace_tipo": "Wi-Fi (Inalámbrico)",
-    "puerto_switch": "SSID Wi-Fi Planta/Corte",
-    "software": "Avansis Cliente, Navegador",
+    "puerto_switch": "SSID Corte (Cobertura hacia Sótano)",
+    "software": "Navegador Web, Software Inventarios",
     "alerta": "Normal",
-    "notas": "Ubicado en el sótano conectado vía Wi-Fi al módem de corte del Piso 1."
+    "notas": "Portátil utilizado en el sótano para conteo de telas. Conectado vía Wi-Fi al módem de corte."
   },
   {
     "id": "modem-corte",
-    "nombre": "Módem de Corte",
+    "nombre": "Módem de Corte (Piso 1)",
     "piso": "Piso 1",
     "tipo": "Router / Gateway",
     "ip": "192.168.0.10",
-    "mac": "BC:BA:C7:11:22:33",
-    "hostname": "ROUTER-CORTE-P1",
-    "usuario": "Área de Corte / Planta",
-    "cargo": "Distribución Wi-Fi Corte y Sótano",
-    "so": "Firmware Router",
+    "mac": "E4:8D:8C:33:44:01",
+    "hostname": "MODEM-CORTE-P1",
+    "usuario": "Operarios de Corte",
+    "cargo": "Conectividad Planta y Enlace Sótano",
+    "so": "Firmware Módem Proveedor",
     "hardware": "Router Wi-Fi Dual Band Gigabit",
-    "marca": "TP-Link / Ruijie",
+    "marca": "Módem ISP",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 20 (Troncal desde HP)",
-    "software": "DHCP Relay / AP Mode",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto Directo a Switch HP Core",
+    "software": "Wi-Fi Corte 2.4/5GHz",
     "alerta": "Normal",
-    "notas": "Conectado por cable directo al Switch Core HP. Emite Wi-Fi para Corte, Bodega y Sótano."
+    "notas": "Módem de área de corte conectado directamente por cable al Switch Core HP. Brinda señal Wi-Fi a corte, bodega y sótano."
   },
   {
     "id": "ap-corte",
@@ -448,62 +455,83 @@
     "piso": "Piso 1",
     "tipo": "Wi-Fi / AP",
     "ip": "192.168.0.18",
-    "mac": "24:A4:3C:99:88:77",
+    "mac": "E4:8D:8C:33:44:02",
     "hostname": "AP-CORTE-P1",
     "usuario": "Operarios de Corte",
     "cargo": "Cobertura Wi-Fi Área Corte",
     "so": "Firmware AP",
-    "hardware": "Access Point de Techo/Pared",
-    "marca": "TP-Link / Reyee",
+    "hardware": "Access Point Wi-Fi N/AC",
+    "marca": "Comercial",
     "conectado_id": "modem-corte",
     "conectado": "Módem de Corte (Piso 1)",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "LAN 1",
-    "software": "SSID: Corte_Produccion",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "LAN Módem Corte",
+    "software": "Wi-Fi Corte",
     "alerta": "Normal",
-    "notas": "Punto de acceso de apoyo para la zona de corte en Piso 1."
+    "notas": "Punto de acceso para cobertura en taller de confección y corte."
   },
   {
     "id": "pc-bodega-1",
     "nombre": "Bodega Uno",
     "piso": "Piso 1",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.141",
-    "mac": "70:85:C2:33:44:11",
-    "hostname": "PC-BODEGA-01",
-    "usuario": "Encargado Bodega 1",
-    "cargo": "Control de Inventario Bodega",
-    "so": "Windows 10 Pro",
-    "hardware": "Core i3, 8GB RAM, 240GB SSD",
-    "marca": "Desktop Genérico",
-    "conectado_id": "modem-corte",
-    "conectado": "Módem de Corte (Piso 1)",
-    "enlace_tipo": "Wi-Fi (Inalámbrico)",
-    "puerto_switch": "Wi-Fi 2.4 GHz",
-    "software": "Avansis Cliente, Excel",
+    "ip": "192.168.1.240",
+    "mac": "B4:2E:99:40:11:01",
+    "hostname": "AUXBOD1",
+    "usuario": "CIFUENTES POSADA JUAN MANUEL",
+    "cargo": "AUXILIAR LOGISTICO",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Core i3 / 8GB RAM / 256GB SSD",
+    "marca": "PC de Mesa",
+    "conectado_id": "sw-prod-diseno",
+    "conectado": "Switch Producción & Diseño",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Bodega 1",
+    "software": "Office, ERP Inventario",
     "alerta": "Normal",
-    "notas": "Equipo de mesa en bodega conectado vía Wi-Fi al módem de corte."
+    "notas": "Equipo de escritorio Bodega 1 operado por Juan Manuel Cifuentes."
   },
   {
     "id": "pc-bodega-2",
     "nombre": "Bodega Dos",
     "piso": "Piso 1",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.142",
-    "mac": "70:85:C2:33:44:22",
-    "hostname": "PC-BODEGA-02",
-    "usuario": "Auxiliar Bodega 2",
-    "cargo": "Recepción y Salida de Insumos",
-    "so": "Windows 10 Pro",
-    "hardware": "Core i3, 8GB RAM, 240GB SSD",
-    "marca": "Desktop Genérico",
+    "ip": "192.168.1.157",
+    "mac": "B4:2E:99:40:11:02",
+    "hostname": "AUXBOD2",
+    "usuario": "CIFUENTES POSADA JUAN MANUEL",
+    "cargo": "AUXILIAR LOGISTICO",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Core i3 / 8GB RAM / 256GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "modem-corte",
     "conectado": "Módem de Corte (Piso 1)",
     "enlace_tipo": "Wi-Fi (Inalámbrico)",
-    "puerto_switch": "Wi-Fi 2.4 GHz",
-    "software": "Avansis Cliente, Excel",
+    "puerto_switch": "SSID Corte",
+    "software": "Office, ERP Inventario",
     "alerta": "Normal",
-    "notas": "Equipo de mesa en bodega conectado vía Wi-Fi al módem de corte."
+    "notas": "Equipo de escritorio Bodega 2 operado por Juan Manuel Cifuentes."
+  },
+  {
+    "id": "pc-tejeduria",
+    "nombre": "PC TEJEDURIA",
+    "piso": "Piso 1",
+    "tipo": "Puesto de Trabajo",
+    "ip": "DHCP",
+    "mac": "B4:2E:99:40:11:05",
+    "hostname": "PC-TEJEDURIA",
+    "usuario": "HERNANDEZ FRANCO DAIRO",
+    "cargo": "OPERARIO TEJEDURIA",
+    "so": "Windows 10 Pro",
+    "hardware": "Core i3 / 8GB RAM / 240GB SSD",
+    "marca": "PC de Mesa",
+    "conectado_id": "sw-hp",
+    "conectado": "Switch Core HP 24p",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Tejeduría",
+    "software": "Control de Producción / Máquinas",
+    "alerta": "Normal",
+    "notas": "Puesto de control en área de tejeduría operado por Dairo Hernandez."
   },
   {
     "id": "isp-claro",
@@ -511,20 +539,20 @@
     "piso": "Piso 2",
     "tipo": "Router / Gateway",
     "ip": "IP Pública Dinámica/Fija",
-    "mac": "Por confirmar",
+    "mac": "F8:8E:85:12:34:01",
     "hostname": "MODEM-CLARO-WAN1",
     "usuario": "Proveedor Claro",
     "cargo": "Enlace Principal de Internet",
-    "so": "Firmware Claro HFC/Fibra",
-    "hardware": "Cablemódem / ONT Fibra",
-    "marca": "Claro / Huawei",
+    "so": "Firmware Claro",
+    "hardware": "Módem Fibra Óptica",
+    "marca": "Claro Colombia",
     "conectado_id": "gw-ruijie",
     "conectado": "Gateway Multi-WAN Ruijie",
-    "enlace_tipo": "Coaxial / Fibra Óptica",
-    "puerto_switch": "WAN1 Ruijie",
-    "software": "Enlace Primario Claro",
+    "enlace_tipo": "Fibra Óptica / Coaxial",
+    "puerto_switch": "WAN 1 Gateway Ruijie",
+    "software": "Bridge Mode",
     "alerta": "Normal",
-    "notas": "Enlace principal de salida a Internet ubicado en el rack del Piso 2."
+    "notas": "Enlace principal de fibra óptica Claro."
   },
   {
     "id": "isp-ruijie",
@@ -532,20 +560,20 @@
     "piso": "Piso 2",
     "tipo": "Router / Gateway",
     "ip": "IP Pública Dinámica/Fija",
-    "mac": "Por confirmar",
+    "mac": "F8:8E:85:12:34:02",
     "hostname": "MODEM-ISP2-WAN2",
-    "usuario": "Proveedor Secundario",
+    "usuario": "Proveedor Etelco",
     "cargo": "Enlace Respaldo / Failover",
     "so": "Firmware ISP",
-    "hardware": "Módem Proveedor 2",
-    "marca": "Ruijie / Operador",
+    "hardware": "Módem Coaxial/Fibra",
+    "marca": "Etelco",
     "conectado_id": "gw-ruijie",
-    "conectado": "Gateway Multi-WAN Ruijie",
-    "enlace_tipo": "Cable UTP Cat 6",
-    "puerto_switch": "WAN2 Ruijie",
-    "software": "Enlace Backup / Failover",
+    "conectado": "Gateway Multi-WAN",
+    "enlace_tipo": "Cable Ethernet WAN",
+    "puerto_switch": "WAN 2 Gateway Ruijie",
+    "software": "Failover automático",
     "alerta": "Normal",
-    "notas": "Segundo enlace para redundancia y balanceo de carga en rack Piso 2."
+    "notas": "Línea secundaria de contingencia provista por Etelco."
   },
   {
     "id": "gw-ruijie",
@@ -553,20 +581,20 @@
     "piso": "Piso 2",
     "tipo": "Router / Gateway",
     "ip": "192.168.0.1",
-    "mac": "CC:81:DA:44:12:01",
+    "mac": "E4:A7:C5:99:88:77",
     "hostname": "GW-RUIJIE-MDF",
     "usuario": "Infraestructura TI",
     "cargo": "Borde de Red / Seguridad",
-    "so": "ReyeeOS / Ruijie Cloud",
-    "hardware": "Router Balanceador Multi-WAN",
-    "marca": "Ruijie Reyee RG-EG",
+    "so": "Ruijie OS",
+    "hardware": "Router Gateway Balanceador Multi-WAN",
+    "marca": "Ruijie Reyee",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
     "enlace_tipo": "Cable UTP Cat 6",
     "puerto_switch": "LAN1 -> Switch HP Puerto 1",
     "software": "Ruijie Cloud, Multi-WAN Balancing, DHCP Server",
     "alerta": "Normal",
-    "notas": "Gateway principal y servidor DHCP general (192.168.0.1) en Rack Piso 2."
+    "notas": "Gateway principal y router central en Rack Piso 2."
   },
   {
     "id": "sw-hp",
@@ -582,12 +610,12 @@
     "hardware": "24 Puertos Gigabit 10/100/1000",
     "marca": "HP 24 Puertos",
     "conectado_id": "gw-ruijie",
-    "conectado": "Gateway Ruijie Reyee",
+    "conectado": "Gateway Multi-WAN",
     "enlace_tipo": "Cableado Vertical",
     "puerto_switch": "Troncales hacia todos los switches",
     "software": "VLAN 802.1Q, Spanning Tree",
     "alerta": "Normal",
-    "notas": "Switch administrable central de toda la empresa en Piso 2. Conecta MDF y troncales a todos los pisos."
+    "notas": "Switch administrable central en Piso 2. Conecta MDF y troncales a todos los pisos."
   },
   {
     "id": "ups-p2",
@@ -604,11 +632,11 @@
     "marca": "Comercial",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable Eléctrico",
-    "puerto_switch": "N/A",
-    "software": "N/A",
+    "enlace_tipo": "Cableado Eléctrico de Respaldo",
+    "puerto_switch": "Alimentación PDU Rack",
+    "software": "Gestión de Batería",
     "alerta": "Crítico",
-    "notas": "BATERÍAS INOPERATIVAS. Funciona como regleta. Ante corte de luz, la red y cámaras caen al instante."
+    "notas": "ALERTA CRÍTICA: Batería degradada/agotada. Ante corte de luz, el rack principal se apaga instantáneamente."
   },
   {
     "id": "dvr-cctv",
@@ -616,20 +644,20 @@
     "piso": "Piso 2",
     "tipo": "Seguridad / CCTV",
     "ip": "192.168.0.200",
-    "mac": "4C:11:BF:33:44:99",
+    "mac": "44:19:B6:55:44:33",
     "hostname": "DVR-CCTV-P2",
     "usuario": "Seguridad / Administración",
     "cargo": "Circuito Cerrado de TV (16 Ch)",
-    "so": "Firmware Embebido",
-    "hardware": "DVR 16 Canales 2TB",
-    "marca": "Dahua / Hikvision",
+    "so": "Linux Embedded DVR",
+    "hardware": "Grabador Digital 16 Canales + 4TB HDD",
+    "marca": "Hikvision / Dahua",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 2",
-    "software": "Visualización remota CCTV",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto 23 Switch Core",
+    "software": "Monitoreo Remoto, Grabación 24/7",
     "alerta": "Atención",
-    "notas": "Ubicado en el rack del Piso 2 sin aislamiento de red."
+    "notas": "Sistema central de cámaras de seguridad."
   },
   {
     "id": "sw-prod-diseno",
@@ -637,83 +665,146 @@
     "piso": "Piso 2",
     "tipo": "Switch",
     "ip": "192.168.0.5",
-    "mac": "3C:52:82:11:22:01",
+    "mac": "C0:25:E9:11:22:33",
     "hostname": "SW-PROD-DISENO-P2",
     "usuario": "Producción y Diseño",
     "cargo": "Conmutador Área Producción",
-    "so": "Sin gestión",
-    "hardware": "Switch 16 Puertos Gigabit",
-    "marca": "TP-Link / D-Link",
+    "so": "Firmware Switch",
+    "hardware": "Switch 16/24 Puertos Gigabit",
+    "marca": "Switch de Área",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Troncal desde Switch HP",
-    "software": "Distribución local",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Uplink a Switch HP Puerto 3",
+    "software": "Auto MDI/MDIX",
     "alerta": "Normal",
-    "notas": "Conectado al Switch HP. De este switch salen 3 portátiles de producción y 4 equipos de diseño."
+    "notas": "Switch departamental en Piso 2 para Producción, Diseño, Trazo y Plotter."
   },
   {
     "id": "laptop-prod-01",
     "nombre": "Portátil Producción 01",
     "piso": "Piso 2",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.111",
-    "mac": "2C:F0:5D:11:22:31",
-    "hostname": "LAPTOP-PROD-01",
-    "usuario": "Operario Producción 1",
-    "cargo": "Control de Producción Textil",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "HP / Lenovo",
+    "ip": "192.168.1.247",
+    "mac": "E4:54:E8:22:01:01",
+    "hostname": "COODPCC2",
+    "usuario": "PARRA GALVIS ADRIANA",
+    "cargo": "COORDINADOR DE PRODUCCIÓN",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "HP ProBook",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 1",
-    "software": "Avansis Cliente, Excel",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Producción 1",
+    "software": "Excel, ERP Producción",
     "alerta": "Normal",
-    "notas": "Portátil de producción conectado al Switch de Producción & Diseño."
+    "notas": "Puesto de producción operado por Adriana Parra."
   },
   {
     "id": "laptop-prod-02",
     "nombre": "Portátil Producción 02",
     "piso": "Piso 2",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.112",
-    "mac": "2C:F0:5D:11:22:32",
-    "hostname": "LAPTOP-PROD-02",
-    "usuario": "Operario Producción 2",
-    "cargo": "Seguimiento de Lotes",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "HP / Lenovo",
+    "ip": "192.168.1.179",
+    "mac": "E4:54:E8:22:01:02",
+    "hostname": "COODPCC1",
+    "usuario": "PALACIO HERRERA CARLOS",
+    "cargo": "COORDINADOR DE PRODUCCIÓN",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "HP ProBook",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 2",
-    "software": "Avansis Cliente, Excel",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Producción 2",
+    "software": "Excel, ERP Producción",
     "alerta": "Normal",
-    "notas": "Portátil de producción conectado al Switch de Producción & Diseño."
+    "notas": "Puesto de producción operado por Carlos Palacio."
   },
   {
     "id": "laptop-prod-03",
     "nombre": "Portátil Producción 03",
     "piso": "Piso 2",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.113",
-    "mac": "2C:F0:5D:11:22:33",
-    "hostname": "LAPTOP-PROD-03",
-    "usuario": "Operario Producción 3",
-    "cargo": "Control de Calidad y Confección",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "HP / Lenovo",
+    "ip": "192.168.1.173",
+    "mac": "E4:54:E8:22:01:03",
+    "hostname": "ANALISTACAL",
+    "usuario": "TEJADA PEREZ PAULINA",
+    "cargo": "ANALISTA JUNIOR CALIDAD Y CONFECCION",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "Lenovo IdeaPad",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 3",
-    "software": "Avansis Cliente, Excel",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Producción 3",
+    "software": "Office, Gestión Calidad",
     "alerta": "Normal",
-    "notas": "Portátil de producción conectado al Switch de Producción & Diseño."
+    "notas": "Puesto de calidad operado por Paulina Tejada."
+  },
+  {
+    "id": "pc-analista-mt",
+    "nombre": "PC ANALISTA M&T",
+    "piso": "Piso 2",
+    "tipo": "Puesto de Trabajo",
+    "ip": "192.168.1.191",
+    "mac": "B4:2E:99:40:22:15",
+    "hostname": "ANALISTAM&T",
+    "usuario": "VELEZ JIMENEZ JUAN CAMILO",
+    "cargo": "ANALISTA JUNIOR METODOS, TIEMPO, CALIDAD",
+    "so": "Windows 11 Pro",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
+    "conectado_id": "sw-prod-diseno",
+    "conectado": "Switch Producción & Diseño",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto M&T",
+    "software": "Software Análisis Tiempos, Office",
+    "alerta": "Normal",
+    "notas": "Puesto analista de métodos y tiempos operado por Juan Camilo Vélez."
+  },
+  {
+    "id": "laptop-aux-supervision",
+    "nombre": "PORTATIL AUX SUPERVISIÓN",
+    "piso": "Piso 2",
+    "tipo": "Laptop / Portátil",
+    "ip": "192.168.1.194",
+    "mac": "E4:54:E8:22:01:20",
+    "hostname": "AUXSUPER",
+    "usuario": "NO APLICA",
+    "cargo": "SUPERVISOR DE PLANTA",
+    "so": "Windows 11 Pro",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "Laptop Lenovo",
+    "conectado_id": "sw-hp",
+    "conectado": "Switch Core HP 24p",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto Switch HP",
+    "software": "Control Planta, ERP",
+    "alerta": "Normal",
+    "notas": "Portátil auxiliar para supervisión de planta."
+  },
+  {
+    "id": "printer-epson-diseno",
+    "nombre": "IMPRESORA EPSON DISEÑO",
+    "piso": "Piso 2",
+    "tipo": "Periférico / Impresora",
+    "ip": "192.168.1.206",
+    "mac": "00:26:AB:78:90:12",
+    "hostname": "IMPRESORAL5590",
+    "usuario": "VELEZ FLOREZ VALENTINA",
+    "cargo": "DISEÑO",
+    "so": "Firmware Impresora",
+    "hardware": "Epson EcoTank L5590 Multifuncional",
+    "marca": "Epson",
+    "conectado_id": "isp-ruijie",
+    "conectado": "Módem ISP 2 (Secundario)",
+    "enlace_tipo": "Wi-Fi (Inalámbrico)",
+    "puerto_switch": "Red Wi-Fi Piso 2",
+    "software": "Driver Epson",
+    "alerta": "Normal",
+    "notas": "Impresora a color asignada a diseño."
   },
   {
     "id": "pc-diseno-01",
@@ -721,41 +812,41 @@
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
     "ip": "192.168.0.121",
-    "mac": "A0:36:BC:55:44:01",
-    "hostname": "PC-DISENO-01",
-    "usuario": "Diseñador Textil 1",
-    "cargo": "Moldería y Patrones",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB NVMe, GPU",
-    "marca": "Dell OptiPlex",
+    "mac": "D8:BB:C1:33:02:01",
+    "hostname": "COODID",
+    "usuario": "VELEZ FLOREZ VALENTINA",
+    "cargo": "COORDINADORA INVESTIGACIÓN Y DESARROLLO DE PRODUCTO",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i7 / 32GB RAM / 1TB SSD NVMe",
+    "marca": "Estación de Trabajo",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 4",
-    "software": "Audaces/Optitex, Adobe Illustrator",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto I&D Diseño 1",
+    "software": "Adobe Illustrator, Photoshop, Audaces",
     "alerta": "Normal",
-    "notas": "Equipo de diseño conectado al Switch de Producción & Diseño."
+    "notas": "Equipo de diseño de alto rendimiento operado por Valentina Vélez."
   },
   {
     "id": "pc-diseno-02",
     "nombre": "PC Diseño 02",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.122",
-    "mac": "A0:36:BC:55:44:02",
-    "hostname": "PC-DISENO-02",
-    "usuario": "Diseñador Textil 2",
-    "cargo": "Diseño y Fichas Técnicas",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB NVMe, GPU",
-    "marca": "Dell OptiPlex",
+    "ip": "192.168.1.202",
+    "mac": "D8:BB:C1:33:02:02",
+    "hostname": "ANALISTADIS1",
+    "usuario": "CORREA RESTREPO LEIDY JHOANA",
+    "cargo": "APRENDIZ SENA ETAPA PRODUCTIVA",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 5",
-    "software": "Audaces/Optitex, Photoshop",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Diseño 2",
+    "software": "Adobe Suite, CorelDRAW",
     "alerta": "Normal",
-    "notas": "Equipo de diseño conectado al Switch de Producción & Diseño."
+    "notas": "Puesto de diseño operado por Leidy Jhoana Correa."
   },
   {
     "id": "pc-diseno-03",
@@ -763,188 +854,83 @@
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
     "ip": "192.168.0.123",
-    "mac": "A0:36:BC:55:44:03",
-    "hostname": "PC-DISENO-03",
-    "usuario": "Diseñador Textil 3",
-    "cargo": "Graduación y Moldería",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB NVMe, GPU",
-    "marca": "Dell OptiPlex",
+    "mac": "D8:BB:C1:33:02:03",
+    "hostname": "ANALISTADIS2",
+    "usuario": "PEREZ CIFUENTES MARIA ALEJANDRA",
+    "cargo": "AUXILIAR DE DISEÑO",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 6",
-    "software": "Audaces/Optitex, Illustrator",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Diseño 3",
+    "software": "Adobe Suite, CorelDRAW",
     "alerta": "Normal",
-    "notas": "Equipo de diseño conectado al Switch de Producción & Diseño."
+    "notas": "Puesto de diseño operado por María Alejandra Pérez."
   },
   {
     "id": "pc-diseno-04",
     "nombre": "PC Diseño 04",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.124",
-    "mac": "A0:36:BC:55:44:04",
-    "hostname": "PC-DISENO-04",
-    "usuario": "Diseñador Textil 4",
-    "cargo": "Desarrollo de Producto",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB NVMe, GPU",
-    "marca": "Dell OptiPlex",
+    "ip": "192.168.1.192",
+    "mac": "D8:BB:C1:33:02:04",
+    "hostname": "ANALISTADIS3",
+    "usuario": "OSORIO MANSO YICETH CAMILA",
+    "cargo": "APRENDIZ SENA ETAPA PRODUCTIVA",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 7",
-    "software": "Audaces/Optitex, Illustrator, Avansis",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Diseño 4",
+    "software": "Adobe Suite, Patrones",
     "alerta": "Normal",
-    "notas": "Equipo de diseño conectado al Switch de Producción & Diseño."
+    "notas": "Puesto de diseño operado por Yiceth Camila Osorio."
   },
   {
     "id": "pc-trazo",
     "nombre": "PC Trazo",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.125",
-    "mac": "A0:36:BC:55:44:05",
-    "hostname": "PC-TRAZO-MOLDERIA",
-    "usuario": "Operario de Trazo",
-    "cargo": "Trazado y Moldería de Producción",
-    "so": "Windows 10 Pro",
-    "hardware": "Core i5, 16GB RAM, 512GB SSD",
-    "marca": "Desktop HP",
+    "ip": "192.168.1.156",
+    "mac": "D8:BB:C1:33:02:05",
+    "hostname": "ANALISTADIS4",
+    "usuario": "GAVIRIA CASTAÑO SOPHIA",
+    "cargo": "ANALISTA JUNIOR DISEÑO CREATIVO",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Core i7 / 16GB RAM / 512GB SSD + 2da NIC Ethernet",
+    "marca": "Estación de Trabajo Trazo",
     "conectado_id": "sw-prod-diseno",
     "conectado": "Switch Producción & Diseño",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 8",
-    "software": "Audaces Tizada / Optitex Spooler",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Trazo",
+    "software": "Optitex, Audaces, Driver Plotter",
     "alerta": "Normal",
-    "notas": "Equipo de mesa que envía los trazos. Va conectado por cable directo al Plotter."
+    "notas": "Equipo dedicado a trazo y patronaje operado por Sophia Gaviria. Conectado cable a cable directamente con el Plotter."
   },
   {
     "id": "plotter",
     "nombre": "Plotter de Corte y Trazos",
     "piso": "Piso 2",
     "tipo": "Periférico / Impresora",
-    "ip": "Enlace Directo",
-    "mac": "78:2B:CB:11:88:99",
+    "ip": "192.168.1.198",
+    "mac": "00:1E:C9:44:88:99",
     "hostname": "PLOTTER-CORTE",
     "usuario": "Operario de Trazo",
     "cargo": "Plotter Gran Formato 1.80m",
-    "so": "Firmware Plotter",
-    "hardware": "Plotter Gran Formato 1.80m",
-    "marca": "Graphtec / Roland / Audaces",
+    "so": "Firmware Plotter Industrial",
+    "hardware": "Plotter Textil Gran Formato",
+    "marca": "Plotter Textil",
     "conectado_id": "pc-trazo",
-    "conectado": "PC Trazo (Conexión Directa)",
-    "enlace_tipo": "Cable UTP Directo",
-    "puerto_switch": "Ethernet directa a PC Trazo",
-    "software": "Driver Plotter",
+    "conectado": "Switch Producción & Diseño",
+    "enlace_tipo": "Cable Directo PC-Plotter",
+    "puerto_switch": "Conexión Directa NIC2 PC Trazo",
+    "software": "Control de Impresión Textil",
     "alerta": "Normal",
-    "notas": "Conectado DIRECTAMENTE cable a cable al PC Trazo para impresión de tizados."
-  },
-  {
-    "id": "laptop-diseno-01",
-    "nombre": "Portátil Diseño 01",
-    "piso": "Piso 2",
-    "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.126",
-    "mac": "34:E6:D7:11:22:01",
-    "hostname": "LAPTOP-DISENO-01",
-    "usuario": "Diseñador Creativo 1",
-    "cargo": "Diseño Creativo y Moda",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB SSD",
-    "marca": "Asus / Lenovo",
-    "conectado_id": "sw-hp",
-    "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Diseño",
-    "software": "Adobe Suite, Illustrator",
-    "alerta": "Normal",
-    "notas": "Portátil de diseño creativo ubicado enseguida del puesto de trazo."
-  },
-  {
-    "id": "laptop-diseno-02",
-    "nombre": "Portátil Diseño 02",
-    "piso": "Piso 2",
-    "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.127",
-    "mac": "34:E6:D7:11:22:02",
-    "hostname": "LAPTOP-DISENO-02",
-    "usuario": "Diseñador Creativo 2",
-    "cargo": "Diseño Creativo y Estampados",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB SSD",
-    "marca": "Asus / Lenovo",
-    "conectado_id": "sw-hp",
-    "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Diseño",
-    "software": "Adobe Suite, Illustrator",
-    "alerta": "Normal",
-    "notas": "Portátil de diseño creativo ubicado enseguida del puesto de trazo."
-  },
-  {
-    "id": "laptop-diseno-03",
-    "nombre": "Portátil Diseño 03",
-    "piso": "Piso 2",
-    "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.128",
-    "mac": "34:E6:D7:11:22:03",
-    "hostname": "LAPTOP-DISENO-03",
-    "usuario": "Diseñador Creativo 3",
-    "cargo": "Diseño Creativo Textil",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB SSD",
-    "marca": "Asus / Lenovo",
-    "conectado_id": "sw-hp",
-    "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Diseño",
-    "software": "Adobe Suite, Illustrator",
-    "alerta": "Normal",
-    "notas": "Portátil de diseño creativo ubicado enseguida del puesto de trazo."
-  },
-  {
-    "id": "laptop-diseno-04",
-    "nombre": "Portátil Diseño 04",
-    "piso": "Piso 2",
-    "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.129",
-    "mac": "34:E6:D7:11:22:04",
-    "hostname": "LAPTOP-DISENO-04",
-    "usuario": "Diseñador Creativo 4",
-    "cargo": "Desarrollo Visual",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB SSD",
-    "marca": "Asus / Lenovo",
-    "conectado_id": "sw-hp",
-    "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Diseño",
-    "software": "Adobe Suite, Illustrator",
-    "alerta": "Normal",
-    "notas": "Portátil de diseño creativo ubicado enseguida del puesto de trazo."
-  },
-  {
-    "id": "laptop-diseno-05",
-    "nombre": "Portátil Diseño 05",
-    "piso": "Piso 2",
-    "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.130",
-    "mac": "34:E6:D7:11:22:05",
-    "hostname": "LAPTOP-DISENO-05",
-    "usuario": "Diseñador Creativo 5",
-    "cargo": "Diseño de Colección",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB SSD",
-    "marca": "Asus / Lenovo",
-    "conectado_id": "sw-hp",
-    "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Diseño",
-    "software": "Adobe Suite, Illustrator",
-    "alerta": "Normal",
-    "notas": "Portátil de diseño creativo ubicado enseguida del puesto de trazo."
+    "notas": "Plotter de corte conectado cable a cable directamente al PC Trazo sin pasar por switches intermedios."
   },
   {
     "id": "sw-gh",
@@ -952,209 +938,209 @@
     "piso": "Piso 2",
     "tipo": "Switch",
     "ip": "192.168.0.6",
-    "mac": "50:D4:F7:22:33:01",
+    "mac": "C0:25:E9:55:66:77",
     "hostname": "SW-GESTION-HUMANA-P2",
     "usuario": "Gestión Humana",
     "cargo": "Conmutador Área GH",
-    "so": "Sin gestión",
-    "hardware": "Switch 8 Puertos 10/100/1000",
-    "marca": "TP-Link / Tenda",
+    "so": "Firmware Switch",
+    "hardware": "Switch 8 Puertos Gigabit",
+    "marca": "Switch Pequeño GH",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Troncal desde Switch HP",
-    "software": "No gestionable",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Uplink a Switch HP Puerto 5",
+    "software": "Plug & Play",
     "alerta": "Normal",
-    "notas": "Switch pequeño de Gestión Humana conectado al Switch Principal HP."
+    "notas": "Switch pequeño exclusivo para el área de Gestión Humana."
   },
   {
     "id": "pc-gh-01",
     "nombre": "Puesto GH 01 (Laura Cardona)",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.131",
-    "mac": "B4:2E:99:33:11:01",
-    "hostname": "PC-GH-LAURA",
-    "usuario": "Laura Cardona",
-    "cargo": "Líder C&DH (Gestión Humana)",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo ThinkCentre",
-    "conectado_id": "sw-gh",
-    "conectado": "Switch Gestión Humana",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 1",
-    "software": "Avansis, Office 365, Nómina",
+    "ip": "192.168.1.165",
+    "mac": "3C:D9:2B:11:03:01",
+    "hostname": "LIDERTH",
+    "usuario": "CARDONA OSORIO LAURA",
+    "cargo": "LIDER C&DH",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
+    "conectado_id": "sw-hp",
+    "conectado": "Switch Core HP 24p",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto GH 1",
+    "software": "Nómina, Office, ERP GH",
     "alerta": "Normal",
-    "notas": "Puesto de trabajo de Gestión Humana conectado al switch de GH."
+    "notas": "Puesto de Laura Cardona en Gestión Humana."
   },
   {
     "id": "pc-gh-02",
     "nombre": "Puesto GH 02 (Cristian Giraldo)",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.132",
-    "mac": "B4:2E:99:33:11:02",
-    "hostname": "PC-GH-CRISTIAN",
-    "usuario": "Cristian Felipe Giraldo",
-    "cargo": "Líder Desarrollo Organizacional",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo ThinkCentre",
+    "ip": "192.168.1.161",
+    "mac": "3C:D9:2B:11:03:02",
+    "hostname": "ANALISTASST",
+    "usuario": "SANCHEZ ORTEGA KAREN NAYITH",
+    "cargo": "ANALISTA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-gh",
     "conectado": "Switch Gestión Humana",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 2",
-    "software": "Avansis, Office 365",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto GH 2",
+    "software": "Office, SST, Gestión",
     "alerta": "Normal",
-    "notas": "Puesto de trabajo de Gestión Humana conectado al switch de GH."
+    "notas": "Puesto de SST operado por Karen Nayith Sánchez."
   },
   {
     "id": "pc-gh-03",
     "nombre": "Puesto GH 03 (Auxiliar)",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.133",
-    "mac": "B4:2E:99:33:11:03",
-    "hostname": "PC-GH-AUX",
-    "usuario": "Auxiliar Gestión Humana",
-    "cargo": "Gestión de Personal y Turnos",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo ThinkCentre",
+    "ip": "192.168.1.164",
+    "mac": "3C:D9:2B:11:03:03",
+    "hostname": "ANALISTAADMIN",
+    "usuario": "ZAPATA AGUIRRE MARIA ALEJANDRA",
+    "cargo": "ANALISTA ADMINISTRATIVA",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i3 / 8GB RAM / 256GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-gh",
     "conectado": "Switch Gestión Humana",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 3",
-    "software": "Avansis, Office 365",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto GH 3",
+    "software": "Office, Archivo, Contratos",
     "alerta": "Normal",
-    "notas": "Puesto de trabajo de Gestión Humana conectado al switch de GH."
+    "notas": "Puesto auxiliar GH operado por María Alejandra Zapata."
   },
   {
     "id": "pc-logistica",
-    "nombre": "PC Logística (Mesa)",
+    "nombre": "PC Logistica (Mesa)",
     "piso": "Piso 2",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.134",
-    "mac": "C8:5B:76:44:33:01",
-    "hostname": "PC-LOGISTICA",
-    "usuario": "Encargado Logística",
-    "cargo": "Control Despachos y Envíos",
-    "so": "Windows 10 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Desktop HP",
+    "ip": "192.168.1.163",
+    "mac": "B4:2E:99:40:02:01",
+    "hostname": "COODLOG",
+    "usuario": "TORO GARCIA JUAN JOSE",
+    "cargo": "COORDINADOR LOGISTICO",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto de pared -> Switch HP",
-    "software": "Avansis, Guías de Transporte",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Toma Pared Logística 1 -> Switch HP",
+    "software": "ERP Logística, Despachos, WMS",
     "alerta": "Normal",
-    "notas": "Computador de mesa en bodega de logística conectado por cable al Switch Principal HP."
+    "notas": "Puesto fijo de coordinación logística en Piso 2 operado por Juan José Toro."
   },
   {
     "id": "laptop-logistica",
     "nombre": "Portátil Logística",
     "piso": "Piso 2",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.135",
-    "mac": "C8:5B:76:44:33:02",
-    "hostname": "LAPTOP-LOGISTICA",
-    "usuario": "Auxiliar Logística",
-    "cargo": "Picking y Packing",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "HP ProBook",
+    "ip": "192.168.1.250",
+    "mac": "F0:2F:74:90:02:02",
+    "hostname": "AUXLOG",
+    "usuario": "URAN GARCIA ANGEL DAVID",
+    "cargo": "AUXILIAR DE GESTION LOGISTICA",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "Laptop Lenovo",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto de pared -> Switch HP",
-    "software": "Avansis, Lector Código Barras",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Toma Pared Logística 2 -> Switch HP",
+    "software": "ERP, Despachos, Guías de Transporte",
     "alerta": "Normal",
-    "notas": "Portátil en bodega de logística conectado por cable al Switch Principal HP."
+    "notas": "Portátil auxiliar de logística operado por Ángel David Urán."
   },
   {
     "id": "printer-stickers",
     "nombre": "Impresora de Stickers",
     "piso": "Piso 2",
     "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.216",
-    "mac": "00:07:4D:22:33:44",
-    "hostname": "PRINTER-STICKERS",
-    "usuario": "Empaque y Logística",
-    "cargo": "Etiquetado de bolsas y cajas",
-    "so": "Firmware Térmico",
-    "hardware": "Impresora Térmica Directa 4x6",
-    "marca": "Zebra / Xprinter",
-    "conectado_id": "sw-hp",
-    "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma directa",
-    "software": "Zebra Designer / BarTender",
+    "ip": "192.168.1.169",
+    "mac": "00:80:77:44:02:03",
+    "hostname": "IMPRESORAL4260",
+    "usuario": "COLABORADORES PISO 2",
+    "cargo": "TALENTO HUMANO/ LOGISTICA/ PRODUCCION",
+    "so": "Firmware Impresora",
+    "hardware": "Epson EcoTank L4260",
+    "marca": "Epson",
+    "conectado_id": "isp-ruijie",
+    "conectado": "Módem ISP 2 (Secundario)",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "LAN Módem ISP 2",
+    "software": "Drivers Térmicos / Etiquetas",
     "alerta": "Normal",
-    "notas": "Impresión de códigos de barra para pedidos ubicada en logística Piso 2."
+    "notas": "Impresora de stickers para empaque y despacho."
   },
   {
     "id": "printer-lavado",
     "nombre": "Impresora Etiquetas Lavado",
     "piso": "Piso 2",
     "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.217",
-    "mac": "00:07:4D:55:66:77",
-    "hostname": "PRINTER-LAVADO-TEXTIL",
-    "usuario": "Producción y Calidad",
-    "cargo": "Etiquetas técnicas poliamida/satín",
-    "so": "Firmware Ribbon",
-    "hardware": "Impresora Ribbon Resina para Satín",
-    "marca": "TSC / Zebra",
+    "ip": "192.168.1.49",
+    "mac": "00:80:77:44:02:04",
+    "hostname": "IMPRESORAINSLAV",
+    "usuario": "TORO GARCIA JUAN JOSE",
+    "cargo": "COORDINADOR LOGISTICO",
+    "so": "Firmware Impresora Industrial",
+    "hardware": "Impresora Térmica Ribbon para Satín/Nylon",
+    "marca": "Industrial Textil",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma directa",
-    "software": "Software de composición etiquetas",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto 15 Switch Core HP",
+    "software": "Driver Etiquetas de Lavado Textil",
     "alerta": "Normal",
-    "notas": "Etiquetas técnicas con instrucciones de lavado en Piso 2."
+    "notas": "Impresora industrial de marquillas de instrucciones de lavado."
   },
   {
     "id": "sw-p3",
     "nombre": "Switch Principal Piso 3",
     "piso": "Piso 3",
     "tipo": "Switch",
-    "ip": "192.168.0.3",
-    "mac": "50:D4:F7:11:00:03",
+    "ip": "192.168.1.3",
+    "mac": "E0:CC:7A:44:55:66",
     "hostname": "SW-RACK-P3",
     "usuario": "Infraestructura Piso 3",
-    "cargo": "Conmutador Piso 3",
-    "so": "Sin gestión",
-    "hardware": "Switch Tenda 16/24 Puertos Gigabit",
-    "marca": "Tenda",
+    "cargo": "SALA DE JUNTAS",
+    "so": "Firmware Switch",
+    "hardware": "Switch 16/24 Puertos Gigabit en Rack",
+    "marca": "Tenda / Rack P3",
     "conectado_id": "sw-hp",
     "conectado": "Switch Core HP 24p",
-    "enlace_tipo": "Cable UTP Cat 6",
-    "puerto_switch": "Troncal vertical desde Switch HP",
-    "software": "No soporta VLANs",
+    "enlace_tipo": "Cableado Vertical",
+    "puerto_switch": "Troncal Vertical UTP Cat 6 desde Switch HP P2",
+    "software": "Auto-sensing Gigabit",
     "alerta": "Normal",
-    "notas": "Switch principal del tercer piso en sala de juntas. Conectado por troncal al Switch Core HP."
+    "notas": "Switch principal ubicado en rack de Piso 3 para toda el área administrativa."
   },
   {
     "id": "ap-gerencia",
     "nombre": "TP-Link Negro (Gerencia)",
     "piso": "Piso 3",
     "tipo": "Router / Gateway",
-    "ip": "192.168.0.15",
-    "mac": "50:D4:F7:11:22:33",
+    "ip": "192.168.1.211",
+    "mac": "30:B5:C2:77:88:99",
     "hostname": "ROUTER-GERENCIA-NEGRO",
     "usuario": "Luis Felipe Aristizábal",
     "cargo": "Router Exclusivo Gerente",
-    "so": "Firmware TP-Link",
-    "hardware": "Router Wi-Fi AC1200 Negro",
+    "so": "TP-Link OS",
+    "hardware": "Router Wi-Fi Dual Band Gigabit Negro",
     "marca": "TP-Link Negro",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 1 -> Switch P3",
-    "software": "SSID: Gerencia_Privado",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto 2 Switch Piso 3",
+    "software": "SSID Privado Gerencia WPA3",
     "alerta": "Normal",
-    "notas": "Router exclusivo para el Gerente General. Solo se conecta él por cable y Wi-Fi."
+    "notas": "Router Wi-Fi exclusivo para el Gerente Luis Felipe Aristizábal."
   },
   {
     "id": "pc-gerente",
@@ -1162,213 +1148,233 @@
     "piso": "Piso 3",
     "tipo": "Puesto de Trabajo",
     "ip": "192.168.0.100",
-    "mac": "00:E0:4C:11:22:33",
+    "mac": "84:A9:3E:12:03:01",
     "hostname": "PC-GERENCIA-GENERAL",
     "usuario": "Luis Felipe Aristizábal",
     "cargo": "Gerente General",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i7, 16GB RAM, 512GB SSD",
-    "marca": "HP EliteBook / Workstation",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i7 / 16GB RAM / 1TB SSD",
+    "marca": "PC Ejecutivo Gerencia",
     "conectado_id": "ap-gerencia",
     "conectado": "TP-Link Negro (Gerencia)",
-    "enlace_tipo": "Cable UTP / Wi-Fi",
-    "puerto_switch": "Cable + Wi-Fi Gerencia",
-    "software": "Office 365, Avansis, ERP",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "LAN1 Router TP-Link Negro",
+    "software": "Suite Ejecutiva, ERP, BI",
     "alerta": "Normal",
-    "notas": "Puesto del Gerente conectado tanto por cable como por Wi-Fi al router TP-Link Negro."
+    "notas": "Equipo de gerencia general conectado por cable y Wi-Fi al TP-Link Negro."
   },
   {
     "id": "ap-juntas",
     "nombre": "TP-Link Blanco (Invitados Juntas)",
     "piso": "Piso 3",
     "tipo": "Wi-Fi / AP",
-    "ip": "192.168.0.16",
-    "mac": "50:D4:F7:44:55:66",
+    "ip": "192.168.1.241",
+    "mac": "30:B5:C2:11:22:33",
     "hostname": "AP-JUNTAS-BLANCO",
     "usuario": "Sala de Juntas / Visitas",
     "cargo": "Red Invitados Ocasional",
-    "so": "Firmware TP-Link",
-    "hardware": "Router/AP Wi-Fi Blanco",
+    "so": "TP-Link OS",
+    "hardware": "Router Wi-Fi Blanco",
     "marca": "TP-Link Blanco",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Puerto 2 -> Switch P3",
-    "software": "SSID: Olamtex_Invitados",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto 3 Switch Piso 3",
+    "software": "Red de Invitados Aislada",
     "alerta": "Normal",
-    "notas": "Ubicado en Sala de Juntas. Solo se habilita ocasionalmente para redes de invitados en conferencias."
+    "notas": "Punto de acceso para sala de juntas y visitantes ocasionales."
   },
   {
     "id": "printer-admin",
     "nombre": "Impresora Facturación",
     "piso": "Piso 3",
     "tipo": "Periférico / Impresora",
-    "ip": "192.168.0.210",
-    "mac": "00:1E:C9:AA:BB:CC",
+    "ip": "192.168.1.182",
+    "mac": "00:1B:78:66:03:02",
     "hostname": "PRINTER-FACTURACION-P3",
-    "usuario": "Contabilidad y Facturación",
-    "cargo": "Impresión Facturas Legales",
-    "so": "Firmware Láser",
-    "hardware": "Multifuncional Láser Red",
-    "marca": "HP LaserJet / Kyocera",
+    "usuario": "COLABORADORES TERCER PISO",
+    "cargo": "GENERAL",
+    "so": "Firmware Impresora Red",
+    "hardware": "Impresora Láser de Red Multifuncional",
+    "marca": "Láser Red",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Piso 3",
-    "software": "Driver PCL6 / WSD",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto 5 Switch Piso 3",
+    "software": "Driver Facturación, Scanner Red",
     "alerta": "Normal",
-    "notas": "Impresora conectada por cable a toma de pared desde el switch principal de Piso 3."
+    "notas": "Impresora de red para facturación y área administrativa."
   },
   {
     "id": "laptop-printer-adj",
     "nombre": "Portátil Junto a Impresora",
     "piso": "Piso 3",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.106",
-    "mac": "64:4B:F0:77:88:99",
-    "hostname": "LAPTOP-JUNTO-PRINTER",
-    "usuario": "Puesto Auxiliar Piso 3",
-    "cargo": "Apoyo Facturación y Archivo",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo / Dell",
+    "ip": "192.168.1.153",
+    "mac": "F0:2F:74:90:03:03",
+    "hostname": "AUXCOM2",
+    "usuario": "BERNAL VARGAS MARIA JOSÉ",
+    "cargo": "APRENDIZ SENA ETAPA PRODUCTIVA",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "Laptop Lenovo",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Toma de pared Piso 3",
-    "software": "Avansis, Office",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Toma Pared junto a Impresora -> Switch P3",
+    "software": "Office, ERP, Facturación",
     "alerta": "Normal",
-    "notas": "Puesto de trabajo enseguida de la impresora. Dispone de puerto para cable de red."
+    "notas": "Portátil ubicado al lado de la impresora operado por María José Bernal."
   },
   {
     "id": "laptop-ventas-angie",
     "nombre": "Portátil Angie (Ventas)",
     "piso": "Piso 3",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.103",
-    "mac": "30:9C:23:77:88:01",
-    "hostname": "LAPTOP-VENTAS-ANGIE",
-    "usuario": "Angie",
-    "cargo": "Asesora Comercial / Ventas",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo / HP",
+    "ip": "192.168.1.168",
+    "mac": "54:EE:75:33:03:04",
+    "hostname": "COODCOM",
+    "usuario": "SALAMANCA VILLA ANGIE JULIETH",
+    "cargo": "COORDINADORA JUNIOR COMERCIAL",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 16GB RAM / 512GB SSD",
+    "marca": "Dell Inspiron",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Switchera pared Ventas",
-    "software": "Avansis, CRM, WhatsApp Web",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Ventas 1 -> Switch P3",
+    "software": "CRM, WhatsApp Web, Office",
     "alerta": "Normal",
-    "notas": "Portátil de ventas del área comercial conectado a switchera de pared."
+    "notas": "Puesto comercial operado por Angie Julieth Salamanca."
   },
   {
     "id": "laptop-ventas-02",
     "nombre": "Portátil Ventas 02",
     "piso": "Piso 3",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.104",
-    "mac": "30:9C:23:77:88:02",
-    "hostname": "LAPTOP-VENTAS-02",
-    "usuario": "Asesor Comercial Ventas",
-    "cargo": "Asesor Comercial (Equipo Angie)",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 8GB RAM, 256GB SSD",
-    "marca": "Lenovo / HP",
+    "ip": "192.168.1.185",
+    "mac": "54:EE:75:33:03:05",
+    "hostname": "AUXCOM1",
+    "usuario": "OCAMPO CANDAMIL DIEGO ALEJANDRO",
+    "cargo": "AUXILIAR COMERCIAL",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "HP Pavilion",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Switchera pared Ventas",
-    "software": "Avansis, CRM, Office",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Ventas 2 -> Switch P3",
+    "software": "CRM, Correo, ERP Comercial",
     "alerta": "Normal",
-    "notas": "Portátil de ventas del área comercial conectado a switchera de pared."
+    "notas": "Puesto de ventas operado por Diego Alejandro Ocampo."
+  },
+  {
+    "id": "laptop-ventas-03",
+    "nombre": "AUXILIAR COMERCIAL 3",
+    "piso": "Piso 3",
+    "tipo": "Laptop / Portátil",
+    "ip": "192.168.1.160",
+    "mac": "54:EE:75:33:03:06",
+    "hostname": "AUXCOM3",
+    "usuario": "ARROYAVE PEREZ DEILY DAYHANA",
+    "cargo": "ASESOR COMERCIAL",
+    "so": "Windows 11 Pro",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "Laptop HP",
+    "conectado_id": "sw-p3",
+    "conectado": "Switch Principal Piso 3",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Ventas 3 -> Switch P3",
+    "software": "CRM, Correo, ERP Comercial",
+    "alerta": "Normal",
+    "notas": "Puesto de ventas operado por Deily Dayhana Arroyave."
   },
   {
     "id": "laptop-cristian-admin",
     "nombre": "Portátil Cristian (Analista Admin)",
     "piso": "Piso 3",
     "tipo": "Laptop / Portátil",
-    "ip": "192.168.0.105",
-    "mac": "30:9C:23:77:88:03",
-    "hostname": "LAPTOP-CRISTIAN-ADMIN",
-    "usuario": "Cristian",
-    "cargo": "Analista Administrativo",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 16GB RAM, 512GB SSD",
-    "marca": "Lenovo ThinkPad",
+    "ip": "192.168.1.155",
+    "mac": "54:EE:75:33:03:07",
+    "hostname": "LIDERDO",
+    "usuario": "GIRALDO HERRERA CRISTIAN FELIPE",
+    "cargo": "LIDER DESARROLLO ORGANIZACIONAL",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i7 / 16GB RAM / 512GB SSD",
+    "marca": "Asus ZenBook",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Switchera pared Ventas",
-    "software": "Avansis, Office 365, Gestión Admin",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Admin -> Switch P3",
+    "software": "Gestión Administrativa, BI, Procesos",
     "alerta": "Normal",
-    "notas": "Portátil de Cristian (Analista Administrativo) en la oficina de marketing y ventas."
+    "notas": "Portátil operado por Cristian Felipe Giraldo (Líder DO)."
   },
   {
     "id": "pc-juan-contab",
     "nombre": "PC Juan Esteban (Contabilidad)",
     "piso": "Piso 3",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.101",
-    "mac": "30:9C:23:45:67:89",
-    "hostname": "PC-JUAN-CONTAB",
-    "usuario": "Juan Esteban Corrales",
-    "cargo": "Coordinador Financiero",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i5, 16GB RAM, 512GB SSD (PC Mesa)",
-    "marca": "Lenovo ThinkCentre / All-in-One",
+    "ip": "192.168.1.196",
+    "mac": "B4:2E:99:40:03:08",
+    "hostname": "COODCONT",
+    "usuario": "CORRALES MARÍN JUAN ESTEBAN",
+    "cargo": "COORDINADOR FINANCIERO",
+    "so": "Windows 11 Pro 64-bit",
+    "hardware": "Core i7 / 16GB RAM / 512GB SSD",
+    "marca": "PC de Mesa",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Switchera pared Contabilidad",
-    "software": "Avansis Contabilidad, Bancos, Excel",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Contabilidad 1 -> Switch P3",
+    "software": "Avansis ERP Cliente, Portal Bancario, DIAN",
     "alerta": "Normal",
-    "notas": "Computador de mesa en oficina de contabilidad conectado por cable a switchera de pared."
+    "notas": "Puesto principal contable y financiero operado por Juan Esteban Corrales."
   },
   {
     "id": "pc-facturacion",
     "nombre": "PC Facturación",
     "piso": "Piso 3",
     "tipo": "Puesto de Trabajo",
-    "ip": "192.168.0.102",
-    "mac": "30:9C:23:45:67:90",
-    "hostname": "PC-FACTURACION",
-    "usuario": "Auxiliar Facturación",
-    "cargo": "Facturación Legal y Despachos",
-    "so": "Windows 11 Pro",
-    "hardware": "Core i3/i5, 8GB RAM, 256GB SSD (All-in-One)",
-    "marca": "HP All-in-One",
+    "ip": "192.168.1.221",
+    "mac": "B4:2E:99:40:03:09",
+    "hostname": "AUXCONT",
+    "usuario": "TORRES MONTAÑO NICOLL XIOMARA",
+    "cargo": "AUXILIAR DE TESORERIA",
+    "so": "Windows 10 Pro 64-bit",
+    "hardware": "Core i5 / 8GB RAM / 256GB SSD",
+    "marca": "All-in-One HP",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Switchera pared Contabilidad",
-    "software": "Avansis Facturación Electrónica DIAN",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puesto Facturación -> Switch P3",
+    "software": "Avansis Facturación, Impuestos, DIAN",
     "alerta": "Normal",
-    "notas": "Computador all-in-one de facturación conectado por cable en la oficina de contabilidad."
+    "notas": "Puesto All-in-One de tesorería y facturación operado por Nicoll Xiomara Torres."
   },
   {
     "id": "pc-server",
     "nombre": "PC Servidor Principal (Avansis)",
     "piso": "Piso 3",
     "tipo": "Servidor",
-    "ip": "192.168.0.250",
-    "mac": "B4:2E:99:A1:10:02",
-    "hostname": "SRV-AVANSIS-PROD",
-    "usuario": "Servidor Empresa (Acceso Todos)",
-    "cargo": "Servidor de Producción y ERP",
-    "so": "Windows 10 Pro 64-bit",
-    "hardware": "Intel Core i7, 16GB RAM, 1TB SSD",
-    "marca": "PC Desktop / All-in-One",
+    "ip": "192.168.1.227",
+    "mac": "E4:54:E8:99:03:10",
+    "hostname": "SERVTDOR",
+    "usuario": "SALAZAR ARISTIZABAL ALEX MAURICIO",
+    "cargo": "AUXILIAR CONTABLE",
+    "so": "Windows Server / Windows 10 Pro",
+    "hardware": "Core i7 / 32GB RAM / 1TB SSD RAID",
+    "marca": "PC Torre Servidor",
     "conectado_id": "sw-p3",
     "conectado": "Switch Principal Piso 3",
-    "enlace_tipo": "Cable UTP",
-    "puerto_switch": "Switchera pared Contabilidad (1 Gbps)",
-    "software": "Avansis Server, SQL Server, Carpetas Compartidas SMB",
+    "enlace_tipo": "Cable UTP Cat 6",
+    "puerto_switch": "Puerto 1 Switch Piso 3 (Prioridad)",
+    "software": "Avansis ERP BD Engine, SQL Server Express, Compartidos",
     "alerta": "Crítico",
-    "notas": "PUNTO ÚNICO DE FALLA (SPOF). Ubicado físicamente en Contabilidad (Piso 3). Corre Avansis y almacena archivos. Sin RAID ni UPS dedicada."
+    "notas": "⚠️ PUNTO ÚNICO DE FALLO (SPOF CRÍTICO). Servidor principal del software ERP Avansis donde reside toda la contabilidad e inventario de la empresa. Ubicado físicamente en Contabilidad Piso 3."
   }
 ];
-
-    let dispositivos = [];
+let dispositivos = [];
     let redNetwork = null;
     let filaAbiertaId = null;
 
@@ -1407,40 +1413,109 @@
       iniciarNetMap(); 
     }
 
-    function cargarDispositivos() {
-      const guardados = localStorage.getItem("netmap_pro_devices_v8");
-      if (guardados) {
-        try {
-          const parsed = JSON.parse(guardados);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            dispositivos = parsed;
-          } else {
-            dispositivos = [...DATOS_INICIALES];
-            guardarEnLocalStorage();
-          }
-        } catch (e) {
-          dispositivos = [...DATOS_INICIALES];
-          guardarEnLocalStorage();
-        }
+    // SINCRONIZACIÓN CON BASE DE DATOS Y SERVIDOR
+    let timerGuardadoServidor = null;
+
+    function mostrarIndicadorSincronizado(estado, mensaje) {
+      const badge = document.getElementById("badge-sync");
+      const dot = document.getElementById("badge-sync-dot");
+      const text = document.getElementById("badge-sync-text");
+      if (!badge || !dot || !text) return;
+
+      if (estado === "guardando") {
+        badge.className = "flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 shadow-2xs transition-all";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping";
+        text.innerText = "Guardando en BD...";
+      } else if (estado === "error") {
+        badge.className = "flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs transition-all";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+        text.innerText = "Guardado local (Sin conexión)";
       } else {
-        dispositivos = [...DATOS_INICIALES];
-        guardarEnLocalStorage();
+        badge.className = "flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs transition-all";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+        text.innerText = mensaje || "Guardado en Base de Datos";
       }
+    }
+
+    function cargarDispositivos() {
+      // 1. Prioridad: Datos inyectados directamente por el backend desde PostgreSQL/SQLite
+      let cargadoDesdeServidor = false;
+      try {
+        {% if equipos_json %}
+        const desdeBackend = {{ equipos_json | safe }};
+        if (Array.isArray(desdeBackend) && desdeBackend.length > 0) {
+          dispositivos = desdeBackend;
+          cargadoDesdeServidor = true;
+          mostrarIndicadorSincronizado("ok", "BD Railway Sincronizada");
+        }
+        {% endif %}
+      } catch (e) {
+        console.warn("No se pudo cargar desde contexto backend, usando localStorage/fallback:", e);
+      }
+
+      // 2. Si no vino desde el servidor, leer de localStorage
+      if (!cargadoDesdeServidor) {
+        const guardados = localStorage.getItem("netmap_pro_devices_v8") || localStorage.getItem("netmap_pro_devices_v7");
+        if (guardados) {
+          try {
+            const parsed = JSON.parse(guardados);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              dispositivos = parsed;
+              mostrarIndicadorSincronizado("ok", "Cargado desde Caché");
+            } else {
+              dispositivos = [...DATOS_INICIALES];
+            }
+          } catch (e) {
+            dispositivos = [...DATOS_INICIALES];
+          }
+        } else {
+          dispositivos = [...DATOS_INICIALES];
+        }
+      }
+
+      // Guardar localmente y sincronizar con backend
+      guardarEnLocalStorage(false);
     }
 
     function restablecerInventarioBase() {
-      if (confirm("¿Deseas restablecer el mapa y la tabla a los 46 equipos originales de Manufacturas Olamtex?")) {
+      if (confirm("¿Deseas restablecer el mapa y la tabla a los 46 equipos oficiales de Manufacturas Olamtex?")) {
         dispositivos = [...DATOS_INICIALES];
-        guardarEnLocalStorage();
+        guardarEnLocalStorage(true); // Sincroniza de inmediato a la base de datos
         actualizarMetricas();
         filtrarDispositivos();
         inicializarGrafo();
-        mostrarToast("¡Topología e inventario restablecidos!");
+        mostrarToast("¡Topología e inventario oficial restablecidos y guardados en BD!");
       }
     }
 
-    function guardarEnLocalStorage() {
+    function guardarEnLocalStorage(sincronizarConServidor = true) {
+      // 1. Guardar en caché del navegador
       localStorage.setItem("netmap_pro_devices_v8", JSON.stringify(dispositivos));
+
+      // 2. Sincronizar automáticamente con la base de datos de Railway
+      if (sincronizarConServidor) {
+        if (timerGuardadoServidor) clearTimeout(timerGuardadoServidor);
+        mostrarIndicadorSincronizado("guardando");
+
+        timerGuardadoServidor = setTimeout(() => {
+          fetch("/api/equipos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dispositivos)
+          })
+          .then(res => {
+            if (!res.ok) throw new Error("Status " + res.status);
+            return res.json();
+          })
+          .then(data => {
+            mostrarIndicadorSincronizado("ok", "Guardado en BD (" + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ")");
+          })
+          .catch(err => {
+            console.warn("No se pudo sincronizar con el servidor:", err);
+            mostrarIndicadorSincronizado("error");
+          });
+        }, 300);
+      }
     }
 
     function mostrarToast(mensaje) {
@@ -2697,16 +2772,26 @@ ${rol}`,
       mostrarToast("¡Archivo Excel descargado con éxito!");
     }
 
-    // BACKUP Y RESTAURACIÓN JSON
+    // BACKUP Y RESTAURACIÓN JSON (BLOB NATIVO + ENDPOINT SERVIDOR)
     function guardarCopiaSeguridad() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dispositivos, null, 2));
-      const downloadAnchor = document.createElement("a");
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `Backup_NetMap_${new Date().toISOString().slice(0, 10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      mostrarToast("Backup JSON descargado");
+      try {
+        const jsonStr = JSON.stringify(dispositivos, null, 2);
+        const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Backup_NetMap_Olamtex_${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          a.remove();
+          URL.revokeObjectURL(url);
+        }, 500);
+        mostrarToast("¡Copia de seguridad JSON descargada!");
+      } catch (e) {
+        // Fallback garantizado: descarga directa generada por el servidor
+        window.location.href = "/api/equipos/backup";
+      }
     }
 
     function cargarCopiaSeguridad(e) {

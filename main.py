@@ -9,11 +9,13 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from typing import Optional, List
 import io
+import json
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
 import models
 from database import engine, get_db, SessionLocal
+from equipos_seed import EQUIPOS_OLAMTEX
 
 from contextlib import asynccontextmanager
 
@@ -286,13 +288,71 @@ def admin_dashboard(request: Request, user: models.User = Depends(get_current_ad
     )
 
 @app.get("/admin/equipos", response_class=HTMLResponse)
-def admin_equipos(request: Request, user: models.User = Depends(get_current_admin)):
+def admin_equipos(request: Request, user: models.User = Depends(get_current_admin), db: Session = Depends(get_db)):
     if not user:
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    
+    # Obtener o inicializar configuración de equipos desde la base de datos
+    config = db.query(models.RedConfig).filter(models.RedConfig.clave == "dispositivos").first()
+    if not config or not config.valor:
+        config = models.RedConfig(clave="dispositivos", valor=json.dumps(EQUIPOS_OLAMTEX))
+        db.add(config)
+        db.commit()
+        db.refresh(config)
+    
     return templates.TemplateResponse(
         request=request,
         name="admin_equipos.html",
-        context={"request": request, "user": user}
+        context={
+            "request": request,
+            "user": user,
+            "equipos_json": config.valor
+        }
+    )
+
+@app.get("/api/equipos")
+def get_equipos(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    config = db.query(models.RedConfig).filter(models.RedConfig.clave == "dispositivos").first()
+    if not config or not config.valor:
+        config = models.RedConfig(clave="dispositivos", valor=json.dumps(EQUIPOS_OLAMTEX))
+        db.add(config)
+        db.commit()
+        db.refresh(config)
+    try:
+        return json.loads(config.valor)
+    except Exception:
+        return EQUIPOS_OLAMTEX
+
+@app.post("/api/equipos")
+async def save_equipos(request: Request, db: Session = Depends(get_db), user: models.User = Depends(get_current_admin)):
+    if not user:
+        raise HTTPException(status_code=401, detail="No autorizado")
+    body = await request.json()
+    if not isinstance(body, list):
+        raise HTTPException(status_code=400, detail="Formato inválido: se esperaba lista de equipos")
+    
+    config = db.query(models.RedConfig).filter(models.RedConfig.clave == "dispositivos").first()
+    if not config:
+        config = models.RedConfig(clave="dispositivos", valor=json.dumps(body))
+        db.add(config)
+    else:
+        config.valor = json.dumps(body)
+    db.commit()
+    return {"status": "ok", "total": len(body), "fecha": datetime.now().isoformat()}
+
+@app.get("/api/equipos/backup")
+def download_equipos_backup(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    config = db.query(models.RedConfig).filter(models.RedConfig.clave == "dispositivos").first()
+    data = config.valor if config and config.valor else json.dumps(EQUIPOS_OLAMTEX, indent=2)
+    filename = f"Backup_NetMap_Olamtex_{datetime.now().strftime('%Y-%m-%d')}.json"
+    return Response(
+        content=data,
+        media_type="application/json",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
     )
 
 @app.post("/admin/ticket/{ticket_id}/status")
