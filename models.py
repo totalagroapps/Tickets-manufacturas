@@ -48,6 +48,7 @@ class Ticket(Base):
     
     fecha_creacion = Column(DateTime, default=func.now())
     fecha_actualizacion = Column(DateTime, default=func.now(), onupdate=func.now())
+    fecha_cierre = Column(DateTime, nullable=True)
 
     gestiones = relationship("TicketGestion", back_populates="ticket", cascade="all, delete-orphan")
     adjuntos = relationship("TicketAdjunto", back_populates="ticket", cascade="all, delete-orphan")

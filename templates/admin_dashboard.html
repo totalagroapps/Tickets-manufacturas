@@ -9,7 +9,7 @@
     <table class="min-w-full bg-white text-left">
         <thead class="bg-slate-50 text-slate-500 border-b border-slate-100">
             <tr>
-                <th class="w-1/6 py-3.5 px-6 uppercase font-bold text-xs tracking-wider">Fecha / Hora</th>
+                <th class="w-1/6 py-3.5 px-6 uppercase font-bold text-xs tracking-wider">Fechas Ticket</th>
                 <th class="w-1/5 py-3.5 px-6 uppercase font-bold text-xs tracking-wider">Solicitante</th>
                 <th class="w-2/5 py-3.5 px-6 uppercase font-bold text-xs tracking-wider">Detalles del Ticket</th>
                 <th class="w-1/12 py-3.5 px-6 uppercase font-bold text-xs tracking-wider">Urgencia</th>
@@ -20,8 +20,30 @@
             {% for ticket in ticket_list %}
             <tr class="ticket-row transition-colors {{ row_border }}" data-search="{{ ticket.titulo|lower }} {{ ticket.nombre_solicitante|lower }} {{ ticket.cargo_solicitante|lower }} {{ (ticket.subtipo_equipo or '')|lower }} {{ (ticket.celular_solicitante or '')|lower }} {{ ticket.responsable|lower }}">
                 <td class="py-4 px-6 text-sm text-slate-500 align-top">
-                    <div class="font-semibold text-slate-700">{{ ticket.fecha_creacion.strftime('%d/%m/%Y') if ticket.fecha_creacion else '' }}</div>
-                    <div class="text-xs text-slate-400 mt-0.5">{{ ticket.fecha_creacion.strftime('%I:%M %p') if ticket.fecha_creacion else '' }}</div>
+                    <!-- Fecha Creación -->
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Creación:</span>
+                        <div class="font-semibold text-slate-700">{{ ticket.fecha_creacion.strftime('%d/%m/%Y') if ticket.fecha_creacion else '-' }}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">{{ ticket.fecha_creacion.strftime('%I:%M %p') if ticket.fecha_creacion else '' }}</div>
+                    </div>
+                    <!-- Fecha Cierre -->
+                    {% if ticket.estado == 'Completado' %}
+                    <div class="mt-2 pt-2 border-t border-slate-100">
+                        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Cierre:
+                        </span>
+                        <div class="font-semibold text-emerald-800 text-xs mt-0.5">
+                            {{ ticket.fecha_cierre.strftime('%d/%m/%Y') if ticket.fecha_cierre else (ticket.fecha_actualizacion.strftime('%d/%m/%Y') if ticket.fecha_actualizacion else '-') }}
+                        </div>
+                        <div class="text-[11px] text-emerald-600 font-medium">
+                            {{ ticket.fecha_cierre.strftime('%I:%M %p') if ticket.fecha_cierre else (ticket.fecha_actualizacion.strftime('%I:%M %p') if ticket.fecha_actualizacion else '') }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mt-2 pt-1 border-t border-slate-50 text-[10px] text-amber-600 font-medium flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> En curso
+                    </div>
+                    {% endif %}
                 </td>
                 <td class="py-4 px-6 font-semibold text-slate-800 align-top">
                     <div class="text-slate-900">{{ ticket.nombre_solicitante }}</div>

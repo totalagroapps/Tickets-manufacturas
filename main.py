@@ -65,6 +65,30 @@ async def lifespan(app: FastAPI):
             conn.commit()
     except Exception:
         pass # La columna ya existe
+
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE tickets ADD COLUMN fecha_cierre TIMESTAMP NULL"))
+            conn.commit()
+    except Exception:
+        pass # La columna ya existe
+
+    # Retrocompatibilidad: asignar fecha_cierre a tickets completados que no la tengan
+    try:
+        db_mig = SessionLocal()
+        try:
+            completados_sin_cierre = db_mig.query(models.Ticket).filter(
+                models.Ticket.estado == "Completado",
+                models.Ticket.fecha_cierre == None
+            ).all()
+            for t in completados_sin_cierre:
+                t.fecha_cierre = t.fecha_actualizacion or t.fecha_creacion
+            if completados_sin_cierre:
+                db_mig.commit()
+        finally:
+            db_mig.close()
+    except Exception:
+        pass
         
     create_default_users()
     yield
@@ -355,6 +379,25 @@ def download_equipos_backup(db: Session = Depends(get_db), user: models.User = D
         headers={"Content-Disposition": f'attachment; filename="{filename}"'}
     )
 
+def format_tiempo_resolucion(fecha_ini, fecha_fin):
+    if not fecha_ini or not fecha_fin:
+        return ""
+    diff = fecha_fin - fecha_ini
+    total_segundos = int(diff.total_seconds())
+    if total_segundos < 60:
+        return "< 1 min"
+    dias = total_segundos // 86400
+    horas = (total_segundos % 86400) // 3600
+    minutos = (total_segundos % 3600) // 60
+    partes = []
+    if dias > 0:
+        partes.append(f"{dias}d")
+    if horas > 0:
+        partes.append(f"{horas}h")
+    if minutos > 0 or not partes:
+        partes.append(f"{minutos}m")
+    return " ".join(partes)
+
 @app.post("/admin/ticket/{ticket_id}/status")
 def update_ticket_status(
     request: Request,
@@ -371,6 +414,11 @@ def update_ticket_status(
     if ticket:
         ticket.estado = estado
         ticket.responsable = responsable
+        if estado == "Completado":
+            if not ticket.fecha_cierre:
+                ticket.fecha_cierre = datetime.now()
+        else:
+            ticket.fecha_cierre = None
         db.commit()
         
     referer = request.headers.get("referer", "/admin")
@@ -387,8 +435,22 @@ def admin_ticket_detail(request: Request, ticket_id: int, user: models.User = De
     
     if not ticket.celular_solicitante and ticket.nombre_solicitante in EMPLEADOS_DIRECTORIO:
         ticket.celular_solicitante = EMPLEADOS_DIRECTORIO[ticket.nombre_solicitante]["celular"]
+    
+    tiempo_resolucion = None
+    if ticket.estado == "Completado":
+        cierre_val = ticket.fecha_cierre or ticket.fecha_actualizacion
+        tiempo_resolucion = format_tiempo_resolucion(ticket.fecha_creacion, cierre_val)
         
-    return templates.TemplateResponse(request=request, name="admin_ticket_detail.html", context={"request": request, "ticket": ticket, "user": user})
+    return templates.TemplateResponse(
+        request=request,
+        name="admin_ticket_detail.html",
+        context={
+            "request": request,
+            "ticket": ticket,
+            "user": user,
+            "tiempo_resolucion": tiempo_resolucion
+        }
+    )
 
 @app.post("/admin/ticket/{ticket_id}/gestion")
 def add_ticket_gestion(
@@ -467,7 +529,7 @@ def export_tickets_excel(user: models.User = Depends(get_current_admin), db: Ses
     )
     
     headers = [
-        "ID Ticket", "Fecha Creación", "Solicitante", "Cargo", "Celular / WhatsApp",
+        "ID Ticket", "Fecha Creación", "Fecha Cierre", "Tiempo de Solución", "Solicitante", "Cargo", "Celular / WhatsApp",
         "Título del Problema", "Afectación", "Subtipo Equipo", "Tipo Solicitud",
         "Responsable Asignado", "Nivel Urgencia", "Estado Actual", "Descripción del Problema", 
         "Historial de Gestiones y Notas", "Archivos Adjuntos"
@@ -486,9 +548,21 @@ def export_tickets_excel(user: models.User = Depends(get_current_admin), db: Ses
         gestiones_str = " | ".join([f"[{g.fecha.strftime('%d/%m/%Y %H:%M')} - {g.autor}]: {g.nota}" for g in t.gestiones]) if t.gestiones else "Sin gestiones registradas"
         num_adjuntos = f"{len(t.adjuntos)} archivo(s)" if t.adjuntos else "Sin archivos"
         
+        fecha_cierre_str = ""
+        tiempo_sol_str = ""
+        if t.estado == "Completado":
+            cierre_val = t.fecha_cierre or t.fecha_actualizacion
+            fecha_cierre_str = cierre_val.strftime('%d/%m/%Y %I:%M %p') if cierre_val else "Completado"
+            tiempo_sol_str = format_tiempo_resolucion(t.fecha_creacion, cierre_val)
+        else:
+            fecha_cierre_str = "En curso"
+            tiempo_sol_str = "Pendiente de cierre"
+
         row_data = [
             t.id,
             t.fecha_creacion.strftime('%d/%m/%Y %I:%M %p') if t.fecha_creacion else "",
+            fecha_cierre_str,
+            tiempo_sol_str,
             t.nombre_solicitante,
             t.cargo_solicitante or "",
             cel,

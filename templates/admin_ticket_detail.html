@@ -46,10 +46,26 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Fecha</p>
-                    <p class="text-sm font-semibold text-slate-700">{{ ticket.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Fecha Creación</p>
+                    <p class="text-sm font-semibold text-slate-700">{{ ticket.fecha_creacion.strftime('%d/%m/%Y %I:%M %p') if ticket.fecha_creacion else '-' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Fecha Cierre</p>
+                    {% if ticket.estado == 'Completado' %}
+                    <p class="text-sm font-bold text-emerald-700 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        {{ ticket.fecha_cierre.strftime('%d/%m/%Y %I:%M %p') if ticket.fecha_cierre else (ticket.fecha_actualizacion.strftime('%d/%m/%Y %I:%M %p') if ticket.fecha_actualizacion else 'Completado') }}
+                    </p>
+                    {% if tiempo_resolucion %}
+                    <span class="text-[11px] font-bold text-emerald-600 bg-emerald-100/70 px-2 py-0.5 rounded-md inline-block mt-1">⏱️ Resuelto en {{ tiempo_resolucion }}</span>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-sm font-medium text-amber-600 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span> Abierto
+                    </p>
+                    {% endif %}
                 </div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Afectación</p>
